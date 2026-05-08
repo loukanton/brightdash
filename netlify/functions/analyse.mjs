@@ -1,6 +1,12 @@
 import { getStore } from "@netlify/blobs";
 
-const DEFAULT_PROMPT = `Is dit relevant voor een consultant die NL bedrijven en overheden adviseert over digitalisering? Zo ja: schrijf 1 zin wat de consultant ermee kan (max 15 woorden). Zo nee: schrijf alleen een streepje.`;
+const DEFAULT_PROMPT = `Analyseer dit nieuwsbericht in maximaal 3 bullets. Gebruik exact deze labels en schrijf per bullet max 12 woorden:
+
+• Wat: [wat er is gebeurd, simpel uitgelegd]
+• Betekenis: [impact voor NL bedrijven of overheid]
+• Actie: [wat te doen — alleen als urgent, anders weglaat deze bullet]
+
+Geen inleiding. Geen afsluitende zin. Niet relevant = schrijf niets.`;
 
 export default async (request) => {
   const headers = {
@@ -58,7 +64,7 @@ export default async (request) => {
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 60,
+        max_tokens: 120,
         messages: [{
           role: 'user',
           content: `${prompt}\n\nTitel: ${title}\nSamenvatting: ${description || ''}`
