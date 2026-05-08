@@ -133,6 +133,8 @@ body {
   text-transform: uppercase;
   color: var(--txt3);
 }
+
+.mast-right {
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -429,18 +431,65 @@ footer {
 
 /* ── RESPONSIVE ── */
 @media (max-width: 720px) {
-  .mast { grid-template-columns: 1fr auto; padding: 0 1rem; }
-  .mast-date { display: none; }
+  /* Header */
+  .mast {
+    grid-template-columns: 1fr auto;
+    padding: 0 1rem;
+    height: 52px;
+  }
+  .mast-center { display: none; }
+  .mast-right { gap: .5rem; }
+  .mast-subbrand { display: none; }
+
+  /* Layout: sidebar boven content */
   .layout { grid-template-columns: 1fr; }
-  .sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--line); padding: .75rem 0; }
-  .s-section { display: inline-flex; gap: .25rem; flex-wrap: wrap; padding: .25rem .75rem; }
+
+  /* Sidebar horizontal scrollable pill menu */
+  .sidebar {
+    position: static;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+    padding: .5rem 0;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+  }
+  .s-section {
+    display: inline-flex;
+    gap: .25rem;
+    flex-wrap: nowrap;
+    padding: .25rem .75rem;
+    white-space: nowrap;
+  }
   .s-label { display: none; }
-  .s-list { flex-direction: row; flex-wrap: wrap; }
-  .s-btn { padding: .22rem .55rem; font-size: .7rem; }
+  .s-list { flex-direction: row; flex-wrap: nowrap; gap: .25rem; }
+  .s-btn { padding: .25rem .65rem; font-size: .78rem; white-space: nowrap; }
+  .s-badge { display: none; }
   .s-divider, .s-stat { display: none; }
+
+  /* Toolbar */
+  .toolbar { padding: .5rem .75rem; flex-wrap: wrap; gap: .5rem; }
+  .r-count { font-size: .75rem; }
+
+  /* News grid → single column */
   .news { padding: .75rem; }
-  .toolbar { padding: .5rem .75rem; }
   .grid-v { grid-template-columns: 1fr; }
+
+  /* Cards iets compacter op mobiel */
+  .card { padding: 1rem; }
+  .card-title { font-size: .95rem; }
+  .card-desc { -webkit-line-clamp: 2; }
+
+  /* Lijst */
+  .row { grid-template-columns: 80px 1fr auto; gap: .75rem; padding: .75rem 1rem; }
+  .row-title { font-size: .85rem; }
+
+  /* Footer */
+  footer { padding: .75rem 1rem; flex-direction: column; gap: .35rem; text-align: center; }
+
+  /* Ticker verbergen op klein scherm */
+  .ticker { display: none; }
 }
 </style>
 </head>
@@ -462,8 +511,6 @@ footer {
     <span class="live" id="live-lbl">Live</span>
   </div>
 </header>
-  </div>
-</div>
 
 <div class="ticker">
   <div class="ticker-lbl">Nu</div>
