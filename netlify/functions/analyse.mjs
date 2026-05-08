@@ -1,13 +1,6 @@
 import { getStore } from "@netlify/blobs";
 
-const DEFAULT_PROMPT = `Je bent strategisch adviseur voor een consultant die Nederlandse bedrijven en (semi-)overheden adviseert op het gebied van digitalisering, AI-adoptie en organisatieverandering.
-
-Analyseer dit nieuwsbericht in maximaal 3 bullet points:
-• Relevant? Wat is de impact voor NL bedrijven of (semi-)overheid — in 1 zin
-• Wat kan een digitaliserings-consultant hiermee adviseren of doen?
-• Actie nodig? Alleen vermelden als er urgentie is
-
-Geen inleiding. Geen afsluitende zin. Alleen de bullets die van toepassing zijn.`;
+const DEFAULT_PROMPT = `Is dit relevant voor een consultant die NL bedrijven en overheden adviseert over digitalisering? Zo ja: schrijf 1 zin wat de consultant ermee kan (max 15 woorden). Zo nee: schrijf alleen een streepje.`;
 
 export default async (request) => {
   const headers = {
@@ -65,7 +58,7 @@ export default async (request) => {
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 300,
+        max_tokens: 60,
         messages: [{
           role: 'user',
           content: `${prompt}\n\nTitel: ${title}\nSamenvatting: ${description || ''}`
