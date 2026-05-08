@@ -379,20 +379,18 @@ body {
 
 .card-insight {
   font-size: .82rem; color: var(--txt2);
-  line-height: 1.65; padding: .65rem .8rem;
+  line-height: 1.6; padding: .65rem .8rem;
   background: var(--bg3); border-radius: 3px;
   border-left: 2px solid var(--gold);
   transition: background .3s;
-  white-space: pre-line;
 }
 .card-insight.loading { color: var(--txt3); font-style: italic; }
-.insight-label {
-  font-size: .8rem;
-  font-weight: 500;
-  color: var(--gold);
-  margin-right: .35rem;
-}
 [data-theme="light"] .card-insight { background: #ebe8e2; }
+.insight-row { display: flex; align-items: flex-start; gap: .4rem; margin-bottom: .3rem; font-size: .82rem; }
+.insight-row:last-child { margin-bottom: 0; }
+.insight-icon { color: var(--gold); font-size: .85rem; flex-shrink: 0; margin-top: .1rem; }
+.insight-text { color: var(--txt2); line-height: 1.5; }
+.insight-key { color: var(--gold); font-weight: 500; margin-right: .2rem; }
 
 /* ── ROW ── */
 .row {
@@ -596,6 +594,21 @@ footer {
         <li><button class="s-btn" onclick="setFilter('s:MIT Tech Rev',this)">
           <span style="display:flex;align-items:center;gap:.4rem"><span class="s-dot" style="background:#94a3b8"></span>MIT Tech Rev</span>
           <span class="s-badge" id="b-MIT Tech Rev">—</span></button></li>
+        <li><button class="s-btn" onclick="setFilter('s:CIO.nl',this)">
+          <span style="display:flex;align-items:center;gap:.4rem"><span class="s-dot" style="background:var(--teal)"></span>CIO.nl</span>
+          <span class="s-badge" id="b-CIO.nl">—</span></button></li>
+        <li><button class="s-btn" onclick="setFilter('s:Techzine',this)">
+          <span style="display:flex;align-items:center;gap:.4rem"><span class="s-dot" style="background:var(--blue)"></span>Techzine</span>
+          <span class="s-badge" id="b-Techzine">—</span></button></li>
+        <li><button class="s-btn" onclick="setFilter('s:iGovernment',this)">
+          <span style="display:flex;align-items:center;gap:.4rem"><span class="s-dot" style="background:#c084fc"></span>iGov</span>
+          <span class="s-badge" id="b-iGovernment">—</span></button></li>
+        <li><button class="s-btn" onclick="setFilter('s:Binnenl.Bestuur',this)">
+          <span style="display:flex;align-items:center;gap:.4rem"><span class="s-dot" style="background:#c084fc"></span>Binnenl.Best</span>
+          <span class="s-badge" id="b-Binnenl.Bestuur">—</span></button></li>
+        <li><button class="s-btn" onclick="setFilter('s:Bloomberg Tech',this)">
+          <span style="display:flex;align-items:center;gap:.4rem"><span class="s-dot" style="background:#94a3b8"></span>Bloomberg</span>
+          <span class="s-badge" id="b-Bloomberg Tech">—</span></button></li>
       </ul>
     </div>
     <div class="s-divider"></div>
@@ -604,7 +617,7 @@ footer {
       <div class="l">Berichten</div>
     </div>
     <div class="s-stat">
-      <div class="n">20</div>
+      <div class="n">25</div>
       <div class="l">Bronnen</div>
     </div>
   </aside>
@@ -659,6 +672,11 @@ const FEEDS = [
   { name:'McKinsey',      tag:'McKinsey',      cls:'t-slate',  lang:'en', url:'https://www.mckinsey.com/insights/rss'                           },
   { name:'The Stack',     tag:'The Stack',     cls:'t-slate',  lang:'en', url:'https://thestack.technology/latest/rss/'                         },
   { name:'MIT Tech Rev',  tag:'MIT Tech Rev',  cls:'t-slate',  lang:'en', url:'https://www.technologyreview.com/feed/'                         },
+  { name:'CIO.nl',        tag:'CIO.nl',        cls:'t-teal',   lang:'nl', url:'https://www.cio.nl/rss.xml'                                       },
+  { name:'Techzine',      tag:'Techzine',       cls:'t-blue',   lang:'nl', url:'https://www.techzine.nl/feed/'                                    },
+  { name:'iGovernment',   tag:'iGov',           cls:'t-violet', lang:'nl', url:'https://www.igovernment.nl/rss.xml'                              },
+  { name:'Binnenl.Bestuur',tag:'Binnenl.Best',  cls:'t-violet', lang:'nl', url:'https://www.binnenlandsbestuur.nl/rss/digitaal'                  },
+  { name:'Bloomberg Tech', tag:'Bloomberg',     cls:'t-slate',  lang:'en', url:'https://feeds.bloomberg.com/technology/news.rss'                 },
 ];
 const PROXY = 'https://api.rss2json.com/v1/api.json?rss_url=';
 
@@ -869,13 +887,30 @@ function loadInsightsForVisible() {
     if (!item) return;
     const text = getInsight(item);
     if (text) {
-      insightEl.innerHTML = `<span class="insight-label">→</span>${esc(text)}`;
+      insightEl.innerHTML = formatInsight(text) || esc(text);
     } else {
       insightEl.innerHTML = `<span style="color:var(--txt3);font-size:.8rem">Geen analyse beschikbaar.</span>`;
     }
     insightEl.classList.remove('loading');
     insightEl.setAttribute('data-loaded', 'true');
   });
+}
+
+// ── INSIGHT FORMATTER ───────────────────────────────────────────
+function formatInsight(text) {
+  if (!text || text === '—' || text.trim() === '') return '';
+  const icons = { 'Wat': 'ti-news', 'Betekenis': 'ti-bulb', 'Actie': 'ti-arrow-right' };
+  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+  return lines.map(line => {
+    const clean = line.replace(/^[•\-\*]\s*/, '');
+    const match = clean.match(/^(Wat|Betekenis|Actie):\s*(.*)/i);
+    if (match) {
+      const key = match[1].charAt(0).toUpperCase() + match[1].slice(1).toLowerCase();
+      const icon = icons[key] || 'ti-point';
+      return `<div class="insight-row"><i class="ti ${icon} insight-icon" aria-hidden="true"></i><span class="insight-text"><span class="insight-key">${key}:</span>${esc(match[2])}</span></div>`;
+    }
+    return `<div class="insight-row"><i class="ti ti-point insight-icon" aria-hidden="true"></i><span class="insight-text">${esc(clean)}</span></div>`;
+  }).join('');
 }
 
 // ── RENDER ───────────────────────────────────────────────────────
@@ -894,7 +929,7 @@ function render() {
         </div>
         <a class="card-title-link" href="${esc(i.link)}" target="_blank" rel="noopener"><h2 class="card-title">${esc(i.title)}</h2></a>
         ${i.description?`<p class="card-desc">${esc(i.description)}</p>`:''}
-        <div class="card-insight"><span class="insight-label">→</span>${i.insight ? esc(i.insight) : '<span style="color:var(--txt3);font-size:.8rem">Analyse laden...</span>'}</div>
+        <div class="card-insight">${i.insight ? formatInsight(i.insight) : '<span style="color:var(--txt3);font-size:.8rem">Analyse laden...</span>'}</div>
         <div class="card-actions">
           <span class="card-src">${esc(i.source)}</span>
           <div style="display:flex;align-items:center;gap:.75rem">
@@ -981,7 +1016,7 @@ async function loadInsightsOnDemand() {
     const insight = await fetchInsight(item);
     if (insight) {
       item.insight = insight; // cache in memory
-      insightEl.innerHTML = `<span class="insight-label">→</span>${esc(insight)}`;
+      insightEl.innerHTML = formatInsight(insight) || esc(insight);
     } else {
       insightEl.innerHTML = `<span style="color:var(--txt3);font-size:.8rem">Analyse niet beschikbaar.</span>`;
     }
