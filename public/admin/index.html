@@ -3,202 +3,1323 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BrightDash — Prompt beheren</title>
+<title>BrightDash — AI & Digitaal Nieuws</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAEKUlEQVR4nO2ZS4gdRRSGv8loJKXRiTEMRjRGdNe4UEEC6gSFCFFxUaANEVwEREFRJJtE3ASGLEVEjYoIDkirNC4MxEcgOouoqImPGjWJz6iJRohxkjl5jRkXfSN1a/r2rX7NJvXBXdTp/1TVPX26qvo0BAKBQCAQCAQCgUAgEAgEzi4GXINS6mHgGU//GeA4MAUcBn4A9gDbgW0icqTqxEyiNwJP9pEdAyY7vx+BXcBnwNYoTsVnnLoB6De5Z4FRETlc1tkkegtwR8WxjwBvAKNRnP5UJJxXcQAfFgDrgI+UUpdX8L++xtgLgbWAMYl+rEjYZgbYjAMrRWTGR2wSvRT43TK9H8XpqhzdBWR/djlwLXAXsAo4x5FuiuJ0Q95YrrAtbiGb2Lue+uuc9q48URSnR4GjwAFgB7DZJHoZ8Byw2pKuN4neG8XpK24fZR+BP0VkwP4Bi4ER4MM+vneXGMdN/52+jlGc/gLcCYw5lzZ1MqaL2muAiBwSkXGyiBctONeU6LZyAACiOJ0BHgB+tczDwP2utrFFUEQE2FYgWVSiOzsAk8D3ZecTxelx4CnHvNrVtbkLuBzwEZlEDwNLLdMXnTtahXec9ograCwASqkFwG0Fkq89u3LTP3cB9OQ74LTVPt8keqEtqB0ApdSQUuomYAtwVQ/ZNLDZs8taz79NJ3P+dsxL7EbZbXBYKVUlHdeJyD5PrbsFVg5AB/c/DtqNtteAg8BaEXm6hI+dAceAb6sObhI9CFzomLveT9oOwHbgc1+xSfQSwD42fxXF6b81xl9E92n3BNlN+Z+2A3AvsFMpNaqUmnXszqGx57/D1U57bxSn9qI4J9vgPGADsNFD63UELsHNTnuHK2jiKHwucBkQA98U+K5XSkV9+m86A9wAvOcKmjgKT4vIfhF5HVhBVhTJYxB4sE93dgBO4X92mIVJ9KXA7ZZpCtjq6hp9BERkEni5QLKy1wWT6IuBZZZpIorTkzWm8ygw32qP5VWJ2lgDfiu4VlQYaSz9TaKvBB6yTNPMfi8A2gnAFRX9GjkCm0TPB96ke/9/IYrTPXn6RgOglLqIrBTViz8KrtXOAJPo84BXgRss889ku1AutStCSqlBsnftEbIq7vIC+ccF1+wt8DTwZZl5dBa9t4AbLfMUcE8Up5O9/ObqXeAMr+UZTaKH6H6R2h3F6ZRPhybRi4HHgUfI6oNnEEBHcfppkf9c1QQB3haRXjXBvulvEj0ADAGXkGXcCuBWsnqjcuT7yO78J/0mNVcB+AC4r+C6ewJcYxK9psI4J4GXgCeiOP3Hx6HtABwERoHnReRUga7ONwDIan9jwIudoqg3TQXgBFl5+hDZp7EJshL4uIhMe/j3C8AM2d0V4C9gP7CbbKEcj+J0ouK8A4FAIBAIBAKBQCAQCAQCZx3/ATX4NbsH2YGpAAAAAElFTkSuQmCC">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,600;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,600;1,400;1,600&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:#08090b; --bg2:#0f1115; --bg3:#15181e;
-  --line:#1f2229; --line2:#2c3040;
-  --txt:#dde0e8; --txt2:#7c8494; --txt3:#3e4455;
-  --gold:#d4a853; --gold-dim:rgba(212,168,83,.1);
-  --fd:'Lora',Georgia,serif; --fb:'Outfit',sans-serif;
+  --bg:       #08090b;
+  --bg2:      #0f1115;
+  --bg3:      #15181e;
+  --line:     #1f2229;
+  --line2:    #2c3040;
+  --txt:      #dde0e8;
+  --txt2:     #7c8494;
+  --txt3:     #3e4455;
+  --gold:     #d4a853;
+  --gold-dim: rgba(212,168,83,.1);
+  --indigo:   #818cf8; --indigo-bg: rgba(129,140,248,.12);
+  --blue:     #60a5fa; --blue-bg:   rgba(96,165,250,.12);
+  --amber:    #fbbf24; --amber-bg:  rgba(251,191,36,.12);
+  --teal:     #2dd4bf; --teal-bg:   rgba(45,212,191,.12);
+  --green:    #86efac; --green-bg:  rgba(134,239,172,.12);
+  --fd: 'Lora', Georgia, serif;
+  --fb: 'Outfit', sans-serif;
 }
+
 [data-theme="light"] {
-  --bg:#f5f4f1; --bg2:#fff; --bg3:#eeecea;
-  --line:#dddbd7; --line2:#c8c5c0;
-  --txt:#1a1916; --txt2:#5a5752; --txt3:#9a9791;
-  --gold:#9a6c12; --gold-dim:rgba(154,108,18,.08);
+  --bg:       #f5f4f1;
+  --bg2:      #ffffff;
+  --bg3:      #eeecea;
+  --line:     #dddbd7;
+  --line2:    #c8c5c0;
+  --txt:      #1a1916;
+  --txt2:     #5a5752;
+  --txt3:     #9a9791;
+  --gold:     #9a6c12;
+  --gold-dim: rgba(154,108,18,.08);
+  --indigo:   #4338ca; --indigo-bg: rgba(67,56,202,.08);
+  --blue:     #1d4ed8; --blue-bg:   rgba(29,78,216,.08);
+  --amber:    #92400e; --amber-bg:  rgba(146,64,14,.08);
+  --teal:     #0f766e; --teal-bg:   rgba(15,118,110,.08);
+  --green:    #14532d; --green-bg:  rgba(20,83,45,.08);
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--txt);font-family:var(--fb);font-weight:400;font-size:16px;min-height:100vh;-webkit-font-smoothing:antialiased}
-.mast{border-bottom:1px solid var(--line);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px;background:var(--bg)}
-.brand{font-family:var(--fd);font-size:1.2rem;font-weight:600;letter-spacing:-.02em;text-decoration:none;color:var(--txt)}
-.brand em{font-style:italic;font-weight:400;color:var(--gold)}
-.back{font-size:.82rem;color:var(--txt2);text-decoration:none;display:flex;align-items:center;gap:.35rem}
-.back:hover{color:var(--gold)}
-.main{max-width:760px;margin:0 auto;padding:2.5rem 2rem}
-h1{font-family:var(--fd);font-size:1.4rem;font-weight:600;margin-bottom:.35rem}
-.subtitle{font-size:.85rem;color:var(--txt2);margin-bottom:2rem}
-.section{margin-bottom:2rem}
-.label{font-size:.72rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--txt3);margin-bottom:.6rem;display:block}
-textarea{width:100%;background:var(--bg2);border:1px solid var(--line2);color:var(--txt);font-family:var(--fb);font-size:.88rem;line-height:1.7;padding:.85rem 1rem;border-radius:6px;outline:none;resize:vertical;min-height:220px;transition:border-color .15s}
-textarea:focus{border-color:var(--gold)}
-.test-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
-input[type=text]{width:100%;background:var(--bg2);border:1px solid var(--line2);color:var(--txt);font-family:var(--fb);font-size:.85rem;padding:.6rem .85rem;border-radius:6px;outline:none;transition:border-color .15s}
-input[type=text]:focus{border-color:var(--gold)}
-.btn-row{display:flex;gap:.75rem;flex-wrap:wrap}
-.btn{font-family:var(--fb);font-size:.85rem;padding:.55rem 1.25rem;border-radius:4px;cursor:pointer;border:1px solid var(--line2);background:none;color:var(--txt2);transition:all .15s}
-.btn:hover{border-color:var(--gold);color:var(--gold)}
-.btn-primary{background:var(--gold);color:var(--bg);border-color:var(--gold);font-weight:500}
-.btn-primary:hover{opacity:.85;color:var(--bg)}
-.result-box{background:var(--bg3);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:4px;padding:1rem 1.25rem;font-size:.88rem;line-height:1.7;color:var(--txt2);margin-top:1rem;min-height:60px;display:none}
-.result-box.visible{display:block}
-.msg{font-size:.82rem;padding:.5rem .85rem;border-radius:4px;margin-top:.75rem;display:none}
-.msg.ok{background:rgba(134,239,172,.1);color:#86efac;display:block}
-.msg.err{background:rgba(248,113,113,.1);color:#f87171;display:block}
-.tip{font-size:.78rem;color:var(--txt3);margin-top:.5rem;line-height:1.6}
-.examples{display:grid;grid-template-columns:1fr;gap:.5rem;margin-top:.75rem}
-.example-btn{background:var(--bg3);border:1px solid var(--line);color:var(--txt2);font-family:var(--fb);font-size:.78rem;padding:.5rem .85rem;border-radius:4px;cursor:pointer;text-align:left;transition:all .15s}
-.example-btn:hover{border-color:var(--gold);color:var(--gold)}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--txt);
+  font-family: var(--fb);
+  font-weight: 400;
+  font-size: 16px;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  transition: background .3s, color .3s;
+}
+
+/* ── MASTHEAD ── */
+.mast {
+  border-bottom: 1px solid var(--line);
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 100;
+  transition: background .3s, border-color .3s;
+}
+
+.mast-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: .1rem;
+}
+
+.mast-subbrand {
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+}
+
+.mast-subbrand-label {
+  font-size: .62rem;
+  color: var(--txt3);
+  letter-spacing: .03em;
+}
+
+.mast-logo {
+  height: 14px;
+  width: auto;
+}
+
+.brand {
+  font-family: var(--fd);
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -.02em;
+}
+.brand em {
+  font-family: 'Lora', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--gold);
+}
+
+.mast-center {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+}
+
+.mast-tagline {
+  font-size: .65rem;
+  letter-spacing: .06em;
+  color: var(--txt3);
+  font-style: italic;
+  font-family: var(--fd);
+}
+
+.mast-date {
+  font-size: .65rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--txt3);
+}
+
+.mast-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: .75rem;
+}
+
+.theme-btn {
+  background: none;
+  border: 1px solid var(--line2);
+  color: var(--txt2);
+  height: 30px;
+  padding: 0 .75rem;
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: var(--fb);
+  font-size: .78rem;
+  transition: border-color .15s, color .15s;
+}
+.theme-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+.live {
+  display: flex; align-items: center; gap: .35rem;
+  font-size: .65rem; letter-spacing: .08em; text-transform: uppercase; color: var(--txt3);
+}
+.live::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: #22c55e; animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.3;transform:scale(.7)} }
+
+/* ── TICKER ── */
+.ticker {
+  background: var(--gold-dim);
+  border-bottom: 1px solid var(--line);
+  height: 36px; overflow: hidden;
+  display: flex; align-items: center;
+  transition: background .3s, border-color .3s;
+}
+.ticker-lbl {
+  flex-shrink: 0;
+  background: var(--gold); color: var(--bg);
+  font-size: .7rem; font-weight: 500;
+  letter-spacing: .1em; text-transform: uppercase;
+  padding: 0 .75rem; height: 100%;
+  display: flex; align-items: center;
+}
+.ticker-wrap { overflow: hidden; flex: 1; }
+.ticker-track {
+  display: inline-flex; align-items: center;
+  white-space: nowrap;
+  animation: crawl 80s linear infinite;
+  gap: 2rem; padding-left: 1.5rem;
+}
+.ticker-track:hover { animation-play-state: paused; }
+@keyframes crawl { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+.ticker-item { font-size: .8rem; color: var(--txt2); }
+.ticker-item a { color: inherit; text-decoration: none; }
+.ticker-item a:hover { color: var(--gold); }
+.tick-sep { color: var(--txt3); font-size: .65rem; margin: 0 .5rem; }
+
+/* ── LAYOUT ── */
+.layout {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  min-height: calc(100vh - 86px);
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  border-right: 1px solid var(--line);
+  padding: 1.25rem 0;
+  position: sticky;
+  top: 56px;
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+  transition: border-color .3s;
+}
+
+.s-section { padding: .25rem 1.25rem .9rem; }
+
+.s-label {
+  font-size: .7rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--txt3);
+  margin-bottom: .6rem; font-weight: 500;
+}
+
+.s-list { list-style: none; display: flex; flex-direction: column; gap: .05rem; }
+
+.s-btn {
+  width: 100%; text-align: left;
+  background: none; border: none;
+  font-family: var(--fb); font-size: .9rem; font-weight: 400;
+  color: var(--txt2); padding: .35rem .55rem;
+  border-radius: 3px; cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between; gap: .5rem;
+  transition: background .12s, color .12s;
+}
+.s-btn:hover { background: var(--bg3); color: var(--txt); }
+.s-btn.active { background: var(--gold-dim); color: var(--gold); }
+
+.s-badge {
+  font-size: .68rem; background: var(--bg3); color: var(--txt3);
+  padding: .1rem .4rem; border-radius: 10px; min-width: 20px; text-align: center;
+  transition: background .3s, color .3s;
+}
+
+.s-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+.s-divider { height: 1px; background: var(--line); margin: .4rem 0; transition: background .3s; }
+
+.s-stat { padding: .6rem 1.25rem; }
+.s-stat .n {
+  font-family: var(--fd); font-size: 1.7rem;
+  font-weight: 600; color: var(--txt); line-height: 1;
+}
+.s-stat .l {
+  font-size: .68rem; color: var(--txt3);
+  text-transform: uppercase; letter-spacing: .07em; margin-top: .2rem;
+}
+
+/* ── CONTENT ── */
+.content { display: flex; flex-direction: column; }
+
+/* ── TOOLBAR ── */
+.toolbar {
+  border-bottom: 1px solid var(--line);
+  padding: .6rem 1.5rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  background: var(--bg);
+  transition: background .3s, border-color .3s;
+}
+.toolbar-l { display: flex; align-items: center; gap: .6rem; }
+
+.v-btn {
+  background: none; border: 1px solid var(--line2);
+  color: var(--txt3); font-family: var(--fb);
+  font-size: .82rem; padding: .3rem .75rem;
+  border-radius: 3px; cursor: pointer;
+  display: flex; align-items: center; gap: .35rem;
+  transition: all .12s;
+}
+.v-btn:hover, .v-btn.active { border-color: var(--gold); color: var(--gold); }
+
+.r-count { font-size: .82rem; color: var(--txt3); }
+
+.ref-btn {
+  background: none; border: 1px solid var(--line2);
+  color: var(--txt2); font-family: var(--fb);
+  font-size: .82rem; padding: .3rem .85rem;
+  border-radius: 3px; cursor: pointer;
+  display: flex; align-items: center; gap: .35rem;
+  transition: all .12s;
+}
+.ref-btn:hover { border-color: var(--gold); color: var(--gold); }
+.ref-btn.spin .icon { display: inline-block; animation: rot .7s linear infinite; }
+@keyframes rot { to{transform:rotate(360deg)} }
+
+/* ── NEWS AREA ── */
+.news { padding: 1.25rem 1.5rem; flex: 1; }
+
+/* ── GRID ── */
+.grid-v {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1px; background: var(--line); border: 1px solid var(--line);
+}
+
+/* ── LIST ── */
+.list-v { border: 1px solid var(--line); }
+
+/* ── CARD ── */
+.card {
+  background: var(--bg2); padding: 1.1rem 1.25rem;
+  display: flex; flex-direction: column; gap: .6rem;
+  transition: background .12s;
+  animation: up .25s ease both;
+}
+.card:hover { background: var(--bg3); }
+@keyframes up { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+.card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: .5rem; }
+
+.tag {
+  font-size: .62rem; font-weight: 500;
+  letter-spacing: .06em; text-transform: uppercase;
+  padding: .2rem .5rem; border-radius: 2px; flex-shrink: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 108px;
+}
+.t-indigo{color:var(--indigo);background:var(--indigo-bg)}
+.t-blue  {color:var(--blue);  background:var(--blue-bg)}
+.t-amber {color:var(--amber); background:var(--amber-bg)}
+.t-teal  {color:var(--teal);  background:var(--teal-bg)}
+.t-green {color:var(--green); background:var(--green-bg)}
+.t-red   {color:#f87171;      background:rgba(248,113,113,.12)}
+.t-orange{color:#fb923c;      background:rgba(251,146,60,.12)}
+.t-violet{color:#c084fc;      background:rgba(192,132,252,.12)}
+.t-slate {color:#94a3b8;      background:rgba(148,163,184,.12)}
+
+.card-age { font-size: .78rem; color: var(--txt3); flex-shrink: 0; }
+
+.card-title-link { text-decoration: none; }
+.card-title-link:hover .card-title { color: var(--gold); }
+
+.card-title {
+  font-family: var(--fd); font-size: 1.05rem;
+  font-weight: 600; line-height: 1.45;
+  color: var(--txt); letter-spacing: -.01em;
+}
+
+.card-desc {
+  font-size: .9rem; color: var(--txt2);
+  line-height: 1.7; flex: 1;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+
+.card-foot {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: .55rem; border-top: 1px solid var(--line);
+  transition: border-color .3s;
+}
+
+.card-src { font-size: .72rem; color: var(--txt3); text-transform: uppercase; letter-spacing: .05em; }
+
+.card-link {
+  font-size: .82rem; color: var(--gold); text-decoration: none;
+  display: flex; align-items: center; gap: .3rem;
+  transition: opacity .12s;
+}
+.card-link:hover { opacity: .7; }
+/* ── BOOKMARK ── */
+.card-actions { display: flex; justify-content: space-between; align-items: center; padding-top: .5rem; border-top: 1px solid var(--line); transition: border-color .3s; }
+.bookmark-btn { background: none; border: none; cursor: pointer; font-size: .8rem; color: var(--txt3); font-family: var(--fb); padding: 0; transition: color .15s; display: flex; align-items: center; gap: .3rem; }
+.bookmark-btn:hover { color: var(--gold); }
+.bookmark-btn.saved { color: var(--gold); }
+.saved-badge { display: inline-block; font-size: .58rem; font-weight: 500; letter-spacing: .07em; text-transform: uppercase; background: var(--gold-dim); color: var(--gold); padding: .15rem .5rem; border-radius: 2px; margin-left: .4rem; }
+.admin-link { font-size: .68rem; color: var(--txt3); text-decoration: none; letter-spacing: .03em; transition: color .15s; }
+.admin-link:hover { color: var(--gold); }
+.footer-tagline { font-size: .72rem; font-family: var(--fd); font-style: italic; color: var(--txt3); letter-spacing: .02em; }
+
+
+
+.card-insight {
+  font-size: .82rem; color: var(--txt2);
+  line-height: 1.6; padding: .65rem .8rem;
+  background: var(--bg3); border-radius: 3px;
+  border-left: 2px solid var(--gold);
+  transition: background .3s;
+}
+.card-insight.loading { color: var(--txt3); font-style: italic; }
+[data-theme="light"] .card-insight { background: #ebe8e2; }
+.insight-row { display: flex; align-items: flex-start; gap: .4rem; margin-bottom: .3rem; font-size: .82rem; }
+.insight-row:last-child { margin-bottom: 0; }
+.insight-icon { color: var(--gold); font-size: .85rem; flex-shrink: 0; margin-top: .1rem; }
+.insight-text { color: var(--txt2); line-height: 1.5; }
+.insight-key { color: var(--gold); font-weight: 500; margin-right: .2rem; }
+
+/* ── ROW ── */
+.row {
+  background: var(--bg2); border-bottom: 1px solid var(--line);
+  padding: .8rem 1.25rem;
+  display: grid; grid-template-columns: 110px 1fr auto;
+  align-items: center; gap: 1.25rem;
+  transition: background .12s;
+  animation: up .2s ease both;
+}
+.row:last-child { border-bottom: none; }
+.row:hover { background: var(--bg3); }
+.row-l { display: flex; flex-direction: column; gap: .3rem; align-items: flex-start; min-width: 0; }
+.row-title { font-size: .95rem; color: var(--txt); line-height: 1.45; min-width: 0; }
+.row-src { font-size: .72rem; color: var(--txt3); text-transform: uppercase; letter-spacing: .05em; margin-top: .2rem; }
+
+/* ── STATE ── */
+.state { padding: 4rem 2rem; text-align: center; color: var(--txt2); }
+.ring {
+  width: 30px; height: 30px;
+  border: 2px solid var(--line2); border-top-color: var(--gold);
+  border-radius: 50%; animation: rot .8s linear infinite;
+  margin: 0 auto 1rem;
+}
+.state h3 { font-family: var(--fd); font-size: 1.1rem; font-weight: 700; color: var(--txt); margin-bottom: .4rem; }
+.state p { font-size: .8rem; }
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--line);
+  padding: .9rem 2rem;
+  display: flex; justify-content: flex-end; align-items: center;
+  font-size: .78rem; color: var(--txt3);
+  transition: border-color .3s;
+}
+
+.s-collapse-btn {
+  width: 100%; text-align: left; background: none; border: none;
+  font-family: var(--fb); font-size: .7rem; font-weight: 500;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--txt3);
+  padding: .25rem 1.25rem .5rem; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+  transition: color .12s;
+}
+.s-collapse-btn:hover { color: var(--txt); }
+.s-collapse-icon { font-size: .7rem; transition: transform .2s; }
+.s-collapse-icon.open { transform: rotate(90deg); }
+#sources-panel { padding: 0 0 .5rem; }
+
+.s-source-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .2rem 1.25rem .2rem .75rem; gap: .5rem;
+}
+.s-source-toggle {
+  position: relative; width: 28px; height: 16px; flex-shrink: 0;
+}
+.s-source-toggle input { opacity: 0; width: 0; height: 0; }
+.s-source-slider {
+  position: absolute; inset: 0; background: var(--line2);
+  border-radius: 8px; cursor: pointer; transition: background .2s;
+}
+.s-source-slider::before {
+  content: ''; position: absolute;
+  width: 12px; height: 12px; left: 2px; top: 2px;
+  background: var(--txt3); border-radius: 50%; transition: all .2s;
+}
+.s-source-toggle input:checked + .s-source-slider { background: var(--gold); }
+.s-source-toggle input:checked + .s-source-slider::before {
+  transform: translateX(12px); background: var(--bg);
+}
+.s-source-name {
+  font-size: .78rem; color: var(--txt2); flex: 1;
+  display: flex; align-items: center; gap: .35rem;
+  cursor: pointer;
+}
+.s-source-name:hover { color: var(--txt); }
+
+.toolbar-sep { width: 1px; height: 16px; background: var(--line2); margin: 0 .25rem; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 720px) {
+  /* Header */
+  .mast {
+    grid-template-columns: 1fr auto;
+    padding: 0 1rem;
+    height: 52px;
+  }
+  .mast-center { display: none; }
+  .mast-right { gap: .5rem; }
+  .mast-subbrand { display: none; }
+
+  /* Layout: sidebar boven content */
+  .layout { grid-template-columns: 1fr; }
+
+  /* Sidebar horizontal scrollable pill menu */
+  .sidebar {
+    position: static;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+    padding: .5rem 0;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+  }
+  .s-section {
+    display: inline-flex;
+    gap: .25rem;
+    flex-wrap: nowrap;
+    padding: .25rem .75rem;
+    white-space: nowrap;
+  }
+  .s-label { display: none; }
+  .s-list { flex-direction: row; flex-wrap: nowrap; gap: .25rem; }
+  .s-btn { padding: .25rem .65rem; font-size: .78rem; white-space: nowrap; }
+  .s-badge { display: none; }
+  .s-divider, .s-stat { display: none; }
+
+  /* Toolbar */
+  .toolbar { padding: .5rem .75rem; flex-wrap: wrap; gap: .5rem; }
+  .r-count { font-size: .75rem; }
+
+  /* News grid → single column */
+  .news { padding: .75rem; }
+  .grid-v { grid-template-columns: 1fr; }
+
+  /* Cards iets compacter op mobiel */
+  .card { padding: 1rem; }
+  .card-title { font-size: .95rem; }
+  .card-desc { -webkit-line-clamp: 2; }
+
+  /* Lijst */
+  .row { grid-template-columns: 80px 1fr auto; gap: .75rem; padding: .75rem 1rem; }
+  .row-title { font-size: .85rem; }
+
+  /* Footer */
+  footer { padding: .75rem 1rem; flex-direction: column; gap: .35rem; text-align: center; }
+
+  /* Ticker verbergen op klein scherm */
+  .ticker { display: none; }
+}
 </style>
 </head>
 <body>
+
 <header class="mast">
-  <a href="/" class="brand">Bright<em>Dash</em></a>
-  <a href="/" class="back">← Terug naar dashboard</a>
+  <div class="mast-left">
+    <div class="brand">Bright<em>Dash</em></div>
+    <div class="mast-subbrand">
+      <span class="mast-subbrand-label">a <strong>Bright House</strong> product</span>
+    </div>
+  </div>
+  <div class="mast-center">
+    <div class="mast-date" id="mast-date"></div>
+    <div class="mast-tagline">Complex tech news. Made simple.</div>
+  </div>
+  <div class="mast-right">
+    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Thema wisselen">☀️</button>
+    <span class="live" id="live-lbl">Live</span>
+  </div>
 </header>
 
-<main class="main">
-  <h1>Prompt beheren</h1>
-  <p class="subtitle">Pas de instructie aan die bepaalt hoe analyses worden gegenereerd. Na opslaan worden alle analyses opnieuw gegenereerd.</p>
-
-  <div class="section">
-    <label class="label">Analyse-instructie</label>
-    <textarea id="prompt" placeholder="Laden..."></textarea>
-    <p class="tip">Tip: vermeld wie je bent, wat je doet en wat je wilt weten. Hoe specifieker, hoe relevanter de analyses.</p>
-  </div>
-
-  <div class="section">
-    <label class="label">Snelle voorbeelden</label>
-    <div class="examples">
-      <button class="example-btn" onclick="setExample('consultant')">Strategisch consultant — wat kan ik adviseren?</button>
-      <button class="example-btn" onclick="setExample('ondernemer')">Ondernemer — kansen voor Bright House</button>
-      <button class="example-btn" onclick="setExample('kort')">Supersnel — 1 zin, alleen als het echt relevant is</button>
+<div class="ticker">
+  <div class="ticker-lbl">Nu</div>
+  <div class="ticker-wrap">
+    <div class="ticker-track" id="ticker-track">
+      <span class="ticker-item">Nieuws laden...</span>
     </div>
   </div>
+</div>
 
-  <div class="section">
-    <label class="label">Test de prompt</label>
-    <div class="test-grid">
-      <div>
-        <label class="label" style="margin-bottom:.4rem">Artikel titel</label>
-        <input type="text" id="test-title" placeholder="Microsoft lanceert Copilot Wave 3..." />
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="s-section">
+      <div class="s-label">Weergave</div>
+      <ul class="s-list">
+        <li><button class="s-btn active" onclick="setFilter('all',this)">Alles <span class="s-badge" id="b-all">—</span></button></li>
+        <li><button class="s-btn" onclick="setFilter('nl',this)">🇳🇱 Nederlands <span class="s-badge" id="b-nl">—</span></button></li>
+        <li><button class="s-btn" onclick="setFilter('en',this)">🌐 Internationaal <span class="s-badge" id="b-en">—</span></button></li>
+      </ul>
+    </div>
+    <div class="s-divider"></div>
+    <div class="s-section">
+      <button class="s-collapse-btn" onclick="toggleSources()" id="sources-toggle">
+        <span>Bronnen</span>
+        <span class="s-collapse-icon" id="sources-icon">▸</span>
+      </button>
+      <div id="sources-panel" style="display:none">
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:var(--indigo)"></span>
+            TLDR AI
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('TLDR AI', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:var(--amber)"></span>
+            Ben's Bites
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('Ben's Bites', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:var(--amber)"></span>
+            The Rundown
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('The Rundown', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#f87171"></span>
+            VentureBeat
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('VentureBeat', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:var(--blue)"></span>
+            The Verge
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('The Verge', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#94a3b8"></span>
+            Ars Technica
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('Ars Technica', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:var(--green)"></span>
+            Google AI
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('Google AI', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#94a3b8"></span>
+            Bloomberg Tech
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('Bloomberg Tech', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#94a3b8"></span>
+            MIT Tech Rev
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('MIT Tech Rev', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#c084fc"></span>
+            MIT Sloan
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('MIT Sloan', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#94a3b8"></span>
+            McKinsey
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('McKinsey', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#94a3b8"></span>
+            The Stack
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('The Stack', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:var(--blue)"></span>
+            TLDR Tech
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('TLDR Tech', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#f87171"></span>
+            Tweakers
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('Tweakers', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:var(--teal)"></span>
+            Emerce
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('Emerce', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:var(--green)"></span>
+            Computable
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('Computable', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#fb923c"></span>
+            Frankwatching
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('Frankwatching', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#fb923c"></span>
+            Marketingfacts
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('Marketingfacts', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:var(--teal)"></span>
+            AG Connect
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('AG Connect', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#fb923c"></span>
+            Sprout
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('Sprout', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#f87171"></span>
+            NOS Tech
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('NOS Tech', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:var(--teal)"></span>
+            CIO.nl
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('CIO.nl', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:var(--blue)"></span>
+            Techzine
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('Techzine', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#c084fc"></span>
+            iGovernment
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('iGovernment', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#c084fc"></span>
+            Binnenl.Bestuur
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('Binnenl.Bestuur', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
       </div>
-      <div>
-        <label class="label" style="margin-bottom:.4rem">Korte samenvatting</label>
-        <input type="text" id="test-desc" placeholder="Autonome AI-agents in M365..." />
+    </div>
+    <div class="s-divider"></div>
+    <div class="s-stat">
+      <div class="n" id="stat-n">—</div>
+      <div class="l">Berichten</div>
+    </div>
+    <div class="s-stat">
+      <div class="n">25</div>
+      <div class="l">Bronnen</div>
+    </div>
+  </aside>
+
+  <div class="content">
+    <div class="toolbar">
+      <div class="toolbar-l">
+        <button class="v-btn active" id="btn-grid" onclick="setView('grid')">Grid</button>
+        <button class="v-btn" id="btn-list" onclick="setView('list')">Lijst</button>
+        <div class="toolbar-sep"></div>
+        <button class="v-btn active" id="btn-sort-new" onclick="setSort('new')">Nieuwste</button>
+        <button class="v-btn" id="btn-sort-pop" onclick="setSort('popular')">Populair</button>
+        <span class="r-count" id="r-count"></span>
+      </div>
+      <button class="ref-btn" id="ref-btn" onclick="load()">
+        <span class="icon">↻</span> Vernieuwen
+      </button>
+    </div>
+    <div class="news" id="news-area">
+      <div class="state">
+        <div class="ring"></div>
+        <h3>Nieuws ophalen...</h3>
+        <p>TLDR AI · AI Report · Emerce · Computable</p>
       </div>
     </div>
-    <div class="btn-row">
-      <button class="btn" onclick="testPrompt()">Test analyse genereren</button>
-    </div>
-    <div class="result-box" id="test-result"></div>
   </div>
+</div>
 
-  <div class="btn-row">
-    <button class="btn btn-primary" onclick="savePrompt()">Opslaan & analyses vernieuwen</button>
-    <button class="btn" onclick="resetPrompt()">Standaard herstellen</button>
-  </div>
-  <div class="msg" id="msg"></div>
-</main>
+<footer>
+  <span id="ft-updated">—</span>
+  <span class="footer-tagline">Stay bright. Stay ahead.</span>
+  <a href="/admin" class="admin-link">Prompt beheren</a>
+</footer>
 
 <script>
-const DEFAULT = `Is dit relevant voor een consultant die NL bedrijven en overheden adviseert over digitalisering? Zo ja: schrijf 1 zin wat de consultant ermee kan (max 15 woorden). Zo nee: schrijf alleen een streepje.`;
+// ── CONFIG ──────────────────────────────────────────────────────
+const FEEDS = [
+  { name:'TLDR AI',       tag:'TLDR AI',       cls:'t-indigo', lang:'en', url:'https://tldr.tech/api/rss/ai'                                    },
+  { name:'TLDR Tech',     tag:'TLDR Tech',     cls:'t-blue',   lang:'en', url:'https://tldr.tech/api/rss/tech'                                  },
+  { name:'The Rundown',   tag:'The Rundown',   cls:'t-amber',  lang:'en', url:'https://rss.beehiiv.com/feeds/2R3C6Bt5wj.xml'                    },
+  { name:"Ben's Bites",   tag:"Ben's Bites",   cls:'t-amber',  lang:'en', url:'https://bensbites.beehiiv.com/feed'                              },
+  { name:'VentureBeat',   tag:'VentureBeat',   cls:'t-red',    lang:'en', url:'https://venturebeat.com/category/ai/feed/'                       },
+  { name:'The Verge',     tag:'The Verge',     cls:'t-blue',   lang:'en', url:'https://www.theverge.com/rss/index.xml'                          },
+  { name:'Ars Technica',  tag:'Ars Technica',  cls:'t-slate',  lang:'en', url:'https://feeds.arstechnica.com/arstechnica/index'                 },
+  { name:'Google AI',     tag:'Google AI',     cls:'t-green',  lang:'en', url:'https://blog.google/technology/ai/rss/'                         },
+  { name:'Tweakers',      tag:'Tweakers',      cls:'t-red',    lang:'nl', url:'https://tweakers.net/feeds/nieuws.xml'                           },
+  { name:'Emerce',        tag:'Emerce',        cls:'t-teal',   lang:'nl', url:'https://www.emerce.nl/rss'                                       },
+  { name:'Computable',    tag:'Computable',    cls:'t-green',  lang:'nl', url:'https://www.computable.nl/feed/'                                 },
+  { name:'Frankwatching', tag:'Frankwatching', cls:'t-orange', lang:'nl', url:'https://www.frankwatching.com/feed/'                             },
+  { name:'Marketingfacts',tag:'Mktgfacts',     cls:'t-orange', lang:'nl', url:'https://www.marketingfacts.nl/feed'                              },
+  { name:'AG Connect',    tag:'AG Connect',    cls:'t-teal',   lang:'nl', url:'https://www.agconnect.nl/rss.xml'                                },
+  { name:'Sprout',        tag:'Sprout',        cls:'t-orange', lang:'nl', url:'https://www.sprout.nl/feed'                                      },
+  { name:'NOS Tech',      tag:'NOS Tech',      cls:'t-red',    lang:'nl', url:'https://feeds.nos.nl/nosnieuwstech'                              },
+  { name:'MIT Sloan',     tag:'MIT Sloan',     cls:'t-violet', lang:'en', url:'https://sloanreview.mit.edu/feed/'                               },
+  { name:'McKinsey',      tag:'McKinsey',      cls:'t-slate',  lang:'en', url:'https://www.mckinsey.com/insights/rss'                           },
+  { name:'The Stack',     tag:'The Stack',     cls:'t-slate',  lang:'en', url:'https://thestack.technology/latest/rss/'                         },
+  { name:'MIT Tech Rev',  tag:'MIT Tech Rev',  cls:'t-slate',  lang:'en', url:'https://www.technologyreview.com/feed/'                         },
+  { name:'CIO.nl',        tag:'CIO.nl',        cls:'t-teal',   lang:'nl', url:'https://www.cio.nl/rss.xml'                                       },
+  { name:'Techzine',      tag:'Techzine',       cls:'t-blue',   lang:'nl', url:'https://www.techzine.nl/feed/'                                    },
+  { name:'iGovernment',   tag:'iGov',           cls:'t-violet', lang:'nl', url:'https://www.igovernment.nl/rss.xml'                              },
+  { name:'Binnenl.Bestuur',tag:'Binnenl.Best',  cls:'t-violet', lang:'nl', url:'https://www.binnenlandsbestuur.nl/rss/digitaal'                  },
+  { name:'Bloomberg Tech', tag:'Bloomberg',     cls:'t-slate',  lang:'en', url:'https://feeds.bloomberg.com/technology/news.rss'                 },
+];
+const PROXY = 'https://api.rss2json.com/v1/api.json?rss_url=';
 
-const EXAMPLES = {
-  consultant: `Je bent strategisch adviseur voor een consultant die Nederlandse bedrijven en (semi-)overheden adviseert op het gebied van digitalisering, AI-adoptie en organisatieverandering.
+// Meerdere proxies als fallback voor feeds die rss2json blokkeert
+const RAW_PROXIES = [
+  url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+  url => `https://corsproxy.io/?url=${encodeURIComponent(url)}`,
+  url => url, // directe poging zonder proxy
+];
 
-Analyseer dit nieuwsbericht in maximaal 3 bullet points:
-• Relevant? Wat is de impact voor NL bedrijven of (semi-)overheid — in 1 zin
-• Wat kan een digitaliserings-consultant hiermee adviseren of doen?
-• Actie nodig? Alleen vermelden als er urgentie is
+async function fetchFeedRaw(feedUrl) {
+  for (const proxy of RAW_PROXIES) {
+    try {
+      const r = await fetch(proxy(feedUrl), { signal: AbortSignal.timeout(8000) });
+      if (!r.ok) continue;
+      const text = await r.text();
+      if (text.includes('<item>') || text.includes('<entry>')) return text;
+    } catch(e) { continue; }
+  }
+  return null;
+}
 
-Geen inleiding. Geen afsluitende zin. Alleen de bullets die van toepassing zijn.`,
+// ── STATE ────────────────────────────────────────────────────────
+let all = [], shown = [], view = 'grid', filter = 'all';
 
-  ondernemer: `Je bent adviseur voor een onafhankelijk consultant in Nederland. Hij zoekt kansen voor nieuwe opdrachten bij bedrijven en overheden die digitaliseren.
+// ── THEME ────────────────────────────────────────────────────────
+function autoTheme() { const h = new Date().getHours(); return h>=7&&h<19?'light':'dark'; }
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  document.getElementById('theme-btn').textContent = t==='light' ? '🌙' : '☀️';
+  try { localStorage.setItem('bh-theme', t); } catch(e){}
+}
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme')||'dark';
+  applyTheme(cur==='dark'?'light':'dark');
+}
 
-Analyseer in maximaal 2 bullets:
-• Kans voor een consultant? Welk type klant en welke dienst?
-• Concrete actie: wat doe je morgen met dit nieuws?
+// ── UTILS ────────────────────────────────────────────────────────
+const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
-Alleen als het echt relevant is. Anders: "Niet relevant voor acquisitie."`,
+function age(iso) {
+  const m = Math.floor((Date.now()-new Date(iso))/60000);
+  if(m<1) return 'nu';
+  if(m<60) return m+'m';
+  if(m<1440) return Math.floor(m/60)+'u';
+  return new Date(iso).toLocaleDateString('nl-NL',{day:'numeric',month:'short'});
+}
 
-  kort: `Beoordeel in exact 1-2 bullets of dit nieuws relevant is voor een Nederlandse digitaliserings-consultant bij bedrijven of overheid.
+// ── XML PARSER ───────────────────────────────────────────────────
+function extractTag(block, tag) {
+  const cdata = block.match(new RegExp(`<${tag}[^>]*><!\\[CDATA\\[([\\s\\S]*?)\\]\\]><\\/${tag}>`));
+  if (cdata) return cdata[1].trim();
+  const plain = block.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`));
+  if (plain) return plain[1].replace(/<[^>]*>/g, '').trim();
+  return null;
+}
 
-• Relevant voor NL klanten? Ja/nee + waarom (max 10 woorden)
-• Actie? Alleen als urgent
+function parseXML(xml, feed) {
+  const items = [];
+  // Ondersteun zowel RSS (<item>) als Atom (<entry>)
+  const re = xml.includes('<item>') ? /<item>([\s\S]*?)<\/item>/g : /<entry>([\s\S]*?)<\/entry>/g;
+  let m;
+  while ((m = re.exec(xml)) !== null) {
+    const b = m[1];
+    const title = extractTag(b, 'title');
+    const link  = extractTag(b, 'link') || extractTag(b, 'guid') ||
+                  (b.match(/<link[^>]+href="([^"]+)"/) || [])[1];
+    const desc  = extractTag(b, 'description') || extractTag(b, 'summary') || extractTag(b, 'content');
+    const date  = extractTag(b, 'pubDate') || extractTag(b, 'published') || extractTag(b, 'updated');
+    if (!title || !link) continue;
+    const clean = (desc || '').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&nbsp;/g,' ').replace(/&#\d+;/g,'').trim().slice(0, 200);
+    items.push({
+      title: title.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&#\d+;/g,'').trim(),
+      link: link.trim(),
+      description: clean,
+      pubDate: date ? new Date(date).toISOString() : new Date().toISOString(),
+      source: feed.name, tag: feed.tag, cls: feed.cls, lang: feed.lang
+    });
+    if (items.length >= 8) break;
+  }
+  return items;
+}
 
-Niet relevant = schrijf alleen: "Niet relevant."`
+// ── FETCH ────────────────────────────────────────────────────────
+async function fetchFeed(feed) {
+  // Strategie 1: rss2json (geeft nette JSON terug)
+  try {
+    const r = await fetch(PROXY + encodeURIComponent(feed.url) + '&count=10', { signal: AbortSignal.timeout(8000) });
+    if (r.ok) {
+      const d = await r.json();
+      if (d.status === 'ok' && d.items?.length) {
+        return d.items.slice(0, 8).map(i => ({
+          title:       (i.title||'').replace(/&amp;/g,'&').replace(/&#\d+;/g,'').trim(),
+          link:        i.link || '#',
+          description: (i.description||i.content||'').replace(/<[^>]*>/g,'').replace(/&[a-z]+;/g,' ').trim().slice(0,200),
+          pubDate:     i.pubDate ? new Date(i.pubDate).toISOString() : new Date().toISOString(),
+          source: feed.name, tag: feed.tag, cls: feed.cls, lang: feed.lang
+        }));
+      }
+    }
+  } catch(e) {}
+
+  // Strategie 2: raw XML via fallback proxies
+  try {
+    const xml = await fetchFeedRaw(feed.url);
+    if (xml) return parseXML(xml, feed);
+  } catch(e) {}
+
+  console.warn('Feed mislukt:', feed.name);
+  return [];
+}
+
+async function load() {
+  const btn = document.getElementById('ref-btn');
+  btn.classList.add('spin');
+
+  document.getElementById('news-area').innerHTML =
+    '<div class="state"><div class="ring"></div><h3>Feeds ophalen...</h3><p>Even geduld.</p></div>';
+
+  const results = await Promise.all(FEEDS.map(fetchFeed));
+  all = results.flat().sort((a,b)=>new Date(b.pubDate)-new Date(a.pubDate));
+
+  updateBadges();
+  buildTicker();
+  applyFilter();
+  render();
+
+  const now = new Date();
+  document.getElementById('ft-updated').textContent =
+    'Bijgewerkt '+now.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('live-lbl').textContent = 'Live';
+  btn.classList.remove('spin');
+}
+
+// ── FILTER ───────────────────────────────────────────────────────
+function setFilter(f, btn) {
+  filter = f;
+  document.querySelectorAll('.s-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilter();
+  render();
+}
+
+function applyFilter() {
+  let base;
+  if(filter==='all')      base=all.filter(i=>!disabledSources.has(i.source));
+  else if(filter==='nl')  base=all.filter(i=>i.lang==='nl'&&!disabledSources.has(i.source));
+  else if(filter==='en')  base=all.filter(i=>i.lang==='en'&&!disabledSources.has(i.source));
+  else if(filter.startsWith('s:')) base=all.filter(i=>i.source===filter.slice(2));
+  else base=all.filter(i=>!disabledSources.has(i.source));
+
+  // Sorteren
+  if (sortMode === 'popular') {
+    base.sort((a,b) => getPopularityScore(b) - getPopularityScore(a));
+  } else {
+    base.sort((a,b) => new Date(b.pubDate) - new Date(a.pubDate));
+  }
+
+  // Pin opgeslagen artikelen bovenaan
+  const savedLinks = new Set(getSaved().map(i => i.link));
+  const pinned = base.filter(i => savedLinks.has(i.link));
+  const rest   = base.filter(i => !savedLinks.has(i.link));
+  shown = [...pinned, ...rest];
+
+  let label = shown.length + ' berichten';
+  if (pinned.length > 0) label += ` · ${pinned.length} opgeslagen`;
+  document.getElementById('r-count').textContent = label;
+}
+
+// ── BADGES ───────────────────────────────────────────────────────
+function updateBadges() {
+  const sc={};
+  all.forEach(i=>{ sc[i.source]=(sc[i.source]||0)+1; });
+  document.getElementById('b-all').textContent = all.length;
+  document.getElementById('b-nl').textContent  = all.filter(i=>i.lang==='nl').length;
+  document.getElementById('b-en').textContent  = all.filter(i=>i.lang==='en').length;
+  FEEDS.forEach(f=>{ const el=document.getElementById('b-'+f.name); if(el) el.textContent=sc[f.name]||0; });
+  document.getElementById('stat-n').textContent = all.length;
+}
+
+// ── TICKER ───────────────────────────────────────────────────────
+function buildTicker() {
+  const top = all.slice(0,12);
+  const html = top.map(i=>
+    `<span class="ticker-item"><a href="${esc(i.link)}" target="_blank" rel="noopener">${esc(i.title.slice(0,70)+(i.title.length>70?'…':''))}</a></span><span class="tick-sep">◆</span>`
+  ).join('');
+  const t = document.getElementById('ticker-track');
+  t.innerHTML = html+html;
+}
+
+// ── VIEW ─────────────────────────────────────────────────────────
+function setView(v) {
+  view=v;
+  document.getElementById('btn-grid').classList.toggle('active',v==='grid');
+  document.getElementById('btn-list').classList.toggle('active',v==='list');
+  render();
+}
+
+// ── INSIGHT CACHE ────────────────────────────────────────────────
+const insightCache = {};
+
+// Analyses komen uit de server-side cache (gegenereerd door scheduled function)
+// Worden direct meegeleverd met de feed data — geen API-call nodig vanuit browser
+function getInsight(item) {
+  return item.insight || null;
+}
+
+function loadInsightsForVisible() {
+  const cards = document.querySelectorAll('.card[data-link]');
+  cards.forEach(card => {
+    const link = card.getAttribute('data-link');
+    const insightEl = card.querySelector('.card-insight');
+    if (!insightEl) return;
+    const item = all.find(i => i.link === link);
+    if (!item) return;
+    const text = getInsight(item);
+    if (text) {
+      insightEl.innerHTML = formatInsight(text) || esc(text);
+    } else {
+      insightEl.innerHTML = `<span style="color:var(--txt3);font-size:.8rem">Geen analyse beschikbaar.</span>`;
+    }
+    insightEl.classList.remove('loading');
+    insightEl.setAttribute('data-loaded', 'true');
+  });
+}
+
+// ── INSIGHT FORMATTER ───────────────────────────────────────────
+function formatInsight(text) {
+  if (!text || text === '—' || text.trim() === '') return '';
+  const icons = { 'Wat': 'ti-news', 'Betekenis': 'ti-bulb', 'Actie': 'ti-arrow-right' };
+  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+  return lines.map(line => {
+    const clean = line.replace(/^[•\-\*]\s*/, '');
+    const match = clean.match(/^(Wat|Betekenis|Actie):\s*(.*)/i);
+    if (match) {
+      const key = match[1].charAt(0).toUpperCase() + match[1].slice(1).toLowerCase();
+      const icon = icons[key] || 'ti-point';
+      return `<div class="insight-row"><i class="ti ${icon} insight-icon" aria-hidden="true"></i><span class="insight-text"><span class="insight-key">${key}:</span>${esc(match[2])}</span></div>`;
+    }
+    return `<div class="insight-row"><i class="ti ti-point insight-icon" aria-hidden="true"></i><span class="insight-text">${esc(clean)}</span></div>`;
+  }).join('');
+}
+
+// ── RENDER ───────────────────────────────────────────────────────
+function render() {
+  const area = document.getElementById('news-area');
+  if(!shown.length) {
+    area.innerHTML='<div class="state"><h3>Geen berichten</h3><p>Probeer een ander filter.</p></div>';
+    return;
+  }
+  if(view==='grid') {
+    area.innerHTML = `<div class="grid-v">${shown.map((i,n)=>`
+      <article class="card" style="animation-delay:${Math.min(n*.025,.4)}s" data-link="${esc(i.link)}">
+        <div class="card-top">
+          <span class="tag ${esc(i.cls)}">${esc(i.tag)}</span>
+          <span class="card-age">${age(i.pubDate)}</span>
+        </div>
+        <a class="card-title-link" href="${esc(i.link)}" target="_blank" rel="noopener"><h2 class="card-title">${esc(i.title)}</h2></a>
+        ${i.description?`<p class="card-desc">${esc(i.description)}</p>`:''}
+        <div class="card-insight">${i.insight ? formatInsight(i.insight) : '<span style="color:var(--txt3);font-size:.8rem">Analyse laden...</span>'}</div>
+        <div class="card-actions">
+          <span class="card-src">${esc(i.source)}</span>
+          <div style="display:flex;align-items:center;gap:.75rem">
+            <button class="bookmark-btn ${isSaved(i.link) ? 'saved' : ''}" onclick="toggleSave(event,'${esc(i.link)}','${esc(i.title.replace(/'/g,''))}','${esc(i.source)}','${esc(i.cls)}')" title="${isSaved(i.link) ? 'Verwijder uit opgeslagen' : 'Opslaan voor later'}">${isSaved(i.link) ? '★ Opgeslagen' : '☆ Opslaan'}</button>
+            <a class="card-link" href="${esc(i.link)}" target="_blank" rel="noopener">Lezen</a>
+          </div>
+        </div>
+      </article>`).join('')}</div>`;
+  } else {
+    area.innerHTML = `<div class="list-v">${shown.map((i,n)=>`
+      <article class="row" style="animation-delay:${Math.min(n*.02,.3)}s">
+        <div class="row-l">
+          <span class="tag ${esc(i.cls)}">${esc(i.tag)}</span>
+          <span class="card-age">${age(i.pubDate)}</span>
+        </div>
+        <div>
+          <div class="row-title">${esc(i.title)}</div>
+          <div class="row-src">${esc(i.source)}</div>
+        </div>
+        <a class="card-link" href="${esc(i.link)}" target="_blank" rel="noopener">Lezen</a>
+      </article>`).join('')}</div>`;
+  }
+
+  // On-demand analyses ophalen
+  if (view === 'grid') setTimeout(loadInsightsOnDemand, 100);
+}
+
+// ── BOOKMARKS ────────────────────────────────────────────────────
+function getSaved() {
+  try { return JSON.parse(localStorage.getItem('bh-saved') || '[]'); } catch(e) { return []; }
+}
+function setSaved(arr) {
+  try { localStorage.setItem('bh-saved', JSON.stringify(arr)); } catch(e) {}
+}
+function isSaved(link) {
+  return getSaved().some(i => i.link === link);
+}
+function toggleSave(event, link, title, source, cls) {
+  event.preventDefault();
+  event.stopPropagation();
+  const arr = getSaved();
+  const idx = arr.findIndex(i => i.link === link);
+  if (idx > -1) {
+    arr.splice(idx, 1);
+  } else {
+    arr.unshift({ link, title, source, cls, savedAt: new Date().toISOString() });
+  }
+  setSaved(arr);
+  render(); // re-render to update button state
+}
+
+// ── ON-DEMAND ANALYSE ────────────────────────────────────────────
+async function fetchInsight(item) {
+  try {
+    const res = await fetch('/api/analyse', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ link: item.link, title: item.title, description: item.description })
+    });
+    const data = await res.json();
+    return data.insight || null;
+  } catch(e) { return null; }
+}
+
+async function loadInsightsOnDemand() {
+  const cards = document.querySelectorAll('.card[data-link]');
+  for (const card of cards) {
+    const link = card.getAttribute('data-link');
+    const insightEl = card.querySelector('.card-insight');
+    if (!insightEl || insightEl.getAttribute('data-loaded') === 'true') continue;
+    const item = shown.find(i => i.link === link);
+    if (!item) continue;
+
+    // Als analyse al in data zit
+    if (item.insight) {
+      insightEl.innerHTML = `<span class="insight-label">→</span>${esc(item.insight)}`;
+      insightEl.classList.remove('loading');
+      insightEl.setAttribute('data-loaded', 'true');
+      continue;
+    }
+
+    // On-demand ophalen
+    insightEl.innerHTML = `<span class="insight-label">→</span><span style="color:var(--txt3);font-size:.8rem">Analyse ophalen...</span>`;
+    const insight = await fetchInsight(item);
+    if (insight) {
+      item.insight = insight; // cache in memory
+      insightEl.innerHTML = formatInsight(insight) || esc(insight);
+    } else {
+      insightEl.innerHTML = `<span style="color:var(--txt3);font-size:.8rem">Analyse niet beschikbaar.</span>`;
+    }
+    insightEl.classList.remove('loading');
+    insightEl.setAttribute('data-loaded', 'true');
+  }
+}
+
+// ── SOURCE TOGGLES ───────────────────────────────────────────────
+let disabledSources = new Set();
+try { disabledSources = new Set(JSON.parse(localStorage.getItem('bh-disabled') || '[]')); } catch(e) {}
+
+function toggleSource(name, enabled) {
+  if (enabled) disabledSources.delete(name);
+  else disabledSources.add(name);
+  try { localStorage.setItem('bh-disabled', JSON.stringify([...disabledSources])); } catch(e) {}
+  applyFilter();
+  render();
+}
+
+function toggleSources() {
+  const panel = document.getElementById('sources-panel');
+  const icon = document.getElementById('sources-icon');
+  const open = panel.style.display === 'none';
+  panel.style.display = open ? 'block' : 'none';
+  icon.classList.toggle('open', open);
+}
+
+// Sync toggles with saved state on load
+function syncToggles() {
+  document.querySelectorAll('#sources-panel input[type=checkbox]').forEach(cb => {
+    const name = cb.getAttribute('onchange').match(/'([^']+)'/)?.[1];
+    if (name && disabledSources.has(name)) cb.checked = false;
+  });
+}
+
+// ── SORT ─────────────────────────────────────────────────────────
+let sortMode = 'new';
+
+// Source popularity weights (higher = more authoritative/popular)
+const SOURCE_WEIGHT = {
+  'McKinsey': 3, 'MIT Sloan': 3, 'MIT Tech Rev': 3, 'Bloomberg Tech': 3,
+  'The Verge': 2.5, 'Ars Technica': 2.5, 'VentureBeat': 2,
+  'Tweakers': 2, 'Emerce': 2, 'NOS Tech': 2,
+  'TLDR AI': 2, 'The Rundown': 2, "Ben's Bites": 2,
 };
 
-async function loadPrompt() {
-  try {
-    const res = await fetch('/api/admin/prompt');
-    const data = await res.json();
-    document.getElementById('prompt').value = data.prompt || DEFAULT;
-  } catch(e) {
-    document.getElementById('prompt').value = DEFAULT;
-  }
+function getPopularityScore(item) {
+  const ageHours = (Date.now() - new Date(item.pubDate)) / 3600000;
+  const weight = SOURCE_WEIGHT[item.source] || 1;
+  const recency = Math.max(0, 48 - ageHours) / 48; // veroudert na 48u
+  return (weight * 2) + (recency * 3);
 }
 
-function setExample(key) {
-  document.getElementById('prompt').value = EXAMPLES[key];
+function setSort(mode) {
+  sortMode = mode;
+  document.getElementById('btn-sort-new').classList.toggle('active', mode === 'new');
+  document.getElementById('btn-sort-pop').classList.toggle('active', mode === 'popular');
+  applyFilter();
+  render();
 }
 
-function resetPrompt() {
-  document.getElementById('prompt').value = DEFAULT;
-}
+// ── INIT ─────────────────────────────────────────────────────────
+let saved; try { saved=localStorage.getItem('bh-theme'); } catch(e){}
+applyTheme(saved||autoTheme());
 
-async function savePrompt() {
-  const prompt = document.getElementById('prompt').value.trim();
-  if (!prompt) return;
-  const msg = document.getElementById('msg');
-  msg.className = 'msg';
-  msg.textContent = 'Opslaan...';
-  msg.style.display = 'block';
-  try {
-    const res = await fetch('/api/admin/prompt', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'save', prompt })
-    });
-    const data = await res.json();
-    if (data.ok) {
-      msg.className = 'msg ok';
-      msg.textContent = data.message;
-    } else {
-      msg.className = 'msg err';
-      msg.textContent = data.error || 'Fout bij opslaan';
-    }
-  } catch(e) {
-    msg.className = 'msg err';
-    msg.textContent = e.message;
-  }
-}
+document.getElementById('mast-date').textContent =
+  new Date().toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 
-async function testPrompt() {
-  const prompt = document.getElementById('prompt').value.trim();
-  const title = document.getElementById('test-title').value.trim();
-  const desc = document.getElementById('test-desc').value.trim();
-  if (!title) { alert('Voer een testtitel in'); return; }
-  const resultBox = document.getElementById('test-result');
-  resultBox.textContent = 'Genereren...';
-  resultBox.classList.add('visible');
-  try {
-    const res = await fetch('/api/admin/prompt', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'test', prompt, testTitle: title, testDescription: desc })
-    });
-    const data = await res.json();
-    resultBox.textContent = data.result || data.error || 'Geen resultaat';
-  } catch(e) {
-    resultBox.textContent = 'Fout: ' + e.message;
-  }
-}
-
-loadPrompt();
+syncToggles();
+load();
+setInterval(load, 15*60*1000);
 </script>
 </body>
 </html>
