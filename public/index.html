@@ -894,7 +894,7 @@ function render() {
         </div>
         <a class="card-title-link" href="${esc(i.link)}" target="_blank" rel="noopener"><h2 class="card-title">${esc(i.title)}</h2></a>
         ${i.description?`<p class="card-desc">${esc(i.description)}</p>`:''}
-        <div class="card-insight"><span class="insight-label">→</span>${item.insight ? esc(item.insight) : '<span style="color:var(--txt3);font-size:.8rem">Geen analyse beschikbaar.</span>'}</div>
+        <div class="card-insight"><span class="insight-label">→</span>${i.insight ? esc(i.insight) : '<span style="color:var(--txt3);font-size:.8rem">Analyse laden...</span>'}</div>
         <div class="card-actions">
           <span class="card-src">${esc(i.source)}</span>
           <div style="display:flex;align-items:center;gap:.75rem">
