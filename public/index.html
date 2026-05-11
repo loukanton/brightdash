@@ -2,683 +2,1438 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>BrightDash — Complex tech news. Made simple.</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BrightDash — AI & Digitaal Nieuws</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAEKUlEQVR4nO2ZS4gdRRSGv8loJKXRiTEMRjRGdNe4UEEC6gSFCFFxUaANEVwEREFRJJtE3ASGLEVEjYoIDkirNC4MxEcgOouoqImPGjWJz6iJRohxkjl5jRkXfSN1a/r2rX7NJvXBXdTp/1TVPX26qvo0BAKBQCAQCAQCgUAgEAgEzi4GXINS6mHgGU//GeA4MAUcBn4A9gDbgW0icqTqxEyiNwJP9pEdAyY7vx+BXcBnwNYoTsVnnLoB6De5Z4FRETlc1tkkegtwR8WxjwBvAKNRnP5UJJxXcQAfFgDrgI+UUpdX8L++xtgLgbWAMYl+rEjYZgbYjAMrRWTGR2wSvRT43TK9H8XpqhzdBWR/djlwLXAXsAo4x5FuiuJ0Q95YrrAtbiGb2Lue+uuc9q48URSnR4GjwAFgB7DZJHoZ8Byw2pKuN4neG8XpK24fZR+BP0VkwP4Bi4ER4MM+vneXGMdN/52+jlGc/gLcCYw5lzZ1MqaL2muAiBwSkXGyiBctONeU6LZyAACiOJ0BHgB+tczDwP2utrFFUEQE2FYgWVSiOzsAk8D3ZecTxelx4CnHvNrVtbkLuBzwEZlEDwNLLdMXnTtahXec9ograCwASqkFwG0Fkq89u3LTP3cB9OQ74LTVPt8keqEtqB0ApdSQUuomYAtwVQ/ZNLDZs8taz79NJ3P+dsxL7EbZbXBYKVUlHdeJyD5PrbsFVg5AB/c/DtqNtteAg8BaEXm6hI+dAceAb6sObhI9CFzomLveT9oOwHbgc1+xSfQSwD42fxXF6b81xl9E92n3BNlN+Z+2A3AvsFMpNaqUmnXszqGx57/D1U57bxSn9qI4J9vgPGADsNFD63UELsHNTnuHK2jiKHwucBkQA98U+K5XSkV9+m86A9wAvOcKmjgKT4vIfhF5HVhBVhTJYxB4sE93dgBO4X92mIVJ9KXA7ZZpCtjq6hp9BERkEni5QLKy1wWT6IuBZZZpIorTkzWm8ygw32qP5VWJ2lgDfiu4VlQYaSz9TaKvBB6yTNPMfi8A2gnAFRX9GjkCm0TPB96ke/9/IYrTPXn6RgOglLqIrBTViz8KrtXOAJPo84BXgRss889ku1AutStCSqlBsnftEbIq7vIC+ccF1+wt8DTwZZl5dBa9t4AbLfMUcE8Up5O9/ObqXeAMr+UZTaKH6H6R2h3F6ZRPhybRi4HHgUfI6oNnEEBHcfppkf9c1QQB3haRXjXBvulvEj0ADAGXkGXcCuBWsnqjcuT7yO78J/0mNVcB+AC4r+C6ewJcYxK9psI4J4GXgCeiOP3Hx6HtABwERoHnReRUga7ONwDIan9jwIudoqg3TQXgBFl5+hDZp7EJshL4uIhMe/j3C8AM2d0V4C9gP7CbbKEcj+J0ouK8A4FAIBAIBAKBQCAQCAQCZx3/ATX4NbsH2YGpAAAAAElFTkSuQmCC">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,600;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,600;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-/* === TOKENS === */
 :root {
-  --bg:#09090c; --bg2:#101115; --bg3:#17191f; --bg4:#1d2028;
-  --line:#1f2230; --line2:#292d3e;
-  --txt:#e3e5ee; --txt2:#8b93aa; --txt3:#464d66;
-  --gold:#d4a853; --gold2:#e8c278; --gold-dim:rgba(212,168,83,.09);
-  --pink:#ff2d78;
-  --indigo:#818cf8; --indigo-bg:rgba(129,140,248,.1);
-  --blue:#60a5fa; --blue-bg:rgba(96,165,250,.1);
-  --amber:#fbbf24; --amber-bg:rgba(251,191,36,.1);
-  --teal:#2dd4bf; --teal-bg:rgba(45,212,191,.1);
-  --green:#86efac; --green-bg:rgba(134,239,172,.1);
-  --red:#f87171; --red-bg:rgba(248,113,113,.1);
-  --orange:#fb923c; --orange-bg:rgba(251,146,60,.1);
-  --violet:#c084fc; --violet-bg:rgba(192,132,252,.1);
-  --slate:#94a3b8; --slate-bg:rgba(148,163,184,.1);
-  --fd:'Lora',Georgia,serif;
-  --fb:'Outfit',system-ui,sans-serif;
-  --r:8px; --r-sm:5px;
-  --hdr-h:72px; --ticker-h:34px; --toolbar-h:48px;
-  --top:calc(var(--hdr-h) + var(--ticker-h));
+  --bg:       #08090b;
+  --bg2:      #0f1115;
+  --bg3:      #15181e;
+  --line:     #1f2229;
+  --line2:    #2c3040;
+  --txt:      #dde0e8;
+  --txt2:     #7c8494;
+  --txt3:     #3e4455;
+  --gold:     #d4a853;
+  --gold-dim: rgba(212,168,83,.1);
+  --indigo:   #818cf8; --indigo-bg: rgba(129,140,248,.12);
+  --blue:     #60a5fa; --blue-bg:   rgba(96,165,250,.12);
+  --amber:    #fbbf24; --amber-bg:  rgba(251,191,36,.12);
+  --teal:     #2dd4bf; --teal-bg:   rgba(45,212,191,.12);
+  --green:    #86efac; --green-bg:  rgba(134,239,172,.12);
+  --fd: 'Lora', Georgia, serif;
+  --fb: 'Inter', sans-serif;
 }
+
 [data-theme="light"] {
-  --bg:#f3f2ef; --bg2:#ffffff; --bg3:#eae8e4; --bg4:#e0ddd8;
-  --line:#d5d2cc; --line2:#c0bdb6;
-  --txt:#17160e; --txt2:#504e48; --txt3:#9c9991;
-  --gold:#8a5f0e; --gold2:#a87415; --gold-dim:rgba(138,95,14,.07);
-  --indigo:#3730a3; --indigo-bg:rgba(55,48,163,.07);
-  --blue:#1d4ed8; --blue-bg:rgba(29,78,216,.07);
-  --amber:#92400e; --amber-bg:rgba(146,64,14,.07);
-  --teal:#0f766e; --teal-bg:rgba(15,118,110,.07);
-  --green:#14532d; --green-bg:rgba(20,83,45,.07);
-  --red:#b91c1c; --red-bg:rgba(185,28,28,.07);
-  --orange:#c2410c; --orange-bg:rgba(194,65,12,.07);
-  --violet:#7c3aed; --violet-bg:rgba(124,58,237,.07);
-  --slate:#475569; --slate-bg:rgba(71,85,105,.07);
+  --bg:       #f5f4f1;
+  --bg2:      #ffffff;
+  --bg3:      #eeecea;
+  --line:     #dddbd7;
+  --line2:    #c8c5c0;
+  --txt:      #1a1916;
+  --txt2:     #5a5752;
+  --txt3:     #9a9791;
+  --gold:     #9a6c12;
+  --gold-dim: rgba(154,108,18,.08);
+  --indigo:   #4338ca; --indigo-bg: rgba(67,56,202,.08);
+  --blue:     #1d4ed8; --blue-bg:   rgba(29,78,216,.08);
+  --amber:    #92400e; --amber-bg:  rgba(146,64,14,.08);
+  --teal:     #0f766e; --teal-bg:   rgba(15,118,110,.08);
+  --green:    #14532d; --green-bg:  rgba(20,83,45,.08);
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{height:100%;scroll-behavior:smooth}
-body{background:var(--bg);color:var(--txt);font-family:var(--fb);font-size:15px;font-weight:400;min-height:100%;-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .3s,color .3s}
 
-/* === HEADER === */
-.hdr{position:sticky;top:0;z-index:300;background:var(--bg);border-bottom:1px solid var(--line);transition:background .3s,border-color .3s}
-.hdr-inner{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:var(--hdr-h);padding:0 1.75rem}
-.brand-wrap{display:flex;flex-direction:column;gap:3px}
-.brand{font-family:var(--fd);font-size:1.55rem;font-weight:600;letter-spacing:-.03em;line-height:1;color:var(--txt);text-decoration:none;display:flex;align-items:baseline;gap:0}
-.brand-bright{color:var(--txt)}
-.brand-dash{font-style:italic;font-weight:400;color:var(--gold)}
-.brand-by{font-size:.62rem;color:var(--txt3);letter-spacing:.04em;text-transform:uppercase;font-weight:400}
-.hdr-center{text-align:center;display:flex;flex-direction:column;gap:2px}
-.hdr-date{font-size:.62rem;color:var(--txt3);letter-spacing:.09em;text-transform:uppercase}
-.hdr-motto{font-family:var(--fd);font-style:italic;font-size:.85rem;color:var(--txt2)}
-.hdr-right{display:flex;align-items:center;justify-content:flex-end;gap:.6rem}
-.icon-btn{background:none;border:1px solid var(--line2);color:var(--txt2);padding:.3rem .55rem;border-radius:var(--r-sm);cursor:pointer;font-family:var(--fb);font-size:.75rem;transition:all .15s;display:flex;align-items:center;gap:.3rem;line-height:1}
-.icon-btn:hover{border-color:var(--gold);color:var(--gold)}
-.live-pill{display:flex;align-items:center;gap:.35rem;font-size:.62rem;letter-spacing:.09em;text-transform:uppercase;color:var(--txt3)}
-.live-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;animation:pulse 2.5s ease-in-out infinite;flex-shrink:0}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.25;transform:scale(.55)}}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* === TICKER === */
-.ticker{height:var(--ticker-h);overflow:hidden;display:flex;align-items:center;background:var(--gold-dim);border-bottom:1px solid var(--line);transition:background .3s,border-color .3s}
-.ticker-badge{flex-shrink:0;background:var(--gold);color:var(--bg);font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:0 .9rem;height:100%;display:flex;align-items:center}
-.ticker-fade{overflow:hidden;flex:1;-webkit-mask:linear-gradient(90deg,transparent,black 4%,black 96%,transparent)}
-.ticker-track{display:inline-flex;align-items:center;white-space:nowrap;gap:2.5rem;padding-left:1.75rem;animation:crawl 100s linear infinite}
-.ticker-track:hover{animation-play-state:paused}
-@keyframes crawl{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.ticker-item{font-size:.73rem;color:var(--txt2)}
-.ticker-item a{color:inherit;text-decoration:none;transition:color .15s}
-.ticker-item a:hover{color:var(--gold)}
-.tick-sep{color:var(--txt3);font-size:.5rem}
+body {
+  background: var(--bg);
+  color: var(--txt);
+  font-family: var(--fb);
+  font-weight: 400;
+  font-size: 16px;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  transition: background .3s, color .3s;
+}
 
-/* === LAYOUT === */
-.app-shell{display:grid;grid-template-columns:268px 1fr;min-height:calc(100vh - var(--top))}
+/* ── MASTHEAD ── */
+.mast {
+  border-bottom: 1px solid var(--line);
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 100;
+  transition: background .3s, border-color .3s;
+}
 
-/* === SIDEBAR === */
-.sidebar{border-right:1px solid var(--line);position:sticky;top:var(--top);height:calc(100vh - var(--top));overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:var(--line2) transparent;transition:border-color .3s;display:flex;flex-direction:column}
-.sidebar::-webkit-scrollbar{width:3px}
-.sidebar::-webkit-scrollbar-thumb{background:var(--line2);border-radius:2px}
+.mast-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: .1rem;
+}
 
-/* Sidebar sections */
-.s-section{padding:.9rem 1.1rem}
-.s-section+.s-section{border-top:1px solid var(--line)}
-.s-head{font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--txt3);margin-bottom:.5rem;padding:0 .1rem}
+.mast-subbrand {
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+}
 
-/* Filter pills */
-.filter-pills{display:flex;flex-direction:column;gap:2px}
-.fp{display:flex;align-items:center;justify-content:space-between;width:100%;background:none;border:none;font-family:var(--fb);font-size:.82rem;color:var(--txt2);padding:.38rem .55rem;border-radius:var(--r-sm);cursor:pointer;transition:background .12s,color .12s;text-align:left}
-.fp:hover{background:var(--bg3);color:var(--txt)}
-.fp.on{background:var(--gold-dim);color:var(--gold);font-weight:500}
-.fp-left{display:flex;align-items:center;gap:.45rem}
-.fp-badge{font-size:.58rem;background:var(--bg4);color:var(--txt3);padding:.08rem .38rem;border-radius:9px;min-width:18px;text-align:center;font-weight:500;line-height:1.6;transition:background .2s}
-.fp.on .fp-badge{background:rgba(212,168,83,.14);color:var(--gold)}
+.mast-subbrand-label {
+  font-size: 0.62rem;
+  color: var(--txt3);
+  letter-spacing: .03em;
+}
 
-/* Themes */
-.theme-chips{display:flex;flex-wrap:wrap;gap:.3rem}
-.tc{background:none;border:1px solid var(--line2);color:var(--txt3);font-family:var(--fb);font-size:.72rem;padding:.22rem .6rem;border-radius:14px;cursor:pointer;transition:all .12s;white-space:nowrap}
-.tc:hover{border-color:var(--txt2);color:var(--txt2)}
-.tc.on{border-color:var(--gold);background:var(--gold-dim);color:var(--gold)}
+.mast-logo {
+  height: 14px;
+  width: auto;
+}
 
-/* Sources accordion */
-.src-regions{display:flex;flex-direction:column;gap:.15rem}
-.src-region-hdr{display:flex;align-items:center;justify-content:space-between;width:100%;background:none;border:none;font-family:var(--fb);font-size:.72rem;font-weight:500;color:var(--txt3);padding:.3rem .1rem;cursor:pointer;text-align:left;letter-spacing:.02em;transition:color .12s}
-.src-region-hdr:hover{color:var(--txt2)}
-.src-chev{font-size:.75rem;transition:transform .2s;color:var(--txt3)}
-.src-chev.open{transform:rotate(90deg)}
-.src-list{display:flex;flex-direction:column;gap:0;padding:.1rem 0 .35rem}
-.src-row{display:flex;align-items:center;justify-content:space-between;padding:.28rem .1rem;border-radius:var(--r-sm);transition:background .12s}
-.src-row:hover{background:var(--bg3)}
-.src-name{display:flex;align-items:center;gap:.4rem;font-size:.78rem;color:var(--txt2);cursor:pointer;flex:1;user-select:none;transition:color .12s}
-.src-name:hover{color:var(--txt)}
-.sdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.brand {
+  font-family: var(--fd);
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -.02em;
+}
+.brand em {
+  font-family: 'Lora', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--gold);
+}
 
-/* Toggle */
-.tgl{position:relative;width:28px;height:16px;flex-shrink:0}
-.tgl input{opacity:0;width:0;height:0}
-.tgl-track{position:absolute;inset:0;background:var(--line2);border-radius:8px;cursor:pointer;transition:background .2s}
-.tgl-track::before{content:'';position:absolute;width:12px;height:12px;left:2px;top:2px;background:var(--txt3);border-radius:50%;transition:all .2s}
-.tgl input:checked+.tgl-track{background:var(--gold)}
-.tgl input:checked+.tgl-track::before{transform:translateX(12px);background:var(--bg)}
+.mast-center {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+}
 
-/* Saved in sidebar */
-.saved-sidebar{background:var(--gold-dim);border-radius:var(--r-sm);padding:.55rem .65rem;display:none;flex-direction:column;gap:.35rem}
-.saved-sidebar.on{display:flex}
-.saved-sidebar-hdr{display:flex;align-items:center;justify-content:space-between}
-.saved-sidebar-title{font-size:.75rem;font-weight:500;color:var(--gold);display:flex;align-items:center;gap:.3rem}
-.saved-sidebar-clear{background:none;border:none;font-size:.68rem;color:var(--txt3);cursor:pointer;font-family:var(--fb);transition:color .12s}
-.saved-sidebar-clear:hover{color:var(--red)}
-.saved-sidebar-list{display:flex;flex-direction:column;gap:.2rem;max-height:160px;overflow-y:auto}
-.saved-sidebar-item{font-size:.73rem;color:var(--txt2);line-height:1.35;cursor:pointer;padding:.15rem 0;border-bottom:1px solid rgba(212,168,83,.1)}
-.saved-sidebar-item:last-child{border-bottom:none}
-.saved-sidebar-item:hover{color:var(--gold)}
-.saved-sidebar-item a{color:inherit;text-decoration:none}
+.mast-tagline {
+  font-size: 0.65rem;
+  letter-spacing: .06em;
+  color: var(--txt3);
+  font-style: italic;
+  font-family: var(--fd);
+}
 
-/* Stats */
-.sidebar-stats{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:auto;padding:1rem 1.1rem;border-top:1px solid var(--line)}
-.sstat{text-align:center}
-.sstat-n{font-family:var(--fd);font-size:1.4rem;font-weight:600;color:var(--txt);line-height:1}
-.sstat-l{font-size:.58rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.08em;margin-top:.15rem}
+.mast-date {
+  font-size: 0.65rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--txt3);
+}
 
-/* === CONTENT === */
-.content{display:flex;flex-direction:column;min-width:0}
+.mast-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: .75rem;
+}
 
-/* Toolbar */
-.toolbar{position:sticky;top:var(--top);z-index:200;background:var(--bg);border-bottom:1px solid var(--line);padding:.55rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:.75rem;height:var(--toolbar-h);transition:background .3s,border-color .3s}
-.tbar-l{display:flex;align-items:center;gap:.3rem;flex-wrap:nowrap}
-.tb{background:none;border:1px solid var(--line2);color:var(--txt3);font-family:var(--fb);font-size:.73rem;padding:.26rem .6rem;border-radius:var(--r-sm);cursor:pointer;transition:all .12s;display:flex;align-items:center;gap:.28rem;white-space:nowrap}
-.tb:hover{border-color:var(--txt2);color:var(--txt2)}
-.tb.on{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
-.tb-sep{width:1px;height:14px;background:var(--line2);margin:0 .1rem;flex-shrink:0}
-.tb-count{font-size:.72rem;color:var(--txt3);margin-left:.15rem;white-space:nowrap}
-.ref-btn{background:none;border:1px solid var(--line2);color:var(--txt2);font-family:var(--fb);font-size:.73rem;padding:.26rem .7rem;border-radius:var(--r-sm);cursor:pointer;transition:all .12s;display:flex;align-items:center;gap:.3rem;white-space:nowrap;flex-shrink:0}
-.ref-btn:hover{border-color:var(--gold);color:var(--gold)}
-.ref-btn.spin .si{display:inline-block;animation:rot .7s linear infinite}
-@keyframes rot{to{transform:rotate(360deg)}}
+.theme-btn {
+  background: none;
+  border: 1px solid var(--line2);
+  color: var(--txt2);
+  height: 30px;
+  padding: 0 .75rem;
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: var(--fb);
+  font-size: 0.78rem;
+  transition: border-color .15s, color .15s;
+}
+.theme-btn:hover { border-color: var(--gold); color: var(--gold); }
 
-/* News area */
-.news-area{padding:1.25rem 1.5rem;flex:1}
+.live {
+  display: flex; align-items: center; gap: .35rem;
+  font-size: 0.65rem; letter-spacing: .08em; text-transform: uppercase; color: var(--txt3);
+}
+.live::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: #22c55e; animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.3;transform:scale(.7)} }
 
-/* Grid */
-.grid-v{display:grid;grid-template-columns:repeat(auto-fill,minmax(295px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+/* ── TICKER ── */
+.ticker {
+  background: var(--gold-dim);
+  border-bottom: 1px solid var(--line);
+  height: 36px; overflow: hidden;
+  display: flex; align-items: center;
+  transition: background .3s, border-color .3s;
+}
+.ticker-lbl {
+  flex-shrink: 0;
+  background: var(--gold); color: var(--bg);
+  font-size: 0.7rem; font-weight: 500;
+  letter-spacing: .1em; text-transform: uppercase;
+  padding: 0 .75rem; height: 100%;
+  display: flex; align-items: center;
+}
+.ticker-wrap { overflow: hidden; flex: 1; }
+.ticker-track {
+  display: inline-flex; align-items: center;
+  white-space: nowrap;
+  animation: crawl 120s linear infinite;
+  gap: 2rem; padding-left: 1.5rem;
+}
+.ticker-track:hover { animation-play-state: paused; }
+@keyframes crawl { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+.ticker-item { font-size: 0.8rem; color: var(--txt2); }
+.ticker-item a { color: inherit; text-decoration: none; }
+.ticker-item a:hover { color: var(--gold); }
+.tick-sep { color: var(--txt3); font-size: 0.65rem; margin: 0 .5rem; }
 
-/* List */
-.list-v{border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+/* ── LAYOUT ── */
+.layout {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  min-height: calc(100vh - 86px);
+}
 
-/* Card */
-.card{background:var(--bg2);padding:1.15rem 1.2rem;display:flex;flex-direction:column;gap:.6rem;transition:background .15s;animation:up .22s ease both}
-.card:hover{background:var(--bg3)}
-@keyframes up{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem}
+/* ── SIDEBAR ── */
+.sidebar {
+  border-right: 1px solid var(--line);
+  padding: 1.25rem 0;
+  position: sticky;
+  top: 56px;
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+  transition: border-color .3s;
+}
 
-/* Tags */
-.tag{font-size:.56rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.18rem .5rem;border-radius:3px;flex-shrink:0;line-height:1.5}
+.s-section { padding: .25rem 1.25rem .9rem; }
+
+.s-label {
+  font-size: 0.59rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--txt3);
+  margin-bottom: .6rem; font-weight: 500;
+}
+
+.s-list { list-style: none; display: flex; flex-direction: column; gap: .05rem; }
+
+.s-btn {
+  width: 100%; text-align: left;
+  background: none; border: none;
+  font-family: var(--fb); font-size: 0.9rem; font-weight: 400;
+  color: var(--txt2); padding: .35rem .55rem;
+  border-radius: 3px; cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between; gap: .5rem;
+  transition: background .12s, color .12s;
+}
+.s-btn i {
+  width: 1.1rem; text-align: center; flex-shrink: 0;
+}
+.s-btn-label {
+  flex: 1;
+}
+.s-btn:hover { background: var(--bg3); color: var(--txt); }
+.s-btn.active { background: var(--gold-dim); color: var(--gold); }
+
+.s-badge {
+  font-size: 0.68rem; background: var(--bg3); color: var(--txt3);
+  padding: .1rem .4rem; border-radius: 10px; min-width: 20px; text-align: center;
+  transition: background .3s, color .3s;
+}
+
+.s-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+.s-divider { height: 1px; background: var(--line); margin: .4rem 0; transition: background .3s; }
+
+.s-stat { padding: .6rem 1.25rem; }
+.s-stat .n {
+  font-family: var(--fd); font-size: 1.3rem;
+  font-weight: 600; color: var(--txt); line-height: 1;
+}
+.s-stat .l {
+  font-size: 0.57rem; color: var(--txt3);
+  text-transform: uppercase; letter-spacing: .07em; margin-top: .2rem;
+}
+
+/* ── CONTENT ── */
+.content { display: flex; flex-direction: column; }
+
+/* ── TOOLBAR ── */
+.toolbar {
+  border-bottom: 1px solid var(--line);
+  padding: .6rem 1.5rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  background: var(--bg);
+  transition: background .3s, border-color .3s;
+}
+.toolbar-l { display: flex; align-items: center; gap: .6rem; }
+
+.v-btn {
+  background: none; border: 1px solid var(--line2);
+  color: var(--txt3); font-family: var(--fb);
+  font-size: 0.74rem; padding: .3rem .75rem;
+  border-radius: 3px; cursor: pointer;
+  display: flex; align-items: center; gap: .35rem;
+  transition: all .12s;
+}
+.v-btn:hover, .v-btn.active { border-color: var(--gold); color: var(--gold); }
+
+.r-count { font-size: 0.7rem; color: var(--txt3); }
+
+.ref-btn {
+  background: none; border: 1px solid var(--line2);
+  color: var(--txt2); font-family: var(--fb);
+  font-size: 0.74rem; padding: .3rem .85rem;
+  border-radius: 3px; cursor: pointer;
+  display: flex; align-items: center; gap: .35rem;
+  transition: all .12s;
+}
+.ref-btn:hover { border-color: var(--gold); color: var(--gold); }
+.ref-btn.spin .icon { display: inline-block; animation: rot .7s linear infinite; }
+@keyframes rot { to{transform:rotate(360deg)} }
+
+/* ── NEWS AREA ── */
+.news { padding: 1.25rem 1.5rem; flex: 1; }
+
+/* ── GRID ── */
+.grid-v {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1px; background: var(--line); border: 1px solid var(--line);
+}
+
+/* ── LIST ── */
+.list-v { border: 1px solid var(--line); }
+
+/* ── CARD ── */
+.card {
+  background: var(--bg2); padding: 1.1rem 1.25rem;
+  display: flex; flex-direction: column; gap: .6rem;
+  transition: background .12s;
+  animation: up .25s ease both;
+}
+.card:hover { background: var(--bg3); }
+@keyframes up { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+.card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: .5rem; }
+
+.tag {
+  font-size: 0.62rem; font-weight: 500;
+  letter-spacing: .06em; text-transform: uppercase;
+  padding: .2rem .5rem; border-radius: 2px; flex-shrink: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 108px;
+}
 .t-indigo{color:var(--indigo);background:var(--indigo-bg)}
-.t-blue{color:var(--blue);background:var(--blue-bg)}
-.t-amber{color:var(--amber);background:var(--amber-bg)}
-.t-teal{color:var(--teal);background:var(--teal-bg)}
-.t-green{color:var(--green);background:var(--green-bg)}
-.t-red{color:var(--red);background:var(--red-bg)}
-.t-orange{color:var(--orange);background:var(--orange-bg)}
-.t-violet{color:var(--violet);background:var(--violet-bg)}
-.t-slate{color:var(--slate);background:var(--slate-bg)}
+.t-blue  {color:var(--blue);  background:var(--blue-bg)}
+.t-amber {color:var(--amber); background:var(--amber-bg)}
+.t-teal  {color:var(--teal);  background:var(--teal-bg)}
+.t-green {color:var(--green); background:var(--green-bg)}
+.t-red   {color:#f87171;      background:rgba(248,113,113,.12)}
+.t-orange{color:#fb923c;      background:rgba(251,146,60,.12)}
+.t-violet{color:#c084fc;      background:rgba(192,132,252,.12)}
+.t-slate {color:#94a3b8;      background:rgba(148,163,184,.12)}
 
-/* Theme badge */
-.theme-badge{font-size:.56rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:.18rem .5rem;border-radius:3px;flex-shrink:0;border:1px solid;line-height:1.5}
-.tb-ai{color:#a78bfa;border-color:rgba(167,139,250,.3);background:rgba(167,139,250,.07)}
-.tb-tech{color:#60a5fa;border-color:rgba(96,165,250,.3);background:rgba(96,165,250,.07)}
-.tb-strategy{color:#34d399;border-color:rgba(52,211,153,.3);background:rgba(52,211,153,.07)}
-.tb-hr{color:#f472b6;border-color:rgba(244,114,182,.3);background:rgba(244,114,182,.07)}
-.tb-design{color:#fbbf24;border-color:rgba(251,191,36,.3);background:rgba(251,191,36,.07)}
-.tb-gov{color:#94a3b8;border-color:rgba(148,163,184,.3);background:rgba(148,163,184,.07)}
-.tb-biz{color:#fb923c;border-color:rgba(251,146,60,.3);background:rgba(251,146,60,.07)}
+.card-age { font-size: 0.78rem; color: var(--txt3); flex-shrink: 0; }
 
-.card-age{font-size:.63rem;color:var(--txt3);flex-shrink:0;margin-top:2px}
-.card-title-link{text-decoration:none;display:block}
-.card-title-link:hover .card-title{color:var(--gold)}
-.card-title{font-family:var(--fd);font-size:.98rem;font-weight:600;line-height:1.42;color:var(--txt);letter-spacing:-.01em;transition:color .12s}
-.card-desc{font-size:.78rem;color:var(--txt2);line-height:1.65;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card-title-link { text-decoration: none; }
+.card-title-link:hover .card-title { color: var(--gold); }
 
-/* Insight */
-.card-insight{border-radius:var(--r-sm);background:var(--bg3);border-left:2px solid var(--gold);padding:.55rem .7rem;display:none;flex-direction:column;gap:.18rem;transition:background .3s}
-.card-insight.show{display:flex}
-[data-theme="light"] .card-insight{background:#e6e2d9}
-.ins-row{display:flex;align-items:baseline;gap:.38rem;font-size:.76rem;line-height:1.5}
-.ins-ico{color:var(--gold);font-size:.72rem;flex-shrink:0;margin-top:.1rem}
-.ins-key{color:var(--gold);font-weight:600;font-size:.68rem;flex-shrink:0}
-.ins-val{color:var(--txt2)}
-.ins-load{font-size:.72rem;color:var(--txt3);font-style:italic}
-
-/* Card actions */
-.card-foot{display:flex;align-items:center;justify-content:space-between;padding-top:.5rem;border-top:1px solid var(--line)}
-.card-src{font-size:.6rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.05em}
-.card-actions{display:flex;align-items:center;gap:.55rem}
-.bm-btn{background:none;border:none;cursor:pointer;font-size:.7rem;color:var(--txt3);font-family:var(--fb);display:flex;align-items:center;gap:.22rem;padding:0;transition:color .15s;line-height:1}
-.bm-btn:hover,.bm-btn.on{color:var(--gold)}
-.read-link{font-size:.73rem;color:var(--gold);text-decoration:none;display:flex;align-items:center;gap:.2rem;transition:opacity .12s}
-.read-link:hover{opacity:.7}
-
-/* Row (list view) */
-.row{background:var(--bg2);border-bottom:1px solid var(--line);padding:.8rem 1.25rem;display:grid;grid-template-columns:100px 1fr auto;align-items:center;gap:.9rem;transition:background .12s;animation:up .18s ease both}
-.row:last-child{border-bottom:none}
-.row:hover{background:var(--bg3)}
-.row-l{display:flex;flex-direction:column;gap:.28rem}
-.row-title{font-size:.86rem;color:var(--txt);line-height:1.4}
-.row-title a{color:inherit;text-decoration:none}
-.row-title a:hover{color:var(--gold)}
-.row-src{font-size:.6rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.05em}
-
-/* State (loading/empty) */
-.state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5rem 2rem;text-align:center;gap:1.5rem;min-height:50vh}
-.state-brand{font-family:var(--fd);font-size:2.4rem;font-weight:600;letter-spacing:-.025em;color:var(--txt);line-height:1}
-.state-brand em{font-style:italic;font-weight:400;color:var(--gold)}
-.state-tagline{font-family:var(--fd);font-style:italic;font-size:1.05rem;color:var(--txt2)}
-.state-ring{width:38px;height:38px;border:2px solid var(--line2);border-top-color:var(--gold);border-radius:50%;animation:rot .9s linear infinite}
-.state-msg{font-size:.82rem;color:var(--txt3)}
-
-/* Footer */
-footer{border-top:1px solid var(--line);padding:.85rem 1.75rem;display:flex;justify-content:space-between;align-items:center;font-size:.67rem;color:var(--txt3)}
-.ft-brand{font-family:var(--fd);font-weight:600;font-size:.75rem}
-.ft-brand em{font-style:italic;color:var(--gold);font-weight:400}
-
-/* === MOBILE === */
-.mob-bar{display:none;position:sticky;top:calc(var(--hdr-h) + var(--ticker-h));z-index:200;background:var(--bg);border-bottom:1px solid var(--line);padding:.4rem 1rem;gap:.3rem;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
-.mob-bar::-webkit-scrollbar{display:none}
-.mob-chip{background:none;border:1px solid var(--line2);color:var(--txt3);font-family:var(--fb);font-size:.72rem;padding:.25rem .65rem;border-radius:14px;cursor:pointer;white-space:nowrap;transition:all .12s;flex-shrink:0}
-.mob-chip:hover{border-color:var(--txt2);color:var(--txt)}
-.mob-chip.on{border-color:var(--gold);background:var(--gold-dim);color:var(--gold)}
-.mob-sep{width:1px;height:14px;background:var(--line2);flex-shrink:0}
-
-.fab{display:none;position:fixed;bottom:1.5rem;right:1.25rem;z-index:500;background:var(--gold);color:var(--bg);border:none;border-radius:28px;padding:.6rem 1.1rem;font-family:var(--fb);font-size:.8rem;font-weight:600;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.35);align-items:center;gap:.38rem}
-.fab:hover{opacity:.9}
-
-.overlay{display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.7);backdrop-filter:blur(5px)}
-.overlay.on{display:block}
-
-.sheet{position:fixed;bottom:0;left:0;right:0;z-index:700;background:var(--bg2);border-radius:20px 20px 0 0;padding-bottom:max(1.25rem,env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .32s cubic-bezier(.32,.72,0,1);max-height:90vh;overflow-y:auto;box-shadow:0 -8px 40px rgba(0,0,0,.4)}
-.sheet.on{transform:translateY(0)}
-.sheet-handle{width:36px;height:4px;background:var(--line2);border-radius:2px;margin:.9rem auto .35rem}
-.sheet-title{font-family:var(--fd);font-size:1rem;font-weight:600;text-align:center;color:var(--txt);padding:.25rem 1.25rem .85rem;letter-spacing:-.01em}
-.sheet-sec{padding:.15rem 1.25rem .85rem}
-.sheet-sec-lbl{font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--txt3);display:block;margin-bottom:.55rem;padding:0 .1rem}
-.sheet-sep{height:1px;background:var(--line);margin:.15rem 1.25rem .25rem}
-.sheet-pills{display:flex;gap:.35rem;flex-wrap:wrap}
-.spill{padding:.32rem .8rem;border-radius:16px;border:1px solid var(--line2);background:none;font-family:var(--fb);font-size:.78rem;color:var(--txt2);cursor:pointer;transition:all .12s}
-.spill:hover{border-color:var(--txt2);color:var(--txt)}
-.spill.on{border-color:var(--gold);background:var(--gold-dim);color:var(--gold)}
-.sheet-src-list{display:flex;flex-direction:column;gap:1px}
-.sheet-src-row{display:flex;align-items:center;justify-content:space-between;padding:.38rem .5rem;border-radius:var(--r-sm)}
-.sheet-src-row:hover{background:var(--bg3)}
-.sheet-src-name{display:flex;align-items:center;gap:.4rem;font-size:.82rem;color:var(--txt2);flex:1;cursor:pointer}
-.sheet-close-btn{display:block;width:calc(100% - 2.5rem);margin:.35rem 1.25rem 0;padding:.75rem;background:var(--bg3);border:1px solid var(--line2);border-radius:var(--r);font-family:var(--fb);font-size:.82rem;color:var(--txt2);cursor:pointer;text-align:center;transition:all .12s}
-.sheet-close-btn:hover{border-color:var(--gold);color:var(--gold)}
-
-/* Responsive breakpoints */
-@media(max-width:900px){
-  .hdr-inner{padding:0 1rem;height:58px;--hdr-h:58px;grid-template-columns:1fr auto}
-  .hdr-center{display:none}
-  .brand{font-size:1.3rem}
-  .brand-by{display:none}
-  .ticker{--ticker-h:0;display:none}
-  .app-shell{grid-template-columns:1fr}
-  .sidebar{display:none}
-  .mob-bar{display:flex}
-  .fab{display:flex!important}
-  .toolbar{top:calc(58px + 38px);padding:.45rem .85rem}
-  .news-area{padding:.75rem}
-  .grid-v{grid-template-columns:1fr}
-  .card{padding:.9rem 1rem}
-  .card-desc{-webkit-line-clamp:2}
-  .row{grid-template-columns:88px 1fr auto;gap:.65rem;padding:.7rem .9rem}
-  footer{padding:.75rem 1rem;flex-direction:column;gap:.2rem;text-align:center}
+.card-title {
+  font-family: var(--fd); font-size: 1.05rem;
+  font-weight: 600; line-height: 1.45;
+  color: var(--txt); letter-spacing: -.01em;
 }
-@media(min-width:901px){
-  .fab,.overlay,.sheet{display:none!important}
-  .mob-bar{display:none!important}
+
+.card-desc {
+  font-size: 0.9rem; color: var(--txt2);
+  line-height: 1.7; flex: 1;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
 }
+
+.card-foot {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: .55rem; border-top: 1px solid var(--line);
+  transition: border-color .3s;
+}
+
+.card-src { font-size: 0.72rem; color: var(--txt3); text-transform: uppercase; letter-spacing: .05em; }
+
+.card-link {
+  font-size: 0.82rem; color: var(--gold); text-decoration: none;
+  display: flex; align-items: center; gap: .3rem;
+  transition: opacity .12s;
+}
+.card-link:hover { opacity: .7; }
+/* ── BOOKMARK ── */
+.card-actions { display: flex; justify-content: space-between; align-items: center; padding-top: .5rem; border-top: 1px solid var(--line); transition: border-color .3s; }
+.bookmark-btn { background: none; border: none; cursor: pointer; font-size: 0.8rem; color: var(--txt3); font-family: var(--fb); padding: 0; transition: color .15s; display: flex; align-items: center; gap: .3rem; }
+.bookmark-btn:hover { color: var(--gold); }
+.bookmark-btn.saved { color: var(--gold); }
+.saved-badge { display: inline-block; font-size: 0.58rem; font-weight: 500; letter-spacing: .07em; text-transform: uppercase; background: var(--gold-dim); color: var(--gold); padding: .15rem .5rem; border-radius: 2px; margin-left: .4rem; }
+.admin-link { font-size: 0.68rem; color: var(--txt3); text-decoration: none; letter-spacing: .03em; transition: color .15s; }
+.admin-link:hover { color: var(--gold); }
+.footer-tagline { font-size: 0.72rem; font-family: var(--fd); font-style: italic; color: var(--txt3); letter-spacing: .02em; }
+
+
+
+.card-insight {
+  font-size: 0.82rem; color: var(--txt2);
+  line-height: 1.6; padding: .65rem .8rem;
+  background: var(--bg3); border-radius: 3px;
+  border-left: 2px solid var(--gold);
+  transition: background .3s;
+}
+.card-insight.loading { color: var(--txt3); font-style: italic; }
+[data-theme="light"] .card-insight { background: #ebe8e2; }
+.insight-row { display: flex; align-items: flex-start; gap: .4rem; margin-bottom: .3rem; font-size: 0.82rem; }
+.insight-row:last-child { margin-bottom: 0; }
+.insight-icon { color: var(--gold); font-size: 0.85rem; flex-shrink: 0; margin-top: .1rem; }
+.insight-text { color: var(--txt2); line-height: 1.5; }
+.insight-key { color: var(--gold); font-weight: 500; margin-right: .2rem; }
+
+/* ── ROW ── */
+.row {
+  background: var(--bg2); border-bottom: 1px solid var(--line);
+  padding: .8rem 1.25rem;
+  display: grid; grid-template-columns: 110px 1fr auto;
+  align-items: center; gap: 1.25rem;
+  transition: background .12s;
+  animation: up .2s ease both;
+}
+.row:last-child { border-bottom: none; }
+.row:hover { background: var(--bg3); }
+.row-l { display: flex; flex-direction: column; gap: .3rem; align-items: flex-start; min-width: 0; }
+.row-title { font-size: 0.95rem; color: var(--txt); line-height: 1.45; min-width: 0; }
+.row-src { font-size: 0.72rem; color: var(--txt3); text-transform: uppercase; letter-spacing: .05em; margin-top: .2rem; }
+
+/* ── STATE ── */
+.state { padding: 4rem 2rem; text-align: center; color: var(--txt2); }
+.ring {
+  width: 30px; height: 30px;
+  border: 2px solid var(--line2); border-top-color: var(--gold);
+  border-radius: 50%; animation: rot .8s linear infinite;
+  margin: 0 auto 1rem;
+}
+.state h3 { font-family: var(--fd); font-size: 1.1rem; font-weight: 700; color: var(--txt); margin-bottom: .4rem; }
+.state p { font-size: 0.8rem; }
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--line);
+  padding: .9rem 2rem;
+  display: flex; justify-content: flex-end; align-items: center;
+  font-size: 0.78rem; color: var(--txt3);
+  transition: border-color .3s;
+}
+
+.s-collapse-btn {
+  width: 100%; text-align: left; background: none; border: none;
+  font-family: var(--fb); font-size: 0.7rem; font-weight: 500;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--txt3);
+  padding: .25rem 1.25rem .5rem; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+  transition: color .12s;
+}
+.s-collapse-btn:hover { color: var(--txt); }
+.s-collapse-icon { font-size: 0.7rem; transition: transform .2s; }
+.s-collapse-icon.open { transform: rotate(90deg); }
+#sources-panel { padding: 0 0 .5rem; }
+
+.s-source-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .2rem 1.25rem .2rem .75rem; gap: .5rem;
+}
+.s-source-toggle {
+  position: relative; width: 28px; height: 16px; flex-shrink: 0;
+}
+.s-source-toggle input { opacity: 0; width: 0; height: 0; }
+.s-source-slider {
+  position: absolute; inset: 0; background: var(--line2);
+  border-radius: 8px; cursor: pointer; transition: background .2s;
+}
+.s-source-slider::before {
+  content: ''; position: absolute;
+  width: 12px; height: 12px; left: 2px; top: 2px;
+  background: var(--txt3); border-radius: 50%; transition: all .2s;
+}
+.s-source-toggle input:checked + .s-source-slider { background: var(--gold); }
+.s-source-toggle input:checked + .s-source-slider::before {
+  transform: translateX(12px); background: var(--bg);
+}
+.s-source-name {
+  font-size: 0.78rem; color: var(--txt2); flex: 1;
+  display: flex; align-items: center; gap: .35rem;
+  cursor: pointer;
+}
+.s-source-name:hover { color: var(--txt); }
+
+.toolbar-sep { width: 1px; height: 16px; background: var(--line2); margin: 0 .25rem; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 720px) {
+  /* Header */
+  .mast {
+    grid-template-columns: 1fr auto;
+    padding: 0 1rem;
+    height: 52px;
+  }
+  .mast-center { display: none; }
+  .mast-right { gap: .5rem; }
+  .mast-subbrand { display: none; }
+
+  /* Layout: sidebar boven content */
+  .layout { grid-template-columns: 1fr; }
+
+  /* Sidebar horizontal scrollable pill menu */
+  .sidebar {
+    position: static;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+    padding: .5rem 0;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+  }
+  .s-section {
+    display: inline-flex;
+    gap: .25rem;
+    flex-wrap: nowrap;
+    padding: .25rem .75rem;
+    white-space: nowrap;
+  }
+  .s-label { display: none; }
+  .s-list { flex-direction: row; flex-wrap: nowrap; gap: .25rem; }
+  .s-btn { padding: .25rem .65rem; font-size: 0.78rem; white-space: nowrap; }
+  .s-badge { display: none; }
+  .s-divider, .s-stat { display: none; }
+
+  /* Toolbar */
+  .toolbar { padding: .5rem .75rem; flex-wrap: wrap; gap: .5rem; }
+  .r-count { font-size: 0.75rem; }
+
+  /* News grid → single column */
+  .news { padding: .75rem; }
+  .grid-v { grid-template-columns: 1fr; }
+
+  /* Cards iets compacter op mobiel */
+  .card { padding: 1rem; }
+  .card-title { font-size: 0.95rem; }
+  .card-desc { -webkit-line-clamp: 2; }
+
+  /* Lijst */
+  .row { grid-template-columns: 80px 1fr auto; gap: .75rem; padding: .75rem 1rem; }
+  .row-title { font-size: 0.85rem; }
+
+  /* Footer */
+  footer { padding: .75rem 1rem; flex-direction: column; gap: .35rem; text-align: center; }
+
+  /* Ticker verbergen op klein scherm */
+  .ticker { display: none; }
+}
+
+.svg-icon { display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; }
+.svg-icon svg { display: block; }
+.s-btn .svg-icon { width: 1.1rem; flex-shrink: 0; }
+.s-collapse-icon { display: inline-flex; align-items: center; transition: transform .2s; }
+.s-collapse-icon.open { transform: rotate(90deg); }
+
+/* Theme button icons */
+.icon-sun, .icon-moon { display: inline-flex; align-items: center; }
+/* Dark mode: show sun (to switch to light) */
+.icon-sun { display: inline-flex; }
+.icon-moon { display: none; }
+/* Light mode: show moon (to switch to dark) */
+[data-theme="light"] .icon-sun { display: none; }
+[data-theme="light"] .icon-moon { display: inline-flex; }
+
+/* ── LOADING SPLASH ── */
+.state-brand {
+  font-family: var(--fd);
+  font-size: 2.8rem;
+  font-weight: 600;
+  letter-spacing: -.02em;
+  line-height: 1;
+  margin-bottom: .5rem;
+}
+.state-bright { color: var(--txt); }
+.state-dash {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--gold);
+}
+.state-payoff {
+  font-family: var(--fd);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--txt3);
+  margin-bottom: 2rem;
+  letter-spacing: .01em;
+}
+.state-loading-txt {
+  font-size: 0.75rem;
+  color: var(--txt3);
+  margin-top: .75rem;
+}
+
+.footer-legal { display: flex; align-items: center; gap: .3rem; margin-left: auto; }
+.footer-legal-link { font-size: 0.6rem; color: var(--txt3); text-decoration: none; letter-spacing: .03em; transition: color .15s; }
+.footer-legal-link:hover { color: var(--txt2); }
+.footer-legal-sep { font-size: 0.6rem; color: var(--txt3); }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<header class="hdr">
-  <div class="hdr-inner">
-    <div class="brand-wrap">
-      <a href="/" class="brand"><span class="brand-bright">Bright</span><span class="brand-dash">Dash</span></a>
-      <span class="brand-by">a Bright House product</span>
-    </div>
-    <div class="hdr-center">
-      <div class="hdr-date" id="hdr-date"></div>
-      <div class="hdr-motto">Complex tech news. Made simple.</div>
-    </div>
-    <div class="hdr-right">
-      <span class="live-pill"><span class="live-dot"></span>Live</span>
-      <button class="icon-btn" id="theme-btn" onclick="toggleTheme()">☀️</button>
+<header class="mast">
+  <div class="mast-left">
+    <div class="brand">Bright<em>Dash</em></div>
+    <div class="mast-subbrand">
+      <span class="mast-subbrand-label">a <strong>Bright House</strong> product</span>
     </div>
   </div>
-  <div class="ticker">
-    <div class="ticker-badge">Nu</div>
-    <div class="ticker-fade">
-      <div class="ticker-track" id="ticker-track"><span class="ticker-item">Laden...</span></div>
-    </div>
+  <div class="mast-center">
+    <div class="mast-date" id="mast-date"></div>
+    <div class="mast-tagline">Complex tech news. Made simple.</div>
+  </div>
+  <div class="mast-right">
+    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Thema wisselen"><span class="icon-sun"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></span><span class="icon-moon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg></span></button>
+    <span class="live" id="live-lbl">Live</span>
   </div>
 </header>
 
-<!-- MOBILE FILTER BAR -->
-<div class="mob-bar" id="mob-bar">
-  <button class="mob-chip on" id="mc-all" onclick="setFilter('all');mcSync('all')">Alles</button>
-  <button class="mob-chip" id="mc-nl" onclick="setFilter('nl');mcSync('nl')">🇳🇱 NL</button>
-  <button class="mob-chip" id="mc-en" onclick="setFilter('en');mcSync('en')">🌐 Int'l</button>
-  <div class="mob-sep"></div>
-  <button class="mob-chip on" id="mc-new" onclick="setSort('new');msSync('new')">Nieuwste</button>
-  <button class="mob-chip" id="mc-pop" onclick="setSort('popular');msSync('popular')">Populair</button>
+<div class="ticker">
+  <div class="ticker-lbl">Nu</div>
+  <div class="ticker-wrap">
+    <div class="ticker-track" id="ticker-track">
+      <span class="ticker-item">Nieuws laden...</span>
+    </div>
+  </div>
 </div>
 
-<!-- APP -->
-<div class="app-shell">
+<div class="layout">
 
-  <!-- SIDEBAR -->
   <aside class="sidebar">
-
     <div class="s-section">
-      <div class="s-head">Weergave</div>
-      <div class="filter-pills">
-        <button class="fp on" id="fp-all" onclick="setFilter('all');fpSync('all')">
-          <span class="fp-left"><i class="ti ti-layout-grid" style="font-size:.85rem"></i> Alles</span>
-          <span class="fp-badge" id="b-all">—</span>
-        </button>
-        <button class="fp" id="fp-nl" onclick="setFilter('nl');fpSync('nl')">
-          <span class="fp-left">🇳🇱 Nederlands</span>
-          <span class="fp-badge" id="b-nl">—</span>
-        </button>
-        <button class="fp" id="fp-en" onclick="setFilter('en');fpSync('en')">
-          <span class="fp-left">🌐 Internationaal</span>
-          <span class="fp-badge" id="b-en">—</span>
-        </button>
-      </div>
+      <div class="s-label">Weergave</div>
+      <ul class="s-list">
+        <li><button class="s-btn active" onclick="setFilter('all',this)"><span class="svg-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="6" height="6" rx="1"/><rect x="3" y="13" width="6" height="6" rx="1"/><line x1="13" y1="8" x2="21" y2="8"/><line x1="13" y1="16" x2="21" y2="16"/></svg></span> <span class="s-btn-label">Alles</span> <span class="s-badge" id="b-all">—</span></button></li>
+        <li><button class="s-btn" onclick="setFilter('nl',this)"><span class="svg-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5a5 5 0 0 1 7 0 5 5 0 0 0 7 0v13a5 5 0 0 1-7 0 5 5 0 0 0-7 0V5z"/><line x1="5" y1="21" x2="5" y2="18"/></svg></span> <span class="s-btn-label">Nederlands</span> <span class="s-badge" id="b-nl">—</span></button></li>
+        <li><button class="s-btn" onclick="setFilter('en',this)"><span class="svg-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3.6 9h16.8M3.6 15h16.8M12 3a12 12 0 0 1 3 9 12 12 0 0 1-3 9 12 12 0 0 1-3-9 12 12 0 0 1 3-9z"/></svg></span> <span class="s-btn-label">Internationaal</span> <span class="s-badge" id="b-en">—</span></button></li>
+        <li><button class="s-btn" onclick="setFilter('saved',this)"><span class="svg-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-3-7 3V4a1 1 0 0 1 1-1z"/></svg></span> <span class="s-btn-label">Opgeslagen</span> <span class="s-badge" id="b-saved">0</span></button></li>
+      </ul>
     </div>
-
+    <div class="s-divider"></div>
     <div class="s-section">
-      <div class="s-head">Thema</div>
-      <div class="theme-chips">
-        <button class="tc" data-theme-filter="AI" onclick="toggleThemeFilter('AI',this)">AI</button>
-        <button class="tc" data-theme-filter="Tech" onclick="toggleThemeFilter('Tech',this)">Tech</button>
-        <button class="tc" data-theme-filter="Strategie" onclick="toggleThemeFilter('Strategie',this)">Strategie</button>
-        <button class="tc" data-theme-filter="HR" onclick="toggleThemeFilter('HR',this)">HR</button>
-        <button class="tc" data-theme-filter="Design" onclick="toggleThemeFilter('Design',this)">Design</button>
-        <button class="tc" data-theme-filter="Overheid" onclick="toggleThemeFilter('Overheid',this)">Overheid</button>
-        <button class="tc" data-theme-filter="Ondernemen" onclick="toggleThemeFilter('Ondernemen',this)">Ondernemen</button>
-      </div>
+      <div class="s-label">Thema</div>
+      <ul class="s-list">
+        <li><button class="s-btn" onclick="setFilter('cat:ai',this)"><span class="svg-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><line x1="12" y1="7" x2="12" y2="11"/><line x1="8" y1="15" x2="8" y2="17"/><line x1="16" y1="15" x2="16" y2="17"/></svg></span> <span class="s-btn-label">AI</span> <span class="s-badge" id="b-ai">—</span></button></li>
+        <li><button class="s-btn" onclick="setFilter('cat:tech',this)"><span class="svg-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="10" height="10" rx="1"/><path d="M9 7V4M12 7V4M15 7V4M9 20v-3M12 20v-3M15 20v-3M7 9H4M7 12H4M7 15H4M20 9h-3M20 12h-3M20 15h-3"/></svg></span> <span class="s-btn-label">Tech</span> <span class="s-badge" id="b-tech">—</span></button></li>
+        <li><button class="s-btn" onclick="setFilter('cat:media',this)"><span class="svg-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a3 3 0 0 1 0 6"/><path d="M10 8v11a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-5"/><path d="M12 8h0l4.524-3.77A.9.9 0 0 1 18 5v14a.9.9 0 0 1-1.476.692L12 16H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1h8z"/></svg></span> <span class="s-btn-label">Media & Marketing</span> <span class="s-badge" id="b-media">—</span></button></li>
+        <li><button class="s-btn" onclick="setFilter('cat:overheid',this)"><span class="svg-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="21" x2="21" y2="21"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="5 10 5 21"/><polyline points="19 10 19 21"/><polyline points="9 10 9 21"/><polyline points="15 10 15 21"/><path d="M12 3L3 10h18L12 3z"/></svg></span> <span class="s-btn-label">Overheid</span> <span class="s-badge" id="b-overheid">—</span></button></li>
+        <li><button class="s-btn" onclick="setFilter('cat:org',this)"><span class="svg-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="1"/><line x1="9" y1="22" x2="9" y2="12"/><line x1="15" y1="22" x2="15" y2="12"/><rect x="9" y="12" width="6" height="10"/><line x1="8" y1="6" x2="8" y2="6.01"/><line x1="12" y1="6" x2="12" y2="6.01"/><line x1="16" y1="6" x2="16" y2="6.01"/></svg></span> <span class="s-btn-label">Organisatie</span> <span class="s-badge" id="b-org">—</span></button></li>
+        <li><button class="s-btn" onclick="setFilter('cat:wow',this)"><span class="svg-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5z"/><path d="M5 3l.75 2.25L8 6l-2.25.75L5 9l-.75-2.25L2 6l2.25-.75z"/><path d="M19 15l.75 2.25L22 18l-2.25.75L19 21l-.75-2.25L16 18l2.25-.75z"/></svg></span> <span class="s-btn-label">WoW</span> <span class="s-badge" id="b-wow">—</span></button></li>
+        <li><button class="s-btn" onclick="setFilter('cat:hr',this)"><span class="svg-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="3"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><circle cx="17" cy="7" r="3"/><path d="M21 21v-2a4 4 0 0 0-3-3.87"/></svg></span> <span class="s-btn-label">HR & Werk</span> <span class="s-badge" id="b-hr">—</span></button></li>
+      </ul>
     </div>
-
+    <div class="s-divider"></div>
     <div class="s-section">
-      <div class="s-head">Bronnen</div>
-      <div class="src-regions" id="src-regions"></div>
-    </div>
-
-    <div class="s-section">
-      <div class="s-head">Opgeslagen</div>
-      <div class="saved-sidebar" id="saved-sidebar">
-        <div class="saved-sidebar-hdr">
-          <span class="saved-sidebar-title"><i class="ti ti-star-filled"></i> <span id="saved-count-txt"></span></span>
-          <button class="saved-sidebar-clear" onclick="clearSaved()">Wis alles</button>
+      <button class="s-collapse-btn" onclick="toggleSources()" id="sources-toggle">
+        <span>Bronnen</span>
+        <span class="svg-icon s-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+      </button>
+      <div id="sources-panel" style="display:none">
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:var(--indigo)"></span>
+            TLDR AI
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('TLDR AI', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
         </div>
-        <div class="saved-sidebar-list" id="saved-list"></div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:var(--amber)"></span>
+            Ben's Bites
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('Ben's Bites', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:var(--amber)"></span>
+            The Rundown
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('The Rundown', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#f87171"></span>
+            VentureBeat
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('VentureBeat', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:var(--blue)"></span>
+            The Verge
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('The Verge', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#94a3b8"></span>
+            Ars Technica
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('Ars Technica', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:var(--green)"></span>
+            Google AI
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('Google AI', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#94a3b8"></span>
+            Bloomberg Tech
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('Bloomberg Tech', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#94a3b8"></span>
+            MIT Tech Rev
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('MIT Tech Rev', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#c084fc"></span>
+            MIT Sloan
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('MIT Sloan', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#94a3b8"></span>
+            McKinsey
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('McKinsey', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#94a3b8"></span>
+            The Stack
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('The Stack', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:var(--blue)"></span>
+            TLDR Tech
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('TLDR Tech', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#f87171"></span>
+            Tweakers
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('Tweakers', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:var(--teal)"></span>
+            Emerce
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('Emerce', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:var(--green)"></span>
+            Computable
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('Computable', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#fb923c"></span>
+            Frankwatching
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('Frankwatching', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#fb923c"></span>
+            Marketingfacts
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('Marketingfacts', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:var(--teal)"></span>
+            AG Connect
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('AG Connect', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#fb923c"></span>
+            Sprout
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('Sprout', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#f87171"></span>
+            NOS Tech
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('NOS Tech', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:var(--teal)"></span>
+            CIO.nl
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('CIO.nl', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:var(--blue)"></span>
+            Techzine
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('Techzine', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#c084fc"></span>
+            iGovernment
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('iGovernment', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
+        <div class="s-source-row">
+          <label class="s-source-name">
+            <span class="s-dot" style="background:#c084fc"></span>
+            Binnenl.Bestuur
+          </label>
+          <label class="s-source-toggle">
+            <input type="checkbox" checked onchange="toggleSource('Binnenl.Bestuur', this.checked)" />
+            <span class="s-source-slider"></span>
+          </label>
+        </div>
       </div>
     </div>
-
-    <div class="sidebar-stats">
-      <div class="sstat"><div class="sstat-n" id="stat-n">—</div><div class="sstat-l">Berichten</div></div>
-      <div class="sstat"><div class="sstat-n">25</div><div class="sstat-l">Bronnen</div></div>
+    <div class="s-divider"></div>
+    <div class="s-stat">
+      <div class="n" id="stat-n">—</div>
+      <div class="l">Berichten</div>
+    </div>
+    <div class="s-stat">
+      <div class="n">25</div>
+      <div class="l">Bronnen</div>
     </div>
   </aside>
 
-  <!-- CONTENT -->
   <div class="content">
     <div class="toolbar">
-      <div class="tbar-l">
-        <button class="tb on" id="btn-grid" onclick="setView('grid')"><i class="ti ti-layout-grid"></i> Grid</button>
-        <button class="tb" id="btn-list" onclick="setView('list')"><i class="ti ti-list"></i> Lijst</button>
-        <div class="tb-sep"></div>
-        <button class="tb on" id="btn-new" onclick="setSort('new')"><i class="ti ti-clock"></i> Nieuwste</button>
-        <button class="tb" id="btn-pop" onclick="setSort('popular')"><i class="ti ti-trending-up"></i> Populair</button>
-        <span class="tb-count" id="r-count"></span>
+      <div class="toolbar-l">
+        <button class="v-btn active" id="btn-grid" onclick="setView('grid')"><span class="svg-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg></span> Grid</button>
+        <button class="v-btn" id="btn-list" onclick="setView('list')"><span class="svg-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1" fill="currentColor"/><circle cx="3" cy="12" r="1" fill="currentColor"/><circle cx="3" cy="18" r="1" fill="currentColor"/></svg></span> Lijst</button>
+        <div class="toolbar-sep"></div>
+        <button class="v-btn active" id="btn-sort-new" onclick="setSort('new')"><span class="svg-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg></span> Nieuwste</button>
+        <button class="v-btn" id="btn-sort-pop" onclick="setSort('popular')"><span class="svg-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span> Populair</button>
+        <span class="r-count" id="r-count"></span>
       </div>
-      <button class="ref-btn" id="ref-btn" onclick="load()"><span class="si">↻</span> Vernieuwen</button>
+      <button class="ref-btn" id="ref-btn" onclick="load()">
+        <span class="svg-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11A8 8 0 1 0 9.5 3"/><polyline points="20 3 20 11 12 11"/></svg></span> Vernieuwen
+      </button>
     </div>
-    <div id="news-area">
+    <div class="news" id="news-area">
       <div class="state">
-        <div class="state-brand">Bright<em>Dash</em></div>
-        <div class="state-tagline">Complex tech news. Made simple.</div>
-        <div class="state-ring"></div>
-        <p class="state-msg">Nieuws ophalen uit 25 bronnen...</p>
+        <div class="state-brand"><span class="state-bright">Bright</span><em class="state-dash">Dash</em></div>
+        <div class="state-payoff">Complex tech news. Made simple.</div>
+        <div class="ring"></div>
+        <p class="state-loading-txt">Nieuws ophalen uit 25 bronnen...</p>
       </div>
     </div>
   </div>
 </div>
 
 <footer>
-  <span class="ft-brand">Bright<em>Dash</em> · a Bright House product</span>
   <span id="ft-updated">—</span>
+  <span class="footer-tagline">Stay bright. Stay ahead.</span>
+  <a href="/admin" class="admin-link">Prompt beheren</a>
+  <span class="footer-legal">
+    <a href="/privacy" class="footer-legal-link">Privacybeleid</a>
+    <span class="footer-legal-sep">·</span>
+    <a href="/voorwaarden" class="footer-legal-link">Voorwaarden</a>
+  </span>
 </footer>
 
-<!-- MOBILE FAB -->
-<button class="fab" onclick="openSheet()"><i class="ti ti-adjustments-horizontal"></i> Filters</button>
-
-<!-- OVERLAY + SHEET -->
-<div class="overlay" id="overlay" onclick="closeSheet()"></div>
-<div class="sheet" id="sheet">
-  <div class="sheet-handle"></div>
-  <div class="sheet-title">BrightDash Filters</div>
-
-  <div class="sheet-sec">
-    <span class="sheet-sec-lbl">Weergave</span>
-    <div class="sheet-pills">
-      <button class="spill on" id="sp-all" onclick="setFilter('all');mcSync('all');spSync('all')">Alles</button>
-      <button class="spill" id="sp-nl" onclick="setFilter('nl');mcSync('nl');spSync('nl')">🇳🇱 Nederlands</button>
-      <button class="spill" id="sp-en" onclick="setFilter('en');mcSync('en');spSync('en')">🌐 Internationaal</button>
-    </div>
-  </div>
-
-  <div class="sheet-sep"></div>
-
-  <div class="sheet-sec">
-    <span class="sheet-sec-lbl">Sorteren</span>
-    <div class="sheet-pills">
-      <button class="spill on" id="ss-new" onclick="setSort('new');msSync('new');ssSync('new')"><i class="ti ti-clock"></i> Nieuwste</button>
-      <button class="spill" id="ss-pop" onclick="setSort('popular');msSync('popular');ssSync('popular')"><i class="ti ti-trending-up"></i> Populair</button>
-    </div>
-  </div>
-
-  <div class="sheet-sep"></div>
-
-  <div class="sheet-sec">
-    <span class="sheet-sec-lbl">Thema</span>
-    <div class="sheet-pills" id="sheet-themes"></div>
-  </div>
-
-  <div class="sheet-sep"></div>
-
-  <div class="sheet-sec">
-    <span class="sheet-sec-lbl">Bronnen</span>
-    <div class="sheet-src-list" id="sheet-srcs"></div>
-  </div>
-
-  <button class="sheet-close-btn" onclick="closeSheet()">Sluiten</button>
-</div>
-
 <script>
-/* ── DATA ─────────────────────────────────────────────────────── */
-const FEEDS=[
-  {name:'TLDR AI',tag:'TLDR AI',cls:'t-indigo',lang:'en',url:'https://tldr.tech/api/rss/ai'},
-  {name:'TLDR Tech',tag:'TLDR Tech',cls:'t-blue',lang:'en',url:'https://tldr.tech/api/rss/tech'},
-  {name:'The Rundown',tag:'The Rundown',cls:'t-amber',lang:'en',url:'https://rss.beehiiv.com/feeds/2R3C6Bt5wj.xml'},
-  {name:"Ben's Bites",tag:"Ben's Bites",cls:'t-amber',lang:'en',url:'https://bensbites.beehiiv.com/feed'},
-  {name:'VentureBeat',tag:'VentureBeat',cls:'t-red',lang:'en',url:'https://venturebeat.com/category/ai/feed/'},
-  {name:'The Verge',tag:'The Verge',cls:'t-blue',lang:'en',url:'https://www.theverge.com/rss/index.xml'},
-  {name:'Ars Technica',tag:'Ars Technica',cls:'t-slate',lang:'en',url:'https://feeds.arstechnica.com/arstechnica/index'},
-  {name:'Google AI',tag:'Google AI',cls:'t-green',lang:'en',url:'https://blog.google/technology/ai/rss/'},
-  {name:'Bloomberg Tech',tag:'Bloomberg',cls:'t-slate',lang:'en',url:'https://feeds.bloomberg.com/technology/news.rss'},
-  {name:'MIT Tech Rev',tag:'MIT Tech Rev',cls:'t-slate',lang:'en',url:'https://www.technologyreview.com/feed/'},
-  {name:'MIT Sloan',tag:'MIT Sloan',cls:'t-violet',lang:'en',url:'https://sloanreview.mit.edu/feed/'},
-  {name:'McKinsey',tag:'McKinsey',cls:'t-slate',lang:'en',url:'https://www.mckinsey.com/insights/rss'},
-  {name:'The Stack',tag:'The Stack',cls:'t-slate',lang:'en',url:'https://thestack.technology/latest/rss/'},
-  {name:'Tweakers',tag:'Tweakers',cls:'t-red',lang:'nl',url:'https://tweakers.net/feeds/nieuws.xml'},
-  {name:'Emerce',tag:'Emerce',cls:'t-teal',lang:'nl',url:'https://www.emerce.nl/rss'},
-  {name:'Computable',tag:'Computable',cls:'t-green',lang:'nl',url:'https://www.computable.nl/feed/'},
-  {name:'Frankwatching',tag:'Frankwatching',cls:'t-orange',lang:'nl',url:'https://www.frankwatching.com/feed/'},
-  {name:'Marketingfacts',tag:'Mktgfacts',cls:'t-orange',lang:'nl',url:'https://www.marketingfacts.nl/feed'},
-  {name:'AG Connect',tag:'AG Connect',cls:'t-teal',lang:'nl',url:'https://www.agconnect.nl/rss.xml'},
-  {name:'Sprout',tag:'Sprout',cls:'t-orange',lang:'nl',url:'https://www.sprout.nl/feed'},
-  {name:'NOS Tech',tag:'NOS Tech',cls:'t-red',lang:'nl',url:'https://feeds.nos.nl/nosnieuwstech'},
-  {name:'CIO.nl',tag:'CIO.nl',cls:'t-teal',lang:'nl',url:'https://www.cio.nl/rss.xml'},
-  {name:'Techzine',tag:'Techzine',cls:'t-blue',lang:'nl',url:'https://www.techzine.nl/feed/'},
-  {name:'iGovernment',tag:'iGov',cls:'t-violet',lang:'nl',url:'https://www.igovernment.nl/rss.xml'},
-  {name:'Binnenl.Bestuur',tag:'Binnenl.Best',cls:'t-violet',lang:'nl',url:'https://www.binnenlandsbestuur.nl/rss/digitaal'},
+// ── CONFIG ──────────────────────────────────────────────────────
+const FEEDS = [
+  { name:'TLDR AI',       tag:'TLDR AI',       cls:'t-indigo', lang:'en', url:'https://tldr.tech/api/rss/ai'                                    },
+  { name:'TLDR Tech',     tag:'TLDR Tech',     cls:'t-blue',   lang:'en', url:'https://tldr.tech/api/rss/tech'                                  },
+  { name:'The Rundown',   tag:'The Rundown',   cls:'t-amber',  lang:'en', url:'https://rss.beehiiv.com/feeds/2R3C6Bt5wj.xml'                    },
+  { name:"Ben's Bites",   tag:"Ben's Bites",   cls:'t-amber',  lang:'en', url:'https://bensbites.beehiiv.com/feed'                              },
+  { name:'VentureBeat',   tag:'VentureBeat',   cls:'t-red',    lang:'en', url:'https://venturebeat.com/category/ai/feed/'                       },
+  { name:'The Verge',     tag:'The Verge',     cls:'t-blue',   lang:'en', url:'https://www.theverge.com/rss/index.xml'                          },
+  { name:'Ars Technica',  tag:'Ars Technica',  cls:'t-slate',  lang:'en', url:'https://feeds.arstechnica.com/arstechnica/index'                 },
+  { name:'Google AI',     tag:'Google AI',     cls:'t-green',  lang:'en', url:'https://blog.google/technology/ai/rss/'                         },
+  { name:'Tweakers',      tag:'Tweakers',      cls:'t-red',    lang:'nl', url:'https://tweakers.net/feeds/nieuws.xml'                           },
+  { name:'Emerce',        tag:'Emerce',        cls:'t-teal',   lang:'nl', url:'https://www.emerce.nl/rss'                                       },
+  { name:'Computable',    tag:'Computable',    cls:'t-green',  lang:'nl', url:'https://www.computable.nl/feed/'                                 },
+  { name:'Frankwatching', tag:'Frankwatching', cls:'t-orange', lang:'nl', url:'https://www.frankwatching.com/feed/'                             },
+  { name:'Marketingfacts',tag:'Mktgfacts',     cls:'t-orange', lang:'nl', url:'https://www.marketingfacts.nl/feed'                              },
+  { name:'AG Connect',    tag:'AG Connect',    cls:'t-teal',   lang:'nl', url:'https://www.agconnect.nl/rss.xml'                                },
+  { name:'Sprout',        tag:'Sprout',        cls:'t-orange', lang:'nl', url:'https://www.sprout.nl/feed'                                      },
+  { name:'NOS Tech',      tag:'NOS Tech',      cls:'t-red',    lang:'nl', url:'https://feeds.nos.nl/nosnieuwstech'                              },
+  { name:'MIT Sloan',     tag:'MIT Sloan',     cls:'t-violet', lang:'en', url:'https://sloanreview.mit.edu/feed/'                               },
+  { name:'McKinsey',      tag:'McKinsey',      cls:'t-slate',  lang:'en', url:'https://www.mckinsey.com/insights/rss'                           },
+  { name:'The Stack',     tag:'The Stack',     cls:'t-slate',  lang:'en', url:'https://thestack.technology/latest/rss/'                         },
+  { name:'MIT Tech Rev',  tag:'MIT Tech Rev',  cls:'t-slate',  lang:'en', url:'https://www.technologyreview.com/feed/'                         },
+  { name:'CIO.nl',        tag:'CIO.nl',        cls:'t-teal',   lang:'nl', url:'https://www.cio.nl/rss.xml'                                       },
+  { name:'Techzine',      tag:'Techzine',       cls:'t-blue',   lang:'nl', url:'https://www.techzine.nl/feed/'                                    },
+  { name:'iGovernment',   tag:'iGov',           cls:'t-violet', lang:'nl', url:'https://www.igovernment.nl/rss.xml'                              },
+  { name:'Binnenl.Bestuur',tag:'Binnenl.Best',  cls:'t-violet', lang:'nl', url:'https://www.binnenlandsbestuur.nl/rss/digitaal'                  },
+  { name:'Bloomberg Tech', tag:'Bloomberg',     cls:'t-slate',  lang:'en', url:'https://feeds.bloomberg.com/technology/news.rss'                 },
+];
+const PROXY = 'https://api.rss2json.com/v1/api.json?rss_url=';
+
+// Meerdere proxies als fallback voor feeds die rss2json blokkeert
+const RAW_PROXIES = [
+  url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+  url => `https://corsproxy.io/?url=${encodeURIComponent(url)}`,
+  url => url, // directe poging zonder proxy
 ];
 
-const SRC_META={
-  'TLDR AI':{c:'#818cf8'},'TLDR Tech':{c:'#60a5fa'},'The Rundown':{c:'#fbbf24'},"Ben's Bites":{c:'#fbbf24'},
-  'VentureBeat':{c:'#f87171'},'The Verge':{c:'#60a5fa'},'Ars Technica':{c:'#94a3b8'},'Google AI':{c:'#86efac'},
-  'Bloomberg Tech':{c:'#94a3b8'},'MIT Tech Rev':{c:'#94a3b8'},'MIT Sloan':{c:'#c084fc'},'McKinsey':{c:'#94a3b8'},
-  'The Stack':{c:'#94a3b8'},'Tweakers':{c:'#f87171'},'Emerce':{c:'#2dd4bf'},'Computable':{c:'#86efac'},
-  'Frankwatching':{c:'#fb923c'},'Marketingfacts':{c:'#fb923c'},'AG Connect':{c:'#2dd4bf'},'Sprout':{c:'#fb923c'},
-  'NOS Tech':{c:'#f87171'},'CIO.nl':{c:'#2dd4bf'},'Techzine':{c:'#60a5fa'},'iGovernment':{c:'#c084fc'},
-  'Binnenl.Bestuur':{c:'#c084fc'}
-};
-
-// Theme classification keywords
-const THEME_KEYS={
-  AI:['artificial intelligence','machine learning','llm','gpt','chatgpt','claude','openai','anthropic','deep learning','neural','ai model','generatieve ai','kunstmatige intelligentie','taalmodel','ai-tool','copilot','gemini'],
-  Tech:['software','cloud','data','cyber','blockchain','quantum','semiconductor','chip','hardware','server','datacenter','5g','iot','platform','saas','api','open source'],
-  Strategie:['strategie','strategy','digital transformation','digitalisering','innovatie','innovation','roadmap','governance','sourcing','make or buy','organisatieverandering','transformation'],
-  HR:['hr','human resources','werknemers','medewerkers','talent','recruitment','arbeidsmarkt','workforce','skills','scholing','training','cultuur','leiderschap','leadership'],
-  Design:['design','ux','ui','user experience','storytelling','communicatie','presentatie','brand','visual','creative','content','marketing','social media'],
-  Overheid:['overheid','gemeente','rijksoverheid','ministerie','politie','beleid','wetgeving','compliance','regulation','eu','europese','gdpr','avg','nis2','ai act'],
-  Ondernemen:['startup','scale-up','investering','funding','acquisitie','merger','ipo','mkb','ondernemer','entrepreneur','groei','revenue','winst','markt']
-};
-
-function classifyTheme(title, desc) {
-  const text = ((title||'')+(desc||'')).toLowerCase();
-  const themes = [];
-  for (const [theme, keys] of Object.entries(THEME_KEYS)) {
-    if (keys.some(k => text.includes(k))) themes.push(theme);
+async function fetchFeedRaw(feedUrl) {
+  for (const proxy of RAW_PROXIES) {
+    try {
+      const r = await fetch(proxy(feedUrl), { signal: AbortSignal.timeout(8000) });
+      if (!r.ok) continue;
+      const text = await r.text();
+      if (text.includes('<item>') || text.includes('<entry>')) return text;
+    } catch(e) { continue; }
   }
-  return themes.length ? themes : ['Tech']; // default
+  return null;
 }
 
-const THEME_BADGE_CLS={AI:'tb-ai',Tech:'tb-tech',Strategie:'tb-strategy',HR:'tb-hr',Design:'tb-design',Overheid:'tb-gov',Ondernemen:'tb-biz'};
+// ── STATE ────────────────────────────────────────────────────────
+let all = [], shown = [], view = 'grid', filter = 'all';
 
-/* ── STATE ─────────────────────────────────────────────────────── */
-const PROXY='https://api.rss2json.com/v1/api.json?rss_url=';
-const RAW_P=[u=>`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,u=>`https://corsproxy.io/?url=${encodeURIComponent(u)}`,u=>u];
-let all=[],shown=[],view='grid',langFilter='all',sortMode='new',activeThemes=new Set();
-let disabled=new Set();
-try{disabled=new Set(JSON.parse(localStorage.getItem('bh-dis')||'[]'))}catch(e){}
+// ── THEME ────────────────────────────────────────────────────────
+function autoTheme() { const h = new Date().getHours(); return h>=7&&h<19?'light':'dark'; }
+let _theme = 'dark';
+function applyTheme(t) {
+  _theme = t;
+  document.documentElement.setAttribute('data-theme', t);
+  // icon handled by CSS
+  try { localStorage.setItem('bh-theme', t); } catch(e){}
+}
+function toggleTheme() {
+  applyTheme(_theme==='dark'?'light':'dark');
+}
 
-/* ── THEME ─────────────────────────────────────────────────────── */
-function autoTheme(){return(new Date().getHours()>=7&&new Date().getHours()<19)?'light':'dark'}
-function applyTheme(t){document.documentElement.setAttribute('data-theme',t);document.getElementById('theme-btn').textContent=t==='light'?'🌙':'☀️';try{localStorage.setItem('bh-theme',t)}catch(e){}}
-function toggleTheme(){applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark')}
+// ── UTILS ────────────────────────────────────────────────────────
+const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
-/* ── UTILS ─────────────────────────────────────────────────────── */
-const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-function age(iso){const m=Math.floor((Date.now()-new Date(iso))/60000);if(m<1)return'nu';if(m<60)return m+'m';if(m<1440)return Math.floor(m/60)+'u';return new Date(iso).toLocaleDateString('nl-NL',{day:'numeric',month:'short'})}
+function age(iso) {
+  const m = Math.floor((Date.now()-new Date(iso))/60000);
+  if(m<1) return 'nu';
+  if(m<60) return m+'m';
+  if(m<1440) return Math.floor(m/60)+'u';
+  return new Date(iso).toLocaleDateString('nl-NL',{day:'numeric',month:'short'});
+}
 
-/* ── RSS PARSING ───────────────────────────────────────────────── */
-function xt(b,t){const c=b.match(new RegExp(`<${t}[^>]*><!\[CDATA\[([\s\S]*?)\]\]><\/${t}>`));if(c)return c[1].trim();const p=b.match(new RegExp(`<${t}[^>]*>([\s\S]*?)<\/${t}>`));if(p)return p[1].replace(/<[^>]*>/g,'').trim();return null}
-function parseXML(xml,feed){const items=[];const re=xml.includes('<item>')?/<item>([\s\S]*?)<\/item>/g:/<entry>([\s\S]*?)<\/entry>/g;let m;while((m=re.exec(xml))!==null){const b=m[1];const title=xt(b,'title');const link=xt(b,'link')||xt(b,'guid')||(b.match(/<link[^>]+href="([^"]+)"/)??[,''])[1];const desc=xt(b,'description')||xt(b,'summary')||xt(b,'content');const date=xt(b,'pubDate')||xt(b,'published')||xt(b,'updated');if(!title||!link)continue;const clean=(desc||'').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&nbsp;/g,' ').replace(/&#\d+;/g,'').trim().slice(0,220);const item={title:title.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&#\d+;/g,'').trim(),link:link.trim(),description:clean,pubDate:date?new Date(date).toISOString():new Date().toISOString(),source:feed.name,tag:feed.tag,cls:feed.cls,lang:feed.lang};item.themes=classifyTheme(item.title,item.description);items.push(item);if(items.length>=8)break}return items}
-async function fetchFeed(feed){try{const r=await fetch(`${PROXY}${encodeURIComponent(feed.url)}&count=8`,{signal:AbortSignal.timeout(8000)});if(r.ok){const d=await r.json();if(d.status==='ok'&&d.items?.length)return d.items.slice(0,8).map(i=>{const item={title:(i.title||'').replace(/&amp;/g,'&').replace(/&#\d+;/g,'').trim(),link:i.link||'#',description:(i.description||i.content||'').replace(/<[^>]*>/g,'').replace(/&[a-z]+;/g,' ').trim().slice(0,220),pubDate:i.pubDate?new Date(i.pubDate).toISOString():new Date().toISOString(),source:feed.name,tag:feed.tag,cls:feed.cls,lang:feed.lang};item.themes=classifyTheme(item.title,item.description);return item})}}catch(e){}for(const p of RAW_P){try{const r=await fetch(p(feed.url),{signal:AbortSignal.timeout(8000)});if(!r.ok)continue;const xml=await r.text();if(xml.includes('<item>')||xml.includes('<entry>'))return parseXML(xml,feed)}catch(e){continue}}return[]}
+// ── XML PARSER ───────────────────────────────────────────────────
+function extractTag(block, tag) {
+  const cdata = block.match(new RegExp(`<${tag}[^>]*><!\\[CDATA\\[([\\s\\S]*?)\\]\\]><\\/${tag}>`));
+  if (cdata) return cdata[1].trim();
+  const plain = block.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`));
+  if (plain) return plain[1].replace(/<[^>]*>/g, '').trim();
+  return null;
+}
 
-/* ── BOOKMARKS ─────────────────────────────────────────────────── */
-function getSaved(){try{return JSON.parse(localStorage.getItem('bh-saved')||'[]')}catch(e){return[]}}
-function setSaved(a){try{localStorage.setItem('bh-saved',JSON.stringify(a))}catch(e){}}
-function isSaved(l){return getSaved().some(i=>i.link===l)}
-function toggleSave(e,link,title,source,cls){e.preventDefault();e.stopPropagation();const a=getSaved(),i=a.findIndex(x=>x.link===link);if(i>-1)a.splice(i,1);else a.unshift({link,title,source,cls,savedAt:new Date().toISOString()});setSaved(a);updateSavedUI();render()}
-function clearSaved(){setSaved([]);updateSavedUI();render()}
-function updateSavedUI(){const s=getSaved();const sb=document.getElementById('saved-sidebar');const ct=document.getElementById('saved-count-txt');const sl=document.getElementById('saved-list');if(s.length){sb.classList.add('on');ct.textContent=s.length+(s.length===1?' artikel':' artikelen');sl.innerHTML=s.map(i=>`<div class="saved-sidebar-item"><a href="${esc(i.link)}" target="_blank" rel="noopener">${esc(i.title.slice(0,52)+(i.title.length>52?'…':''))}</a></div>`).join('')}else{sb.classList.remove('on')}}
+function parseXML(xml, feed) {
+  const items = [];
+  // Ondersteun zowel RSS (<item>) als Atom (<entry>)
+  const re = xml.includes('<item>') ? /<item>([\s\S]*?)<\/item>/g : /<entry>([\s\S]*?)<\/entry>/g;
+  let m;
+  while ((m = re.exec(xml)) !== null) {
+    const b = m[1];
+    const title = extractTag(b, 'title');
+    const link  = extractTag(b, 'link') || extractTag(b, 'guid') ||
+                  (b.match(/<link[^>]+href="([^"]+)"/) || [])[1];
+    const desc  = extractTag(b, 'description') || extractTag(b, 'summary') || extractTag(b, 'content');
+    const date  = extractTag(b, 'pubDate') || extractTag(b, 'published') || extractTag(b, 'updated');
+    if (!title || !link) continue;
+    const clean = (desc || '').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&nbsp;/g,' ').replace(/&#\d+;/g,'').trim().slice(0, 200);
+    items.push({
+      title: title.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&#\d+;/g,'').trim(),
+      link: link.trim(),
+      description: clean,
+      pubDate: date ? new Date(date).toISOString() : new Date().toISOString(),
+      source: feed.name, tag: feed.tag, cls: feed.cls, lang: feed.lang
+    });
+    if (items.length >= 8) break;
+  }
+  return items;
+}
 
-/* ── INSIGHT ───────────────────────────────────────────────────── */
-async function fetchInsight(item){try{const r=await fetch('/api/analyse',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({link:item.link,title:item.title,description:item.description})});const d=await r.json();return d.insight||null}catch(e){return null}}
-function fmtInsight(text){if(!text||text.trim()===''||text.trim()==='—')return'';const IC={wat:'ti-news',betekenis:'ti-bulb',actie:'ti-arrow-right'};return text.split('\n').map(l=>l.trim()).filter(Boolean).map(line=>{const c=line.replace(/^[•\-\*]\s*/,'');const m=c.match(/^(Wat|Betekenis|Actie):\s*(.*)/i);if(m){const k=m[1][0].toUpperCase()+m[1].slice(1).toLowerCase();return`<div class="ins-row"><i class="ti ${IC[k.toLowerCase()]||'ti-point'} ins-ico"></i><span class="ins-key">${k}:</span><span class="ins-val">${esc(m[2])}</span></div>`}return`<div class="ins-row"><i class="ti ti-point ins-ico"></i><span class="ins-val">${esc(c)}</span></div>`}).join('')}
-async function loadInsights(){const cards=document.querySelectorAll('.card[data-link]');for(const card of cards){const link=card.getAttribute('data-link');const el=card.querySelector('.card-insight');if(!el||el.dataset.loaded==='1')continue;const item=shown.find(i=>i.link===link);if(!item)continue;if(item.insight){const h=fmtInsight(item.insight);if(h){el.innerHTML=h;el.classList.add('show')}el.dataset.loaded='1';continue}el.innerHTML='<span class="ins-load">Analyse ophalen...</span>';el.classList.add('show');const ins=await fetchInsight(item);if(ins){item.insight=ins;const h=fmtInsight(ins);if(h)el.innerHTML=h;else{el.innerHTML='';el.classList.remove('show')}}else{el.innerHTML='';el.classList.remove('show')}el.dataset.loaded='1'}}
+// ── FETCH ────────────────────────────────────────────────────────
+async function fetchFeed(feed) {
+  // Strategie 1: rss2json (geeft nette JSON terug)
+  try {
+    const r = await fetch(PROXY + encodeURIComponent(feed.url) + '&count=10', { signal: AbortSignal.timeout(8000) });
+    if (r.ok) {
+      const d = await r.json();
+      if (d.status === 'ok' && d.items?.length) {
+        return d.items.slice(0, 8).map(i => ({
+          title:       (i.title||'').replace(/&amp;/g,'&').replace(/&#\d+;/g,'').trim(),
+          link:        i.link || '#',
+          description: (i.description||i.content||'').replace(/<[^>]*>/g,'').replace(/&[a-z]+;/g,' ').trim().slice(0,200),
+          pubDate:     i.pubDate ? new Date(i.pubDate).toISOString() : new Date().toISOString(),
+          source: feed.name, tag: feed.tag, cls: feed.cls, lang: feed.lang
+        }));
+      }
+    }
+  } catch(e) {}
 
-/* ── SORT & FILTER ─────────────────────────────────────────────── */
-const SW={McKinsey:3,'MIT Sloan':3,'MIT Tech Rev':3,'Bloomberg Tech':3,'The Verge':2.5,'Ars Technica':2.5,'VentureBeat':2,'Tweakers':2,'Emerce':2,'NOS Tech':2,'TLDR AI':2,'The Rundown':2};
-function pscore(i){const h=(Date.now()-new Date(i.pubDate))/3600000;return((SW[i.source]||1)*2)+(Math.max(0,48-h)/48*3)}
+  // Strategie 2: raw XML via fallback proxies
+  try {
+    const xml = await fetchFeedRaw(feed.url);
+    if (xml) return parseXML(xml, feed);
+  } catch(e) {}
 
-function setSort(m){sortMode=m;['new','pop'].forEach(k=>document.getElementById('btn-'+k)?.classList.toggle('on',k===m));applyFilter();render()}
-function setFilter(f){langFilter=f;document.querySelectorAll('.fp').forEach(b=>b.classList.remove('on'));document.getElementById('fp-'+f)?.classList.add('on');applyFilter();render()}
+  console.warn('Feed mislukt:', feed.name);
+  return [];
+}
 
-function toggleThemeFilter(theme,btn){if(activeThemes.has(theme)){activeThemes.delete(theme);btn.classList.remove('on')}else{activeThemes.add(theme);btn.classList.add('on')}// sync sheet
-document.querySelectorAll(`[data-theme-filter="${theme}"]`).forEach(b=>b.classList.toggle('on',activeThemes.has(theme)));applyFilter();render()}
+async function load() {
+  const btn = document.getElementById('ref-btn');
+  btn.classList.add('spin');
 
-function applyFilter(){let base=all.filter(i=>!disabled.has(i.source));if(langFilter==='nl')base=base.filter(i=>i.lang==='nl');else if(langFilter==='en')base=base.filter(i=>i.lang==='en');if(activeThemes.size>0)base=base.filter(i=>i.themes?.some(t=>activeThemes.has(t)));if(sortMode==='popular')base.sort((a,b)=>pscore(b)-pscore(a));else base.sort((a,b)=>new Date(b.pubDate)-new Date(a.pubDate));shown=base;document.getElementById('r-count').textContent=shown.length+' berichten';const act=all.filter(i=>!disabled.has(i.source));document.getElementById('b-all').textContent=act.length;document.getElementById('b-nl').textContent=act.filter(i=>i.lang==='nl').length;document.getElementById('b-en').textContent=act.filter(i=>i.lang==='en').length;document.getElementById('stat-n').textContent=act.length}
+  document.getElementById('news-area').innerHTML =
+    '<div class="state"><div class="state-brand"><span class="state-bright">Bright</span><em class="state-dash">Dash</em></div><div class="state-payoff">Complex tech news. Made simple.</div><div class="ring"></div><p class="state-loading-txt">Nieuws ophalen...</p></div>';
 
-/* ── SOURCES UI ─────────────────────────────────────────────────── */
-function toggleSource(name,on){if(on)disabled.delete(name);else disabled.add(name);try{localStorage.setItem('bh-dis',JSON.stringify([...disabled]))}catch(e){}applyFilter();render()}
+  try {
+    const res = await fetch('/api/articles');
+    const data = await res.json();
+    all = (data.articles || []).sort((a,b)=>new Date(b.pubDate)-new Date(a.pubDate));
 
-function buildSrcRegions(){const nl=FEEDS.filter(f=>f.lang==='nl');const en=FEEDS.filter(f=>f.lang==='en');const el=document.getElementById('src-regions');el.innerHTML=['🇳🇱 Nederlands','🌐 Internationaal'].map((label,ri)=>{const feeds=ri===0?nl:en;const key=ri===0?'nl-src':'en-src';return`<div><button class="src-region-hdr" onclick="toggleRegion('${key}')"><span>${label}</span><i class="ti ti-chevron-right src-chev" id="${key}-chev"></i></button><div id="${key}-list" class="src-list" style="display:none">${feeds.map(f=>`<div class="src-row"><label class="src-name"><span class="sdot" style="background:${SRC_META[f.name]?.c||'#888'}"></span>${esc(f.name)}</label><label class="tgl"><input type="checkbox" ${!disabled.has(f.name)?'checked':''} onchange="toggleSource('${esc(f.name)}',this.checked)"><span class="tgl-track"></span></label></div>`).join('')}</div></div>`}).join('')}
-function toggleRegion(key){const el=document.getElementById(key+'-list');const ic=document.getElementById(key+'-chev');const open=el.style.display==='none';el.style.display=open?'block':'none';ic.classList.toggle('open',open)}
+    const updatedAt = data.updatedAt
+      ? new Date(data.updatedAt).toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})
+      : new Date().toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'});
+    document.getElementById('ft-updated').textContent = 'Bijgewerkt ' + updatedAt;
+  } catch(e) {
+    console.error('Load error:', e);
+    document.getElementById('news-area').innerHTML =
+      '<div class="state"><h3>Laden mislukt</h3><p>Probeer het opnieuw.</p></div>';
+    btn.classList.remove('spin');
+    return;
+  }
 
-function buildSheetSrcs(){document.getElementById('sheet-srcs').innerHTML=FEEDS.map(f=>`<div class="sheet-src-row"><label class="sheet-src-name"><span class="sdot" style="background:${SRC_META[f.name]?.c||'#888'}"></span>${esc(f.name)}</label><label class="tgl"><input type="checkbox" ${!disabled.has(f.name)?'checked':''} onchange="toggleSource('${esc(f.name)}',this.checked)"><span class="tgl-track"></span></label></div>`).join('')}
-function buildSheetThemes(){document.getElementById('sheet-themes').innerHTML=['AI','Tech','Strategie','HR','Design','Overheid','Ondernemen'].map(t=>`<button class="spill ${activeThemes.has(t)?'on':''}" data-theme-filter="${t}" onclick="toggleThemeFilter('${t}',this)">${t}</button>`).join('')}
+  updateBadges();
+  buildTicker();
+  applyFilter();
+  render();
 
-/* ── MOBILE SHEET ──────────────────────────────────────────────── */
-function openSheet(){document.getElementById('overlay').classList.add('on');document.getElementById('sheet').classList.add('on');buildSheetSrcs();buildSheetThemes()}
-function closeSheet(){document.getElementById('overlay').classList.remove('on');document.getElementById('sheet').classList.remove('on')}
+  document.getElementById('live-lbl').textContent = 'Live';
+  btn.classList.remove('spin');
+}
 
-/* ── SYNC HELPERS ──────────────────────────────────────────────── */
-function fpSync(f){['all','nl','en'].forEach(k=>document.getElementById('fp-'+k)?.classList.toggle('on',k===f))}
-function mcSync(f){['all','nl','en'].forEach(k=>document.getElementById('mc-'+k)?.classList.toggle('on',k===f));['all','nl','en'].forEach(k=>document.getElementById('sp-'+k)?.classList.toggle('on',k===f))}
-function msSync(m){['new','pop'].forEach(k=>document.getElementById('mc-'+k)?.classList.toggle('on',k===m));['new','pop'].forEach(k=>document.getElementById('ss-'+k)?.classList.toggle('on',k===m))}
-function ssSync(m){['new','pop'].forEach(k=>document.getElementById('ss-'+k)?.classList.toggle('on',k===m))}
-function spSync(f){['all','nl','en'].forEach(k=>document.getElementById('sp-'+k)?.classList.toggle('on',k===f));fpSync(f)}
+// ── CATEGORY MAP ─────────────────────────────────────────────────
+const catSources = {
+  'ai':      ['TLDR AI','The Rundown','Google AI','VentureBeat','MIT Tech Rev','Ben\'s Bites'],
+  'tech':    ['TLDR Tech','The Verge','Ars Technica','Tweakers','Techzine','AG Connect','The Stack','CIO.nl','Computable','NOS Tech','Bloomberg Tech'],
+  'media':   ['Emerce','Frankwatching','Marketingfacts'],
+  'overheid':['iGovernment','Binnenl.Bestuur'],
+  'org':     ['MIT Sloan','McKinsey','Sprout'],
+  'wow':     ['The Verge','Ars Technica','MIT Tech Rev','TLDR Tech'],
+  'hr':      ['MIT Sloan','Sprout','Frankwatching','McKinsey'],
+};
 
-/* ── TICKER ────────────────────────────────────────────────────── */
-function buildTicker(items){const top=items.slice(0,12);const h=top.map(i=>`<span class="ticker-item"><a href="${esc(i.link)}" target="_blank" rel="noopener">${esc(i.title.slice(0,72)+(i.title.length>72?'…':''))}</a></span><span class="tick-sep"> ◆ </span>`).join('');const t=document.getElementById('ticker-track');t.innerHTML=h+h}
+// ── FILTER ───────────────────────────────────────────────────────
+function setFilter(f, btn) {
+  filter = f;
+  document.querySelectorAll('.s-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilter();
+  render();
+}
 
-/* ── VIEW ──────────────────────────────────────────────────────── */
-function setView(v){view=v;document.getElementById('btn-grid').classList.toggle('on',v==='grid');document.getElementById('btn-list').classList.toggle('on',v==='list');render()}
+function applyFilter() {
+  let base;
+  if(filter==='all')      base=all.filter(i=>!disabledSources.has(i.source));
+  else if(filter==='nl')  base=all.filter(i=>i.lang==='nl'&&!disabledSources.has(i.source));
+  else if(filter==='en')  base=all.filter(i=>i.lang==='en'&&!disabledSources.has(i.source));
+  else if(filter==='saved') {
+    const savedLinks = new Set(getSaved().map(i => i.link));
+    base = all.filter(i=>savedLinks.has(i.link));
+  }
+  else if(filter.startsWith('cat:')) {
+    const cat = filter.slice(4);
+    const srcs = catSources[cat] || [];
+    base = all.filter(i=>srcs.includes(i.source)&&!disabledSources.has(i.source));
+  }
+  else if(filter.startsWith('s:')) base=all.filter(i=>i.source===filter.slice(2));
+  else base=all.filter(i=>!disabledSources.has(i.source));
 
-/* ── RENDER ────────────────────────────────────────────────────── */
-function render(){
-  const area=document.getElementById('news-area');
-  if(!shown.length){area.innerHTML=`<div class="state"><h3>Geen berichten</h3><p class="state-msg">Pas je filters aan.</p></div>`;return}
-
-  const cardHtml=i=>{
-    const themeBadge=i.themes?.[0]?`<span class="theme-badge ${THEME_BADGE_CLS[i.themes[0]]||'tb-tech'}">${i.themes[0]}</span>`:'';
-    const sv=isSaved(i.link);
-    return`<article class="card" data-link="${esc(i.link)}">
-      <div class="card-top">
-        <div style="display:flex;gap:.3rem;flex-wrap:wrap;align-items:center">
-          <span class="tag ${esc(i.cls)}">${esc(i.tag)}</span>
-          ${themeBadge}
-        </div>
-        <span class="card-age">${age(i.pubDate)}</span>
-      </div>
-      <a class="card-title-link" href="${esc(i.link)}" target="_blank" rel="noopener">
-        <h2 class="card-title">${esc(i.title)}</h2>
-      </a>
-      ${i.description?`<p class="card-desc">${esc(i.description)}</p>`:''}
-      <div class="card-insight"></div>
-      <div class="card-foot">
-        <span class="card-src">${esc(i.source)}</span>
-        <div class="card-actions">
-          <button class="bm-btn ${sv?'on':''}" onclick="toggleSave(event,'${esc(i.link)}','${esc(i.title.replace(/'/g,""))}','${esc(i.source)}','${esc(i.cls)}')">
-            <i class="ti ${sv?'ti-star-filled':'ti-star'}"></i> ${sv?'Opgeslagen':'Opslaan'}
-          </button>
-          <a class="read-link" href="${esc(i.link)}" target="_blank" rel="noopener">Lezen <i class="ti ti-arrow-up-right"></i></a>
-        </div>
-      </div>
-    </article>`};
-
-  if(view==='grid'){
-    area.innerHTML=`<div class="grid-v">${shown.map((i,n)=>{const h=cardHtml(i);return h.replace('<article','<article style="animation-delay:'+Math.min(n*.02,.4)+'s"')}).join('')}</div>`;
+  // Sorteren
+  if (sortMode === 'popular') {
+    base.sort((a,b) => getPopularityScore(b) - getPopularityScore(a));
   } else {
-    area.innerHTML=`<div class="list-v">${shown.map((i,n)=>`
-      <article class="row" style="animation-delay:${Math.min(n*.015,.3)}s">
+    base.sort((a,b) => new Date(b.pubDate) - new Date(a.pubDate));
+  }
+
+  // Pin opgeslagen artikelen bovenaan
+  const savedLinks = new Set(getSaved().map(i => i.link));
+  const pinned = base.filter(i => savedLinks.has(i.link));
+  const rest   = base.filter(i => !savedLinks.has(i.link));
+  shown = [...pinned, ...rest];
+
+  let label = shown.length + ' berichten';
+  if (pinned.length > 0) label += ` · ${pinned.length} opgeslagen`;
+  document.getElementById('r-count').textContent = label;
+}
+
+// ── BADGES ───────────────────────────────────────────────────────
+function updateBadges() {
+  const sc={};
+  all.forEach(i=>{ sc[i.source]=(sc[i.source]||0)+1; });
+  document.getElementById('b-all').textContent = all.length;
+  document.getElementById('b-nl').textContent  = all.filter(i=>i.lang==='nl').length;
+  document.getElementById('b-en').textContent  = all.filter(i=>i.lang==='en').length;
+  // Category badges
+  Object.entries(catSources).forEach(([cat, srcs]) => {
+    const el = document.getElementById('b-'+cat);
+    if(el) el.textContent = all.filter(i=>srcs.includes(i.source)).length;
+  });
+  const savedEl = document.getElementById('b-saved');
+  if(savedEl) savedEl.textContent = getSaved().length;
+  FEEDS.forEach(f=>{ const el=document.getElementById('b-'+f.name); if(el) el.textContent=sc[f.name]||0; });
+  document.getElementById('stat-n').textContent = all.length;
+}
+
+// ── TICKER ───────────────────────────────────────────────────────
+function buildTicker() {
+  const top = all.slice(0,12);
+  const html = top.map(i=>
+    `<span class="ticker-item"><a href="${esc(i.link)}" target="_blank" rel="noopener">${esc(i.title.slice(0,70)+(i.title.length>70?'…':''))}</a></span><span class="tick-sep">◆</span>`
+  ).join('');
+  const t = document.getElementById('ticker-track');
+  t.innerHTML = html+html;
+}
+
+// ── VIEW ─────────────────────────────────────────────────────────
+function setView(v) {
+  view=v;
+  document.getElementById('btn-grid').classList.toggle('active',v==='grid');
+  document.getElementById('btn-list').classList.toggle('active',v==='list');
+  render();
+}
+
+// ── INSIGHT CACHE ────────────────────────────────────────────────
+const insightCache = {};
+
+// Analyses komen uit de server-side cache (gegenereerd door scheduled function)
+// Worden direct meegeleverd met de feed data — geen API-call nodig vanuit browser
+function getInsight(item) {
+  return item.insight || null;
+}
+
+function loadInsightsForVisible() {
+  const cards = document.querySelectorAll('.card[data-link]');
+  cards.forEach(card => {
+    const link = card.getAttribute('data-link');
+    const insightEl = card.querySelector('.card-insight');
+    if (!insightEl) return;
+    const item = all.find(i => i.link === link);
+    if (!item) return;
+    const text = getInsight(item);
+    if (text) {
+      insightEl.innerHTML = formatInsight(text) || esc(text);
+    } else {
+      insightEl.innerHTML = `<span style="color:var(--txt3);font-size: 0.8rem">Geen analyse beschikbaar.</span>`;
+    }
+    insightEl.classList.remove('loading');
+    insightEl.setAttribute('data-loaded', 'true');
+  });
+}
+
+// ── INSIGHT FORMATTER ───────────────────────────────────────────
+function formatInsight(text) {
+  if (!text || text === '—' || text.trim() === '') return '';
+  const icons = { 'Wat': 'ti-news', 'Betekenis': 'ti-bulb', 'Actie': 'ti-arrow-right' };
+  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+  return lines.map(line => {
+    const clean = line.replace(/^[•\-\*]\s*/, '');
+    const match = clean.match(/^(Wat|Betekenis|Actie):\s*(.*)/i);
+    if (match) {
+      const key = match[1].charAt(0).toUpperCase() + match[1].slice(1).toLowerCase();
+      const icon = icons[key] || 'ti-point';
+      return `<div class="insight-row"><i class="ti ${icon} insight-icon" aria-hidden="true"></i><span class="insight-text"><span class="insight-key">${key}:</span>${esc(match[2])}</span></div>`;
+    }
+    return `<div class="insight-row"><i class="ti ti-point insight-icon" aria-hidden="true"></i><span class="insight-text">${esc(clean)}</span></div>`;
+  }).join('');
+}
+
+// ── RENDER ───────────────────────────────────────────────────────
+function render() {
+  const area = document.getElementById('news-area');
+  if(!shown.length) {
+    area.innerHTML='<div class="state"><h3>Geen berichten</h3><p>Probeer een ander filter.</p></div>';
+    return;
+  }
+  if(view==='grid') {
+    area.innerHTML = `<div class="grid-v">${shown.map((i,n)=>`
+      <article class="card" style="animation-delay:${Math.min(n*.025,.4)}s" data-link="${esc(i.link)}">
+        <div class="card-top">
+          <span class="tag ${esc(i.cls)}">${esc(i.tag)}</span>
+          <span class="card-age">${age(i.pubDate)}</span>
+        </div>
+        <a class="card-title-link" href="${esc(i.link)}" target="_blank" rel="noopener"><h2 class="card-title">${esc(i.title)}</h2></a>
+        ${i.description?`<p class="card-desc">${esc(i.description)}</p>`:''}
+        <div class="card-insight">${i.insight ? formatInsight(i.insight) : '<span style="color:var(--txt3);font-size: 0.8rem">Analyse laden...</span>'}</div>
+        <div class="card-actions">
+          <span class="card-src">${esc(i.source)}</span>
+          <div style="display:flex;align-items:center;gap:.75rem">
+            <button class="bookmark-btn ${isSaved(i.link) ? 'saved' : ''}" onclick="toggleSave(event,'${esc(i.link)}','${esc(i.title.replace(/'/g,''))}','${esc(i.source)}','${esc(i.cls)}')" title="${isSaved(i.link) ? 'Verwijder uit opgeslagen' : 'Opslaan voor later'}">${isSaved(i.link) ? '&#9733; Opgeslagen' : '&#9734; Opslaan'}</button>
+            <a class="card-link" href="${esc(i.link)}" target="_blank" rel="noopener">Lezen</a>
+          </div>
+        </div>
+      </article>`).join('')}</div>`;
+  } else {
+    area.innerHTML = `<div class="list-v">${shown.map((i,n)=>`
+      <article class="row" style="animation-delay:${Math.min(n*.02,.3)}s">
         <div class="row-l">
           <span class="tag ${esc(i.cls)}">${esc(i.tag)}</span>
           <span class="card-age">${age(i.pubDate)}</span>
         </div>
-        <div><div class="row-title"><a href="${esc(i.link)}" target="_blank" rel="noopener">${esc(i.title)}</a></div><div class="row-src">${esc(i.source)}</div></div>
-        <a class="read-link" href="${esc(i.link)}" target="_blank" rel="noopener">Lezen <i class="ti ti-arrow-up-right"></i></a>
+        <div>
+          <div class="row-title">${esc(i.title)}</div>
+          <div class="row-src">${esc(i.source)}</div>
+        </div>
+        <a class="card-link" href="${esc(i.link)}" target="_blank" rel="noopener">Lezen</a>
       </article>`).join('')}</div>`;
   }
-  setTimeout(loadInsights,60);
-  updateSavedUI();
+
+  // On-demand analyses ophalen
+  if (view === 'grid') setTimeout(loadInsightsOnDemand, 100);
 }
 
-/* ── LOAD ──────────────────────────────────────────────────────── */
-async function load(){
-  const btn=document.getElementById('ref-btn');
-  btn.classList.add('spin');
-  document.getElementById('news-area').innerHTML=`<div class="state"><div class="state-brand">Bright<em>Dash</em></div><div class="state-tagline">Complex tech news. Made simple.</div><div class="state-ring"></div><p class="state-msg">Nieuws ophalen uit ${FEEDS.length} bronnen...</p></div>`;
-  try{
-    const results=await Promise.allSettled(FEEDS.map(fetchFeed));
-    all=results.flatMap(r=>r.status==='fulfilled'?r.value:[]);
-    all.sort((a,b)=>new Date(b.pubDate)-new Date(a.pubDate));
-    applyFilter();buildTicker(shown);render();
-    document.getElementById('ft-updated').textContent='Bijgewerkt '+new Date().toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'});
-  }catch(e){document.getElementById('news-area').innerHTML=`<div class="state"><h3>Verbinding mislukt</h3><p class="state-msg">${e.message}</p></div>`}
-  finally{btn.classList.remove('spin')}
+// ── BOOKMARKS ────────────────────────────────────────────────────
+function getSaved() {
+  try { return JSON.parse(localStorage.getItem('bh-saved') || '[]'); } catch(e) { return []; }
+}
+function setSaved(arr) {
+  try { localStorage.setItem('bh-saved', JSON.stringify(arr)); } catch(e) {}
+}
+function isSaved(link) {
+  return getSaved().some(i => i.link === link);
+}
+function toggleSave(event, link, title, source, cls) {
+  event.preventDefault();
+  event.stopPropagation();
+  const arr = getSaved();
+  const idx = arr.findIndex(i => i.link === link);
+  if (idx > -1) {
+    arr.splice(idx, 1);
+  } else {
+    arr.unshift({ link, title, source, cls, savedAt: new Date().toISOString() });
+  }
+  setSaved(arr);
+  render(); // re-render to update button state
 }
 
-/* ── INIT ──────────────────────────────────────────────────────── */
-let sv;try{sv=localStorage.getItem('bh-theme')}catch(e){}
-applyTheme(sv||autoTheme());
-document.getElementById('hdr-date').textContent=new Date().toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'long'});
-buildSrcRegions();
+// ── ON-DEMAND ANALYSE ────────────────────────────────────────────
+async function fetchInsight(item) {
+  try {
+    const res = await fetch('/api/analyse', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ link: item.link, title: item.title, description: item.description })
+    });
+    const data = await res.json();
+    return data.insight || null;
+  } catch(e) { return null; }
+}
+
+async function loadInsightsOnDemand() {
+  const cards = document.querySelectorAll('.card[data-link]');
+  for (const card of cards) {
+    const link = card.getAttribute('data-link');
+    const insightEl = card.querySelector('.card-insight');
+    if (!insightEl || insightEl.getAttribute('data-loaded') === 'true') continue;
+    const item = shown.find(i => i.link === link);
+    if (!item) continue;
+
+    // Als analyse al in data zit
+    if (item.insight) {
+      insightEl.innerHTML = `<span class="insight-label">→</span>${esc(item.insight)}`;
+      insightEl.classList.remove('loading');
+      insightEl.setAttribute('data-loaded', 'true');
+      continue;
+    }
+
+    // On-demand ophalen
+    insightEl.innerHTML = `<span class="insight-label">→</span><span style="color:var(--txt3);font-size: 0.8rem">Analyse ophalen...</span>`;
+    const insight = await fetchInsight(item);
+    if (insight) {
+      item.insight = insight; // cache in memory
+      insightEl.innerHTML = formatInsight(insight) || esc(insight);
+    } else {
+      insightEl.innerHTML = `<span style="color:var(--txt3);font-size: 0.8rem">Analyse niet beschikbaar.</span>`;
+    }
+    insightEl.classList.remove('loading');
+    insightEl.setAttribute('data-loaded', 'true');
+  }
+}
+
+// ── SOURCE TOGGLES ───────────────────────────────────────────────
+let disabledSources = new Set();
+try { disabledSources = new Set(JSON.parse(localStorage.getItem('bh-disabled') || '[]')); } catch(e) {}
+
+function toggleSource(name, enabled) {
+  if (enabled) disabledSources.delete(name);
+  else disabledSources.add(name);
+  try { localStorage.setItem('bh-disabled', JSON.stringify([...disabledSources])); } catch(e) {}
+  applyFilter();
+  render();
+}
+
+function toggleSources() {
+  const panel = document.getElementById('sources-panel');
+  const icon = document.getElementById('sources-icon');
+  const open = panel.style.display === 'none';
+  panel.style.display = open ? 'block' : 'none';
+  icon.classList.toggle('open', open);
+}
+
+// Sync toggles with saved state on load
+function syncToggles() {
+  document.querySelectorAll('#sources-panel input[type=checkbox]').forEach(cb => {
+    const name = cb.getAttribute('onchange').match(/'([^']+)'/)?.[1];
+    if (name && disabledSources.has(name)) cb.checked = false;
+  });
+}
+
+// ── SORT ─────────────────────────────────────────────────────────
+let sortMode = 'new';
+
+// Source popularity weights (higher = more authoritative/popular)
+const SOURCE_WEIGHT = {
+  'McKinsey': 3, 'MIT Sloan': 3, 'MIT Tech Rev': 3, 'Bloomberg Tech': 3,
+  'The Verge': 2.5, 'Ars Technica': 2.5, 'VentureBeat': 2,
+  'Tweakers': 2, 'Emerce': 2, 'NOS Tech': 2,
+  'TLDR AI': 2, 'The Rundown': 2, "Ben's Bites": 2,
+};
+
+function getPopularityScore(item) {
+  const ageHours = (Date.now() - new Date(item.pubDate)) / 3600000;
+  const weight = SOURCE_WEIGHT[item.source] || 1;
+  const recency = Math.max(0, 48 - ageHours) / 48; // veroudert na 48u
+  return (weight * 2) + (recency * 3);
+}
+
+function setSort(mode) {
+  sortMode = mode;
+  document.getElementById('btn-sort-new').classList.toggle('active', mode === 'new');
+  document.getElementById('btn-sort-pop').classList.toggle('active', mode === 'popular');
+  applyFilter();
+  render();
+}
+
+// ── INIT ─────────────────────────────────────────────────────────
+let saved; try { saved=localStorage.getItem('bh-theme'); } catch(e){}
+applyTheme(saved || 'dark');
+
+document.getElementById('mast-date').textContent =
+  new Date().toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+syncToggles();
 load();
-setInterval(load,15*60*1000);
+setInterval(load, 15*60*1000);
 </script>
 </body>
 </html>

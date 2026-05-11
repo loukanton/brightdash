@@ -2,6 +2,7 @@
   "name": "brightdash-v3",
   "version": "3.0.0",
   "type": "module",
+  "description": "BrightDash — AI nieuws dashboard met Netlify backend",
   "dependencies": {
     "@netlify/blobs": "^8.1.0",
     "@netlify/functions": "^2.8.1"

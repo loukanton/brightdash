@@ -6,7 +6,8 @@
   node_bundler = "esbuild"
 
 [[headers]]
-  for = "/*"
+  for = "/api/*"
   [headers.values]
-    X-Frame-Options = "DENY"
-    X-Content-Type-Options = "nosniff"
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type"
