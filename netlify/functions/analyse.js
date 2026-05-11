@@ -12,17 +12,17 @@ export default async (req, context) => {
       });
     }
 
-    const prompt = `Je bent een strategisch adviseur voor Nederlandse managers en bestuurders in de energie-, tech- en overheidssector.
+    const prompt = `Je bent een strategisch adviseur voor Nederlandse managers en bestuurders in energie, tech en overheid. Schrijf scherp, kort en direct — geen academische taal.
 
-Analyseer dit nieuwsartikel in exact 3 bullets:
-• Relevant? [Waarom dit relevant is voor NL bedrijven of (semi-)overheid — max 1 zin]
-• Betekenis: [Wat dit betekent voor strategie of organisatie — max 1 zin]
-• Actie: [Concrete actie of aandachtspunt — max 1 zin]
+Analyseer dit artikel in exact 3 regels met deze labels:
+Kern: [1-2 zinnen — wat speelt er, waarom relevant]
+Betekenis: [1 zin — strategische implicatie]
+Actie: [1 concrete actie of beslispunt]
 
 Titel: ${title}
-${description ? `Beschrijving: ${description.slice(0, 300)}` : ''}
+${description ? `Info: ${description.slice(0, 300)}` : ''}
 
-Antwoord ALLEEN met de 3 bullets, geen inleiding, geen afsluiting.`;
+Geef ALLEEN de 3 regels terug, geen bullets, geen inleiding, geen afsluiting.`;
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
