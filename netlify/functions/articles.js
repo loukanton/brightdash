@@ -6,8 +6,12 @@ export default async (req, context) => {
     const articles = await store.get('articles', { type: 'json' });
     const meta = await store.get('meta', { type: 'json' });
 
-    if (!articles) {
-      return new Response(JSON.stringify({ articles: [], updatedAt: null }), {
+    if (!articles || articles.length === 0) {
+      // Trigger a background refresh so next request has data
+      context.waitUntil(
+        fetch(new URL('/api/refresh', req.url).toString(), { method: 'POST' }).catch(()=>{})
+      );
+      return new Response(JSON.stringify({ articles: [], updatedAt: null, refreshing: true }), {
         headers: { 'Content-Type': 'application/json' }
       });
     }

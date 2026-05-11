@@ -977,25 +977,17 @@ const FEEDS = [
   { name:'Binnenl.Bestuur',tag:'Binnenl.Best',  cls:'t-violet', lang:'nl', url:'https://www.binnenlandsbestuur.nl/rss/digitaal'                  },
   { name:'Bloomberg Tech', tag:'Bloomberg',     cls:'t-slate',  lang:'en', url:'https://feeds.bloomberg.com/technology/news.rss'                 },
 ];
-const PROXY = 'https://api.rss2json.com/v1/api.json?rss_url=';
-
-// Meerdere proxies als fallback voor feeds die rss2json blokkeert
-const RAW_PROXIES = [
-  url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-  url => `https://corsproxy.io/?url=${encodeURIComponent(url)}`,
-  url => url, // directe poging zonder proxy
-];
-
+// Gebruik eigen Netlify proxy — betrouwbaar, geen externe afhankelijkheid
 async function fetchFeedRaw(feedUrl) {
-  for (const proxy of RAW_PROXIES) {
-    try {
-      const r = await fetch(proxy(feedUrl), { signal: AbortSignal.timeout(8000) });
-      if (!r.ok) continue;
-      const text = await r.text();
-      if (text.includes('<item>') || text.includes('<entry>')) return text;
-    } catch(e) { continue; }
-  }
-  return null;
+  try {
+    const r = await fetch('/api/proxy?url=' + encodeURIComponent(feedUrl), {
+      signal: AbortSignal.timeout(10000)
+    });
+    if (!r.ok) return null;
+    const text = await r.text();
+    if (text.includes('<item>') || text.includes('<entry>')) return text;
+    return null;
+  } catch(e) { return null; }
 }
 
 // ── STATE ────────────────────────────────────────────────────────
@@ -1062,29 +1054,10 @@ function parseXML(xml, feed) {
 
 // ── FETCH ────────────────────────────────────────────────────────
 async function fetchFeed(feed) {
-  // Strategie 1: rss2json (geeft nette JSON terug)
-  try {
-    const r = await fetch(PROXY + encodeURIComponent(feed.url) + '&count=10', { signal: AbortSignal.timeout(8000) });
-    if (r.ok) {
-      const d = await r.json();
-      if (d.status === 'ok' && d.items?.length) {
-        return d.items.slice(0, 8).map(i => ({
-          title:       (i.title||'').replace(/&amp;/g,'&').replace(/&#\d+;/g,'').trim(),
-          link:        i.link || '#',
-          description: (i.description||i.content||'').replace(/<[^>]*>/g,'').replace(/&[a-z]+;/g,' ').trim().slice(0,200),
-          pubDate:     i.pubDate ? new Date(i.pubDate).toISOString() : new Date().toISOString(),
-          source: feed.name, tag: feed.tag, cls: feed.cls, lang: feed.lang
-        }));
-      }
-    }
-  } catch(e) {}
-
-  // Strategie 2: raw XML via fallback proxies
   try {
     const xml = await fetchFeedRaw(feed.url);
     if (xml) return parseXML(xml, feed);
   } catch(e) {}
-
   console.warn('Feed mislukt:', feed.name);
   return [];
 }
@@ -1096,21 +1069,38 @@ async function load() {
   document.getElementById('news-area').innerHTML =
     '<div class="state"><div class="state-brand"><span class="state-bright">Bright</span><em class="state-dash">Dash</em></div><div class="state-payoff">Complex tech news. Made simple.</div><div class="ring"></div><p class="state-loading-txt">Nieuws ophalen...</p></div>';
 
+  // 1. Probeer backend cache
+  let fromBackend = false;
   try {
     const res = await fetch('/api/articles');
-    const data = await res.json();
-    all = (data.articles || []).sort((a,b)=>new Date(b.pubDate)-new Date(a.pubDate));
+    if (res.ok) {
+      const data = await res.json();
+      if (data.articles && data.articles.length > 0) {
+        all = data.articles.sort((a,b)=>new Date(b.pubDate)-new Date(a.pubDate));
+        const updatedAt = data.updatedAt
+          ? new Date(data.updatedAt).toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})
+          : new Date().toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'});
+        document.getElementById('ft-updated').textContent = 'Bijgewerkt ' + updatedAt;
+        fromBackend = true;
+      }
+    }
+  } catch(e) { console.warn('Backend niet bereikbaar, fallback naar RSS:', e); }
 
-    const updatedAt = data.updatedAt
-      ? new Date(data.updatedAt).toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})
-      : new Date().toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'});
-    document.getElementById('ft-updated').textContent = 'Bijgewerkt ' + updatedAt;
-  } catch(e) {
-    console.error('Load error:', e);
-    document.getElementById('news-area').innerHTML =
-      '<div class="state"><h3>Laden mislukt</h3><p>Probeer het opnieuw.</p></div>';
-    btn.classList.remove('spin');
-    return;
+  // 2. Fallback: haal feeds direct op via CORS proxy
+  if (!fromBackend) {
+    try {
+      const results = await Promise.all(FEEDS.map(fetchFeed));
+      all = results.flat().sort((a,b)=>new Date(b.pubDate)-new Date(a.pubDate));
+      const now = new Date();
+      document.getElementById('ft-updated').textContent =
+        'Bijgewerkt ' + now.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'});
+    } catch(e) {
+      console.error('Fallback ook mislukt:', e);
+      document.getElementById('news-area').innerHTML =
+        '<div class="state"><h3>Laden mislukt</h3><p>Probeer het opnieuw.</p></div>';
+      btn.classList.remove('spin');
+      return;
+    }
   }
 
   updateBadges();
