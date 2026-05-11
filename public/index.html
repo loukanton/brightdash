@@ -384,22 +384,23 @@ body {
 
 
 .card-insight {
-  font-size: 0.82rem; color: var(--txt2);
-  line-height: 1.6; padding: .65rem .8rem;
-  background: var(--bg3); border-radius: 3px;
-  border-left: 2px solid var(--gold);
+  padding: .7rem .85rem;
+  background: var(--bg3); border-radius: 4px;
   transition: background .3s;
 }
-.card-insight.loading { color: var(--txt3); font-style: italic; }
+.card-insight.loading { color: var(--txt3); font-style: italic; font-size: 0.78rem; }
 [data-theme="light"] .card-insight { background: #ebe8e2; }
-.insight-row { margin-bottom: .5rem; }
+.insight-row { margin-bottom: .55rem; }
 .insight-row:last-child { margin-bottom: 0; }
-.insight-body { }
-.insight-label { display: inline; font-size: 0.75rem; font-weight: 600; margin-right: .3rem; }
-.insight-label.kern      { color: var(--gold); }
-.insight-label.betekenis { color: var(--blue); }
-.insight-label.actie     { color: var(--green); }
-.insight-value { font-size: 0.8rem; color: var(--txt2); line-height: 1.55; }
+.insight-chip {
+  flex-shrink: 0;
+  font-size: 0.58rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+  padding: .15rem .4rem; border-radius: 3px; white-space: nowrap; line-height: 1.6;
+}
+.insight-chip.kern      { background: rgba(212,168,83,.18); color: var(--gold); }
+.insight-chip.betekenis { background: rgba(96,165,250,.14); color: var(--blue); }
+.insight-chip.actie     { background: rgba(134,239,172,.14); color: var(--green); }
+.insight-value { font-size: 0.8rem; color: var(--txt2); line-height: 1.55; flex: 1; min-width: 0; }
 
 /* ── ROW ── */
 .row {
@@ -1238,16 +1239,14 @@ function loadInsightsForVisible() {
 function formatInsight(text) {
   if (!text || text === '—' || text.trim() === '') return '';
 
-  const iconMap = {
-    'kern':      { cls: 'kern',      label: '📌 Kern' },
-    'betekenis': { cls: 'betekenis', label: '💡 Betekenis' },
-    'actie':     { cls: 'actie',     label: '⚡ Actie' },
+  const chipMap = {
+    'kern':      { cls: 'kern',      label: 'Kern' },
+    'betekenis': { cls: 'betekenis', label: 'Betekenis' },
+    'actie':     { cls: 'actie',     label: 'Actie' },
   };
 
-  // Verwijder markdown opmaak (*tekst**, **tekst**, etc.)
   const stripMd = s => s.replace(/\*\*([^*]+)\*\*/g,'$1').replace(/\*([^*]+)\*/g,'$1').replace(/^[•\-\*]\s*/,'').trim();
 
-  // Normaliseer oude labels (Relevant → Kern, Wat → Kern)
   const normalizeLabel = s => s
     .replace(/^Relevant\??/i, 'Kern')
     .replace(/^Wat\b/i, 'Kern')
@@ -1256,20 +1255,15 @@ function formatInsight(text) {
   const lines = text.split('\n').map(l => stripMd(l.trim())).filter(Boolean);
   return lines.map(line => {
     const normalized = normalizeLabel(line);
-    const match = normalized.match(/^(Kern|Betekenis|Actie):\s*(.*)/i);
+    const match = normalized.match(/^(Kern|Betekenis|Actie)(?:\s*\[[^\]]*\])?:\s*(.*)/i);
     if (match) {
       const key = match[1].toLowerCase();
-      const icon = iconMap[key];
-      if (icon) {
-        return `<div class="insight-row">
-          <div class="insight-body">
-            <span class="insight-label ${icon.cls}">${icon.label}</span>
-            <span class="insight-value">${esc(match[2])}</span>
-          </div>
-        </div>`;
+      const chip = chipMap[key];
+      if (chip) {
+        return `<div class="insight-row"><span class="insight-chip ${chip.cls}">${chip.label}</span><br><span class="insight-value">${esc(match[2])}</span></div>`;
       }
     }
-    return `<div class="insight-row"><div class="insight-body"><span class="insight-value">${esc(line)}</span></div></div>`;
+    return `<div class="insight-row"><span class="insight-value">${esc(line)}</span></div>`;
   }).join('');
 }
 
@@ -1287,9 +1281,9 @@ function render() {
           <span class="tag ${esc(i.cls)}">${esc(i.tag)}</span>
           <span class="card-age">${age(i.pubDate)}</span>
         </div>
+        <div class="card-insight">${i.insight ? formatInsight(i.insight) : '<span style="color:var(--txt3);font-size: 0.8rem">Analyse laden...</span>'}</div>
         <a class="card-title-link" href="${esc(i.link)}" target="_blank" rel="noopener"><h2 class="card-title">${esc(i.title)}</h2></a>
         ${i.description?`<p class="card-desc">${esc(i.description)}</p>`:''}
-        <div class="card-insight">${i.insight ? formatInsight(i.insight) : '<span style="color:var(--txt3);font-size: 0.8rem">Analyse laden...</span>'}</div>
         <div class="card-actions">
           <span class="card-src">${esc(i.source)}</span>
           <div style="display:flex;align-items:center;gap:.75rem">
