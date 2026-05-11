@@ -1261,10 +1261,19 @@ function formatInsight(text) {
     },
   };
 
-  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+  // Verwijder markdown opmaak (*tekst**, **tekst**, etc.)
+  const stripMd = s => s.replace(/\*\*([^*]+)\*\*/g,'$1').replace(/\*([^*]+)\*/g,'$1').replace(/^[•\-\*]\s*/,'').trim();
+
+  // Normaliseer oude labels (Relevant → Kern, Wat → Kern)
+  const normalizeLabel = s => s
+    .replace(/^Relevant\??/i, 'Kern')
+    .replace(/^Wat\b/i, 'Kern')
+    .replace(/^Conclusie\b/i, 'Betekenis');
+
+  const lines = text.split('\n').map(l => stripMd(l.trim())).filter(Boolean);
   return lines.map(line => {
-    const clean = line.replace(/^[•\-\*]\s*/, '');
-    const match = clean.match(/^(Kern|Betekenis|Actie):\s*(.*)/i);
+    const normalized = normalizeLabel(line);
+    const match = normalized.match(/^(Kern|Betekenis|Actie):\s*(.*)/i);
     if (match) {
       const key = match[1].toLowerCase();
       const icon = iconMap[key];
@@ -1278,7 +1287,7 @@ function formatInsight(text) {
         </div>`;
       }
     }
-    return `<div class="insight-row"><div class="insight-body"><span class="insight-value">${esc(clean)}</span></div></div>`;
+    return `<div class="insight-row"><div class="insight-body"><span class="insight-value">${esc(line)}</span></div></div>`;
   }).join('');
 }
 
