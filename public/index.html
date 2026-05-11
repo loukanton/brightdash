@@ -390,18 +390,18 @@ body {
 }
 .card-insight.loading { color: var(--txt3); font-style: italic; font-size: 0.78rem; }
 [data-theme="light"] .card-insight { background: #ebe8e2; }
-.insight-row { display: flex; align-items: flex-start; gap: 0; margin-bottom: .45rem; }
+.insight-row { margin-bottom: .6rem; }
 .insight-row:last-child { margin-bottom: 0; }
 .insight-chip {
-  flex-shrink: 0; width: 5.5rem;
+  display: block;
   font-size: 0.58rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
-  padding: .2rem .4rem; border-radius: 3px; white-space: nowrap; line-height: 1.6;
-  margin-right: .5rem; margin-top: .05rem; align-self: flex-start;
+  padding: .15rem .4rem; border-radius: 3px; white-space: nowrap; line-height: 1.6;
+  margin-bottom: .2rem; width: fit-content;
 }
 .insight-chip.kern      { background: rgba(212,168,83,.18); color: var(--gold); }
 .insight-chip.betekenis { background: rgba(96,165,250,.14); color: var(--blue); }
 .insight-chip.actie     { background: rgba(134,239,172,.14); color: var(--green); }
-.insight-value { font-size: 0.8rem; color: var(--txt2); line-height: 1.55; flex: 1; min-width: 0; }
+.insight-value { display: block; font-size: 0.8rem; color: var(--txt2); line-height: 1.55; }
 
 /* ── ROW ── */
 .row {
