@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
 <title>BrightDash — AI & Digitaal Nieuws</title>
 <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAEKUlEQVR4nO2ZS4gdRRSGv8loJKXRiTEMRjRGdNe4UEEC6gSFCFFxUaANEVwEREFRJJtE3ASGLEVEjYoIDkirNC4MxEcgOouoqImPGjWJz6iJRohxkjl5jRkXfSN1a/r2rX7NJvXBXdTp/1TVPX26qvo0BAKBQCAQCAQCgUAgEAgEzi4GXINS6mHgGU//GeA4MAUcBn4A9gDbgW0icqTqxEyiNwJP9pEdAyY7vx+BXcBnwNYoTsVnnLoB6De5Z4FRETlc1tkkegtwR8WxjwBvAKNRnP5UJJxXcQAfFgDrgI+UUpdX8L++xtgLgbWAMYl+rEjYZgbYjAMrRWTGR2wSvRT43TK9H8XpqhzdBWR/djlwLXAXsAo4x5FuiuJ0Q95YrrAtbiGb2Lue+uuc9q48URSnR4GjwAFgB7DZJHoZ8Byw2pKuN4neG8XpK24fZR+BP0VkwP4Bi4ER4MM+vneXGMdN/52+jlGc/gLcCYw5lzZ1MqaL2muAiBwSkXGyiBctONeU6LZyAACiOJ0BHgB+tczDwP2utrFFUEQE2FYgWVSiOzsAk8D3ZecTxelx4CnHvNrVtbkLuBzwEZlEDwNLLdMXnTtahXec9ograCwASqkFwG0Fkq89u3LTP3cB9OQ74LTVPt8keqEtqB0ApdSQUuomYAtwVQ/ZNLDZs8taz79NJ3P+dsxL7EbZbXBYKVUlHdeJyD5PrbsFVg5AB/c/DtqNtteAg8BaEXm6hI+dAceAb6sObhI9CFzomLveT9oOwHbgc1+xSfQSwD42fxXF6b81xl9E92n3BNlN+Z+2A3AvsFMpNaqUmnXszqGx57/D1U57bxSn9qI4J9vgPGADsNFD63UELsHNTnuHK2jiKHwucBkQA98U+K5XSkV9+m86A9wAvOcKmjgKT4vIfhF5HVhBVhTJYxB4sE93dgBO4X92mIVJ9KXA7ZZpCtjq6hp9BERkEni5QLKy1wWT6IuBZZZpIorTkzWm8ygw32qP5VWJ2lgDfiu4VlQYaSz9TaKvBB6yTNPMfi8A2gnAFRX9GjkCm0TPB96ke/9/IYrTPXn6RgOglLqIrBTViz8KrtXOAJPo84BXgRss889ku1AutStCSqlBsnftEbIq7vIC+ccF1+wt8DTwZZl5dBa9t4AbLfMUcE8Up5O9/ObqXeAMr+UZTaKH6H6R2h3F6ZRPhybRi4HHgUfI6oNnEEBHcfppkf9c1QQB3haRXjXBvulvEj0ADAGXkGXcCuBWsnqjcuT7yO78J/0mNVcB+AC4r+C6ewJcYxK9psI4J4GXgCeiOP3Hx6HtABwERoHnReRUga7ONwDIan9jwIudoqg3TQXgBFl5+hDZp7EJshL4uIhMe/j3C8AM2d0V4C9gP7CbbKEcj+J0ouK8A4FAIBAIBAKBQCAQCAQCZx3/ATX4NbsH2YGpAAAAAElFTkSuQmCC">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -484,33 +484,65 @@ footer {
 
 /* ── RESPONSIVE ── */
 @media (max-width: 720px) {
-  .mast { grid-template-columns: 1fr auto; padding: 0 1rem; height: 52px; }
-  .mast-center { display: none; }
+  /* Reset base font hoger voor leesbaarheid */
+  body { font-size: 17px; }
+
+  /* Header */
+  .mast {
+    grid-template-columns: 1fr auto;
+    padding: 0 1rem;
+    height: 54px;
+  }
+  .mast-center, .mast-subbrand { display: none; }
   .mast-right { gap: .5rem; }
-  .mast-subbrand { display: none; }
+
+  /* Sidebar helemaal weg op mobiel */
   .layout { grid-template-columns: 1fr; }
   .sidebar { display: none; }
-  .content { padding-bottom: 70px; }
-  .toolbar { padding: .5rem .75rem; flex-wrap: wrap; gap: .4rem; }
+
+  /* Ruimte voor vaste tab bar onderaan */
+  .content { padding-bottom: calc(90px + env(safe-area-inset-bottom)); }
+
+  /* Toolbar compact */
+  .toolbar { padding: .6rem .85rem; flex-wrap: wrap; gap: .4rem; }
   .toolbar-l { gap: .35rem; flex-wrap: wrap; }
-  .v-btn { padding: .3rem .65rem; font-size: 0.8rem; }
+  .v-btn { padding: .35rem .7rem; font-size: 0.82rem; }
   .v-btn .svg-icon { display: none; }
-  .ref-btn { padding: .3rem .75rem; font-size: 0.8rem; }
-  .r-count { font-size: 0.75rem; }
-  .news { padding: .75rem; }
-  .grid-v { grid-template-columns: 1fr; gap: .75rem; }
-  .card { padding: 1.1rem; }
-  .card-title { font-size: 1.08rem; line-height: 1.5; }
-  .card-desc { font-size: 0.95rem; line-height: 1.7; -webkit-line-clamp: 3; }
-  .card-insight { padding: .85rem; margin-top: .7rem; }
-  .insight-chip { font-size: 0.62rem; }
+  .ref-btn { padding: .35rem .8rem; font-size: 0.82rem; }
+  .r-count { font-size: 0.78rem; }
+
+  /* Cards */
+  .news { padding: .85rem; }
+  .grid-v { grid-template-columns: 1fr; gap: .85rem; }
+  .card { padding: 1.1rem 1.15rem; }
+  .card-top { margin-bottom: .55rem; }
+  .card-title { font-size: 1.08rem; line-height: 1.5; margin-bottom: .45rem; }
+  .card-desc {
+    font-size: 0.95rem; line-height: 1.7;
+    -webkit-line-clamp: 3;
+  }
+  .card-insight {
+    padding: .85rem .9rem;
+    margin-top: .7rem;
+    border-radius: 6px;
+  }
+  .insight-chip { font-size: 0.62rem; padding: .12rem .4rem; margin-bottom: .25rem; }
   .insight-value { font-size: 0.92rem; line-height: 1.65; }
+  .insight-row { margin-bottom: .65rem; }
   .card-actions { margin-top: .7rem; font-size: 0.85rem; }
-  .row { grid-template-columns: 80px 1fr auto; gap: .75rem; padding: .75rem 1rem; }
-  .row-title { font-size: 0.9rem; }
-  footer { padding: .75rem 1rem; flex-direction: column; gap: .35rem; text-align: center; }
-  .footer-legal { margin-left: 0; justify-content: center; }
+
+  /* Lijst */
+  .row { padding: .85rem 1rem; }
+  .row-title { font-size: 0.95rem; line-height: 1.5; }
+
+  /* Ticker weg */
   .ticker { display: none; }
+
+  /* Footer */
+  footer { padding: .85rem 1rem; flex-direction: column; gap: .4rem; text-align: center; }
+  .footer-legal { margin-left: 0; justify-content: center; }
+
+  /* Tab bar zichtbaar */
   .mobile-tabbar { display: flex; }
 }
 
@@ -563,31 +595,43 @@ footer {
 .footer-legal-link:hover { color: var(--txt2); }
 .footer-legal-sep { font-size: 0.6rem; color: var(--txt3); }
 
-/* ── MOBIELE TAB BAR ── */
+/* ── MOBIELE FLOATING FILTER BAR ── */
 .mobile-tabbar {
   display: none;
-  position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
-  background: var(--bg2); border-top: 1px solid var(--line);
-  height: 58px;
+  position: fixed;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  left: 50%; transform: translateX(-50%);
+  z-index: 200;
+  background: var(--bg2);
+  border: 1px solid var(--line2);
+  border-radius: 50px;
+  box-shadow: 0 4px 24px rgba(0,0,0,.18), 0 1px 4px rgba(0,0,0,.1);
   overflow-x: auto; overflow-y: hidden;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
-  padding: 0 .5rem;
+  padding: .45rem .6rem;
   align-items: center;
-  gap: .25rem;
+  gap: .3rem;
+  max-width: calc(100vw - 2rem);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 .mobile-tabbar::-webkit-scrollbar { display: none; }
 .mob-tab {
   flex-shrink: 0;
-  background: none; border: 1px solid var(--line2);
-  color: var(--txt2); font-family: var(--fb);
-  font-size: 0.78rem; font-weight: 500;
-  padding: .35rem .85rem; border-radius: 20px;
+  background: none; border: none;
+  color: var(--txt3); font-family: var(--fb);
+  font-size: 0.82rem; font-weight: 500;
+  padding: .35rem .85rem; border-radius: 50px;
   cursor: pointer; white-space: nowrap;
-  transition: background .15s, color .15s, border-color .15s;
+  transition: background .15s, color .15s;
 }
 .mob-tab:hover { background: var(--bg3); color: var(--txt); }
-.mob-tab.active { background: var(--gold-dim); color: var(--gold); border-color: var(--gold-dim); }
+.mob-tab.active {
+  background: var(--gold-dim);
+  color: var(--gold);
+  font-weight: 600;
+}
 </style>
 </head>
 <body>
@@ -1251,7 +1295,12 @@ function formatInsight(text) {
     'actie':     { cls: 'actie',     label: 'Actie' },
   };
 
-  const stripMd = s => s.replace(/\*\*([^*]+)\*\*/g,'$1').replace(/\*([^*]+)\*/g,'$1').replace(/^[•\-\*]\s*/,'').trim();
+  // Strip markdown, pijltjes en andere rommel
+  const stripMd = s => s
+    .replace(/\*\*([^*]+)\*\*/g,'$1')
+    .replace(/\*([^*]+)\*/g,'$1')
+    .replace(/^[→•\-\*>]+\s*/,'')
+    .trim();
 
   const normalizeLabel = s => s
     .replace(/^Relevant\??/i, 'Kern')
