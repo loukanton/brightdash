@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,600;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
+*, *::before, *::after { box-sizing: border-box; }
 :root {
   --bg:       #08090b;
   --bg2:      #0f1115;
@@ -57,6 +58,7 @@ body {
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  max-width: 100vw;
   transition: background .3s, color .3s;
 }
 
@@ -512,22 +514,25 @@ footer {
   .r-count { font-size: 0.78rem; }
 
   /* Cards */
-  .news { padding: .85rem; }
+  .news { padding: .75rem; }
   .grid-v { grid-template-columns: 1fr; gap: .85rem; }
-  .card { padding: 1.1rem 1.15rem; }
+  .card { padding: 1.1rem 1.15rem; width: 100%; box-sizing: border-box; overflow: hidden; }
   .card-top { margin-bottom: .55rem; }
-  .card-title { font-size: 1.08rem; line-height: 1.5; margin-bottom: .45rem; }
+  .card-title { font-size: 1.08rem; line-height: 1.5; margin-bottom: .45rem; word-break: break-word; hyphens: auto; }
   .card-desc {
     font-size: 0.95rem; line-height: 1.7;
     -webkit-line-clamp: 3;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
   .card-insight {
     padding: .85rem .9rem;
     margin-top: .7rem;
     border-radius: 6px;
+    overflow: hidden;
   }
   .insight-chip { font-size: 0.62rem; padding: .12rem .4rem; margin-bottom: .25rem; }
-  .insight-value { font-size: 0.92rem; line-height: 1.65; }
+  .insight-value { font-size: 0.92rem; line-height: 1.65; word-break: break-word; overflow-wrap: break-word; }
   .insight-row { margin-bottom: .65rem; }
   .card-actions { margin-top: .7rem; font-size: 0.85rem; }
 
