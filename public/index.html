@@ -484,92 +484,34 @@ footer {
 
 /* ── RESPONSIVE ── */
 @media (max-width: 720px) {
-  /* Header */
-  .mast {
-    grid-template-columns: 1fr auto;
-    padding: 0 1rem;
-    height: 52px;
-  }
+  .mast { grid-template-columns: 1fr auto; padding: 0 1rem; height: 52px; }
   .mast-center { display: none; }
   .mast-right { gap: .5rem; }
   .mast-subbrand { display: none; }
-
-  /* Layout: sidebar boven content */
   .layout { grid-template-columns: 1fr; }
-
-  /* Sidebar horizontaal scrollbaar */
-  .sidebar {
-    position: static;
-    height: auto;
-    border-right: none;
-    border-bottom: 1px solid var(--line);
-    padding: .4rem 0;
-    overflow-x: auto;
-    overflow-y: visible;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-  .sidebar::-webkit-scrollbar { display: none; }
-  .s-section {
-    display: inline-flex;
-    gap: .25rem;
-    flex-wrap: nowrap;
-    padding: .25rem .75rem;
-    white-space: nowrap;
-  }
-  .s-label { display: none; }
-  .s-list { flex-direction: row; flex-wrap: nowrap; gap: .25rem; }
-  .s-btn {
-    padding: .3rem .7rem;
-    font-size: 0.78rem;
-    white-space: nowrap;
-    border-radius: 20px;
-    border: 1px solid var(--line2);
-  }
-  .s-btn .svg-icon { display: none; }
-  .s-badge { display: none; }
-  .s-divider, .s-stat { display: none; }
-  /* Bronnen sectie verbergen op mobiel */
-  .s-section:has(#sources-toggle) { display: none; }
-
-  /* Toolbar */
-  .toolbar {
-    padding: .5rem .75rem;
-    flex-wrap: wrap;
-    gap: .4rem;
-  }
+  .sidebar { display: none; }
+  .content { padding-bottom: 70px; }
+  .toolbar { padding: .5rem .75rem; flex-wrap: wrap; gap: .4rem; }
   .toolbar-l { gap: .35rem; flex-wrap: wrap; }
-  .v-btn { padding: .25rem .6rem; font-size: 0.75rem; }
+  .v-btn { padding: .3rem .65rem; font-size: 0.8rem; }
   .v-btn .svg-icon { display: none; }
-  .ref-btn { padding: .25rem .7rem; font-size: 0.75rem; }
-  .r-count { font-size: 0.72rem; }
-
-  /* News grid → 1 kolom */
+  .ref-btn { padding: .3rem .75rem; font-size: 0.8rem; }
+  .r-count { font-size: 0.75rem; }
   .news { padding: .75rem; }
-  .grid-v {
-    grid-template-columns: 1fr;
-    gap: .75rem;
-  }
-
-  /* Kaarten */
-  .card { padding: .9rem 1rem; }
-  .card-title { font-size: 0.92rem; line-height: 1.4; }
-  .card-desc { -webkit-line-clamp: 2; font-size: 0.8rem; }
-  .card-insight { padding: .6rem .75rem; margin-top: .6rem; }
-  .insight-chip { font-size: 0.55rem; }
-  .insight-value { font-size: 0.78rem; }
-  .card-actions { margin-top: .6rem; }
-
-  /* Lijst */
+  .grid-v { grid-template-columns: 1fr; gap: .75rem; }
+  .card { padding: 1.1rem; }
+  .card-title { font-size: 1.08rem; line-height: 1.5; }
+  .card-desc { font-size: 0.95rem; line-height: 1.7; -webkit-line-clamp: 3; }
+  .card-insight { padding: .85rem; margin-top: .7rem; }
+  .insight-chip { font-size: 0.62rem; }
+  .insight-value { font-size: 0.92rem; line-height: 1.65; }
+  .card-actions { margin-top: .7rem; font-size: 0.85rem; }
   .row { grid-template-columns: 80px 1fr auto; gap: .75rem; padding: .75rem 1rem; }
-  .row-title { font-size: 0.85rem; }
-
-  /* Footer */
+  .row-title { font-size: 0.9rem; }
   footer { padding: .75rem 1rem; flex-direction: column; gap: .35rem; text-align: center; }
   .footer-legal { margin-left: 0; justify-content: center; }
-
-  /* Ticker verbergen op klein scherm */
   .ticker { display: none; }
+  .mobile-tabbar { display: flex; }
 }
 
 .svg-icon { display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; }
@@ -620,6 +562,32 @@ footer {
 .footer-legal-link { font-size: 0.6rem; color: var(--txt3); text-decoration: none; letter-spacing: .03em; transition: color .15s; }
 .footer-legal-link:hover { color: var(--txt2); }
 .footer-legal-sep { font-size: 0.6rem; color: var(--txt3); }
+
+/* ── MOBIELE TAB BAR ── */
+.mobile-tabbar {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+  background: var(--bg2); border-top: 1px solid var(--line);
+  height: 58px;
+  overflow-x: auto; overflow-y: hidden;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 .5rem;
+  align-items: center;
+  gap: .25rem;
+}
+.mobile-tabbar::-webkit-scrollbar { display: none; }
+.mob-tab {
+  flex-shrink: 0;
+  background: none; border: 1px solid var(--line2);
+  color: var(--txt2); font-family: var(--fb);
+  font-size: 0.78rem; font-weight: 500;
+  padding: .35rem .85rem; border-radius: 20px;
+  cursor: pointer; white-space: nowrap;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.mob-tab:hover { background: var(--bg3); color: var(--txt); }
+.mob-tab.active { background: var(--gold-dim); color: var(--gold); border-color: var(--gold-dim); }
 </style>
 </head>
 <body>
@@ -1471,6 +1439,22 @@ function setSort(mode) {
   render();
 }
 
+
+// ── MOBIELE TAB FILTER ───────────────────────────────────────────
+function mobFilter(f, btn) {
+  // Sync met desktop sidebar
+  filter = f;
+  document.querySelectorAll('.mob-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  // Sync desktop sidebar actief
+  document.querySelectorAll('.s-btn').forEach(b => {
+    const onclick = b.getAttribute('onclick') || '';
+    b.classList.toggle('active', onclick.includes("'" + f + "'"));
+  });
+  applyFilter();
+  render();
+}
+
 // ── INIT ─────────────────────────────────────────────────────────
 let saved; try { saved=localStorage.getItem('bh-theme'); } catch(e){}
 applyTheme(saved || 'dark');
@@ -1482,5 +1466,19 @@ syncToggles();
 load();
 setInterval(load, 15*60*1000);
 </script>
+
+<nav class="mobile-tabbar" id="mobile-tabbar">
+  <button class="mob-tab active" onclick="mobFilter('all',this)">Alles</button>
+  <button class="mob-tab" onclick="mobFilter('nl',this)">🇳🇱 NL</button>
+  <button class="mob-tab" onclick="mobFilter('en',this)">🌐 INT</button>
+  <button class="mob-tab" onclick="mobFilter('saved',this)">Opgeslagen</button>
+  <button class="mob-tab" onclick="mobFilter('cat:ai',this)">AI</button>
+  <button class="mob-tab" onclick="mobFilter('cat:tech',this)">Tech</button>
+  <button class="mob-tab" onclick="mobFilter('cat:media',this)">Media</button>
+  <button class="mob-tab" onclick="mobFilter('cat:overheid',this)">Overheid</button>
+  <button class="mob-tab" onclick="mobFilter('cat:org',this)">Organisatie</button>
+  <button class="mob-tab" onclick="mobFilter('cat:wow',this)">WoW</button>
+  <button class="mob-tab" onclick="mobFilter('cat:hr',this)">HR</button>
+</nav>
 </body>
 </html>
