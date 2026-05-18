@@ -484,6 +484,26 @@
     line-height: 1.65;
   }
 
+  @media (max-width: 860px) {
+    .analysis-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      padding: 12px 14px;
+    }
+
+    .analysis-label {
+      min-width: unset;
+      padding-top: 0;
+      font-size: 10px;
+    }
+
+    .analysis-text {
+      font-size: 15px;
+      line-height: 1.65;
+    }
+  }
+
   .analysis-loading {
     display: flex;
     align-items: center;
@@ -732,6 +752,29 @@
 
   body.dark .mobile-theme-btn.active { background: #2A2010; border-color: #6A5010; }
 
+  .mobile-menu-footer {
+    padding: 16px 20px 8px;
+    border-top: 1px solid var(--rule);
+    margin-top: 16px;
+  }
+
+  .mobile-apply-btn {
+    width: 100%;
+    padding: 13px;
+    border-radius: 8px;
+    background: var(--ink);
+    border: none;
+    color: var(--white);
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  body.dark .mobile-apply-btn { background: var(--gold); color: #111; }
+  .mobile-apply-btn:hover { opacity: 0.85; }
+
   /* Categorie pills */
   .mobile-pills {
     display: flex;
@@ -921,33 +964,21 @@
   </div>
 
   <div class="mobile-menu-section">
-    <div class="mobile-menu-label">Sortering</div>
-    <div class="mobile-sort-group">
-      <button class="mobile-sort-btn active" id="msort-nieuwste" onclick="setSort('nieuwste', this); updateMobileSort(this)">Nieuwste</button>
-      <button class="mobile-sort-btn" id="msort-populair" onclick="setSort('populair', this); updateMobileSort(this)">Populair</button>
-    </div>
-  </div>
-
-  <div class="mobile-menu-section">
-    <div class="mobile-menu-label">Weergave</div>
-    <div class="mobile-sort-group">
-      <button class="mobile-sort-btn active" id="mview-lijst" onclick="setView('lijst', this); updateMobileView(this)">Lijst</button>
-      <button class="mobile-sort-btn" id="mview-grid" onclick="setView('grid', this); updateMobileView(this)">Grid</button>
-    </div>
-  </div>
-
-  <div class="mobile-menu-section">
     <div class="mobile-menu-label">Thema</div>
     <div class="mobile-theme-grid">
-      <button class="mobile-theme-btn active" onclick="mobilePill('alles', this)" data-filter="alles">Alles</button>
-      <button class="mobile-theme-btn" onclick="mobilePill('AI', this)" data-filter="AI">AI</button>
-      <button class="mobile-theme-btn" onclick="mobilePill('Tech', this)" data-filter="Tech">Tech</button>
-      <button class="mobile-theme-btn" onclick="mobilePill('Overheid', this)" data-filter="Overheid">Overheid</button>
-      <button class="mobile-theme-btn" onclick="mobilePill('Media', this)" data-filter="Media">Media</button>
-      <button class="mobile-theme-btn" onclick="mobilePill('Organisatie', this)" data-filter="Organisatie">Organisatie</button>
-      <button class="mobile-theme-btn" onclick="mobilePill('WoW', this)" data-filter="WoW">WoW</button>
-      <button class="mobile-theme-btn" onclick="mobilePill('HR', this)" data-filter="HR">HR</button>
+      <button class="mobile-theme-btn" onclick="mobileToggleTheme('alles', this)" data-filter="alles">Alles</button>
+      <button class="mobile-theme-btn" onclick="mobileToggleTheme('AI', this)" data-filter="AI">AI</button>
+      <button class="mobile-theme-btn" onclick="mobileToggleTheme('Tech', this)" data-filter="Tech">Tech</button>
+      <button class="mobile-theme-btn" onclick="mobileToggleTheme('Overheid', this)" data-filter="Overheid">Overheid</button>
+      <button class="mobile-theme-btn" onclick="mobileToggleTheme('Media', this)" data-filter="Media">Media</button>
+      <button class="mobile-theme-btn" onclick="mobileToggleTheme('Organisatie', this)" data-filter="Organisatie">Organisatie</button>
+      <button class="mobile-theme-btn" onclick="mobileToggleTheme('WoW', this)" data-filter="WoW">WoW</button>
+      <button class="mobile-theme-btn" onclick="mobileToggleTheme('HR', this)" data-filter="HR">HR</button>
     </div>
+  </div>
+
+  <div class="mobile-menu-footer">
+    <button class="mobile-apply-btn" onclick="toggleMobileMenu()">Toepassen</button>
   </div>
 </div>
 
@@ -1029,15 +1060,7 @@ function toggleMobileMenu() {
   document.body.style.overflow = isOpen ? '' : 'hidden';
 }
 
-function updateMobileSort(el) {
-  document.querySelectorAll('.mobile-sort-btn[id^="msort-"]').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-}
 
-function updateMobileView(el) {
-  document.querySelectorAll('.mobile-sort-btn[id^="mview-"]').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-}
 
 function syncMobileSort(el) {
   el.closest('.mobile-ctrl-group').querySelectorAll('.mobile-ctrl-btn').forEach(b => b.classList.remove('active'));
@@ -1110,22 +1133,36 @@ function updateFeedTitle() {
   else document.getElementById('feedTitle').textContent = selectedThemes.size + ' thema\'s';
 }
 
-// ── Mobile pills ──
-function mobilePill(filter, el) {
-  document.querySelectorAll('.mobile-theme-btn').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-  // Sluit menu na selectie
-  setTimeout(() => toggleMobileMenu(), 200);
-  const scopeFilters = ['alles','nl','en','opgeslagen'];
-  if (scopeFilters.includes(filter)) {
+// ── Mobile thema multi-select ──
+function mobileToggleTheme(filter, el) {
+  if (filter === 'alles') {
+    // Alles: deselecteer alle thema's
     selectedThemes.clear();
+    document.querySelectorAll('.mobile-theme-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    // Sync desktop sidebar
     document.querySelectorAll('.nav-theme').forEach(b => b.classList.remove('selected'));
-    activeScope = filter;
-    const sidebarEl = document.querySelector(`[onclick="setScope('${filter}', this)"]`);
-    if (sidebarEl) { document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active')); sidebarEl.classList.add('active'); }
   } else {
-    selectedThemes.clear();
-    selectedThemes.add(filter);
+    // Deselect "Alles" knop
+    document.querySelectorAll('.mobile-theme-btn[data-filter="alles"]').forEach(b => b.classList.remove('active'));
+    // Toggle dit thema
+    if (selectedThemes.has(filter)) {
+      selectedThemes.delete(filter);
+      el.classList.remove('active');
+      // Sync desktop
+      const desktopEl = document.getElementById('theme-' + filter);
+      if (desktopEl) desktopEl.classList.remove('selected');
+    } else {
+      selectedThemes.add(filter);
+      el.classList.add('active');
+      // Sync desktop
+      const desktopEl = document.getElementById('theme-' + filter);
+      if (desktopEl) desktopEl.classList.add('selected');
+    }
+    // Als niets geselecteerd: activeer "Alles" weer
+    if (selectedThemes.size === 0) {
+      document.querySelectorAll('.mobile-theme-btn[data-filter="alles"]').forEach(b => b.classList.add('active'));
+    }
   }
   updateFeedTitle();
   displayedCount = PAGE_SIZE;
