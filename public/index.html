@@ -1055,25 +1055,8 @@ function toggleAnalyse() {
   if (mob) mob.textContent = document.body.classList.contains('dark') ? '☾' : '☀';
 
   if (!analyseOn) {
-    // Verberg alle zichtbare analyse-blokken
-    document.querySelectorAll('.analysis-block').forEach(el => el.style.display = 'none');
-    // Reset per-artikel knoppen — maar onthoud dat blok al bestaat
-    document.querySelectorAll('.analyse-btn.done').forEach(btn => {
-      btn.textContent = '✦ Make it simple';
-      btn.classList.remove('done');
-      const link = btn.getAttribute('data-link');
-      if (link) {
-        btn.onclick = () => {
-          const id = safeId(link);
-          const block = document.getElementById('analysis-' + id);
-          if (block) {
-            toonAnalyse(link, btn);
-          } else {
-            analyseArtikel(link);
-          }
-        };
-      }
-    });
+    // Render opnieuw zonder analyses — cleanste aanpak
+    renderArticles();
   } else {
     // Toon eerder verborgen blokken weer, of render opnieuw
     const hidden = document.querySelectorAll('.analysis-block[style*="display: none"]');
