@@ -193,25 +193,21 @@
 
   @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; } }
   #articleFeed.grid {
-    columns: 3 300px;
-    column-gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 420px));
+    gap: 16px;
+    justify-content: start;
   }
 
   #articleFeed.grid .article {
-    break-inside: avoid;
-    margin-bottom: 20px;
     padding: 20px;
-    border: 1px solid var(--rule);
-    border-radius: 8px;
-    background: var(--white);
-    display: inline-block;
-    width: 100%;
+    margin-bottom: 0;
+    align-self: start;
   }
 
   #articleFeed.grid .article:last-child { border-bottom: 1px solid var(--rule); margin-bottom: 0; }
 
-  @media (max-width: 900px) { #articleFeed.grid { columns: 2 280px; } }
-  @media (max-width: 600px) { #articleFeed.grid { columns: 1; } }
+  @media (max-width: 600px) { #articleFeed.grid { grid-template-columns: 1fr; } }
   #articleFeed.grid .article { padding: 20px; border: 1px solid var(--rule); border-radius: 8px; background: var(--white); }
   #articleFeed.grid .article:last-child { border-bottom: 1px solid var(--rule); }
   .article-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
