@@ -37,6 +37,7 @@
   .logo-dash { font-style: italic; color: var(--gold); }
   .logo-tagline { font-size: 12px; color: var(--muted); }
   @media (max-width: 500px) { .logo-tagline { display: none; } }
+
   .masthead-right { display: flex; align-items: center; gap: 8px; }
   .icon-btn { background: none; border: 1px solid var(--rule); border-radius: 5px; color: var(--muted); font-size: 15px; width: 34px; height: 34px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0; }
   .icon-btn:hover { border-color: var(--gold); color: var(--gold); }
@@ -73,14 +74,7 @@
   }
 
   @media (max-width: 600px) {
-    .simple-masthead-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      border-color: #B8922A !important;
-      color: var(--ink) !important;
-    }
+    .simple-masthead-btn { display: none; }
   }
 
   /* Page */
@@ -196,6 +190,7 @@
   @media (max-width: 860px) { .feed-wrapper { padding: 20px 16px 100px; } }
 
   .feed-toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); flex-wrap: wrap; }
+  @media (max-width: 600px) { #updatedLabel { display: none !important; } }
   .feed-title { font-family: 'Lora', serif; font-size: 22px; font-weight: 700; color: var(--ink); flex: 1; min-width: 80px; }
   .feed-count { font-size: 12px; color: var(--muted); }
   .toolbar-group { display: flex; background: var(--bg-2); border: 1px solid var(--rule); border-radius: 5px; padding: 2px; gap: 1px; }
@@ -348,7 +343,7 @@
   .back-to-top { position: fixed; bottom: 32px; right: 24px; width: 40px; height: 40px; border-radius: 50%; background: var(--ink); color: var(--white); border: none; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 12px rgba(0,0,0,0.2); opacity: 0; transform: translateY(10px); transition: all 0.2s; z-index: 100; pointer-events: none; }
   .back-to-top.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
   .back-to-top:hover { background: var(--gold); }
-  @media (max-width: 600px) { .back-to-top { bottom: 90px; right: 20px; width: 32px; height: 32px; font-size: 13px; } }
+  @media (max-width: 600px) { .back-to-top { bottom: 120px; right: 20px; width: 32px; height: 32px; font-size: 13px; } }
   .state-box-title { font-family: 'Lora', serif; font-size: 20px; color: var(--ink-3); margin-bottom: 8px; }
 
   /* Footer */
@@ -506,8 +501,6 @@
   <div class="sheet-header">
     <span class="sheet-title">Filter</span>
     <div class="sheet-actions">
-      <button class="icon-btn" onclick="toggleTheme()" id="themeToggleMobile">☀</button>
-      <button class="icon-btn" onclick="refreshFeed(); toggleSheet()">↻</button>
       <button class="icon-btn" onclick="toggleSheet()">✕</button>
     </div>
   </div>
