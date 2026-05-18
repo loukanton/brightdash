@@ -43,19 +43,22 @@ export default async (req) => {
 
     // Standaard prompt als fallback
     if (!promptTemplate) {
-      promptTemplate = `Analyseer dit nieuwsbericht voor Nederlandse managers en bestuurders in energie, overheid en tech.
+      promptTemplate = `Analyseer dit nieuwsbericht. Geef altijd een analyse, ongeacht het onderwerp.
 
 Geef precies deze 3 onderdelen terug, elk op een nieuwe regel:
 
 Kern: [Wat er feitelijk gebeurt, max 2 zinnen]
-Betekenis: [Strategische betekenis voor Nederlandse organisaties, max 2 zinnen]
-Actie: [Wat een organisatie concreet moet doen of overwegen, max 2 actieve zinnen]
+Betekenis: [Wat dit betekent voor organisaties of de markt, max 2 zinnen]
+Actie: [Wat een organisatie kan doen of overwegen — als er geen directe actie is, geef een relevante observatie]
 
 Titel: {{title}}
 Bron: {{source}}
 {{description}}
 
-Wees bondig. Geen inleiding. Geen herhaling van de titel.`;
+Regels:
+- Altijd alle 3 onderdelen invullen
+- Nooit weigeren of vragen om ander artikel
+- Bondig, geen inleiding, geen herhaling van de titel`;
     }
 
     // Vervang variabelen
