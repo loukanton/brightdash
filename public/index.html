@@ -11,226 +11,577 @@
   :root {
     --gold: #B8922A;
     --gold-pale: #F5EDD8;
-    --gold-border: #E0C870;
-    --ink: #1A1714; --ink-2: #2E2A26; --ink-3: #4A4540;
-    --muted: #8A8178; --rule: #E8E2D8;
-    --bg: #FAF8F4; --bg-2: #F2EDE4; --white: #FFFFFF;
-    --chip-kern-bg: #EBF2FA; --chip-kern-text: #1A4A7A; --chip-kern-border: #C5DDEF;
-    --chip-bet-bg: #EBF5EE; --chip-bet-text: #1A4A2A; --chip-bet-border: #C0DFC8;
-    --chip-act-bg: #FDF3E3; --chip-act-text: #6A3A00; --chip-act-border: #EAD4A0;
+    --gold-border: #DFC870;
+    --ink: #1A1714;
+    --ink-3: #4A4540;
+    --muted: #8A8178;
+    --rule: #E8E2D8;
+    --bg: #FAF8F4;
+    --bg-2: #F2EDE4;
+    --white: #FFFFFF;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
 
-  body { background: var(--bg); color: var(--ink); font-family: 'Instrument Sans', sans-serif; font-size: 15px; line-height: 1.6; min-height: 100vh; }
-
-  body.dark {
-    --gold: #C9A84C; --gold-pale: #2A2210; --gold-border: #6A5010;
-    --ink: #EEEAE4; --ink-2: #D0C9BF; --ink-3: #A09890;
-    --muted: #706860; --rule: #2E2A26; --bg: #111009; --bg-2: #1A1814; --white: #181512;
-    --chip-kern-bg: #0E1A2A; --chip-kern-text: #7ABAEE; --chip-kern-border: #1A3A5A;
-    --chip-bet-bg: #0E1A0E; --chip-bet-text: #7ACC8A; --chip-bet-border: #1A3A1A;
-    --chip-act-bg: #1A1400; --chip-act-text: #D4AA55; --chip-act-border: #3A2E00;
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    min-height: 100vh;
+    -webkit-text-size-adjust: 100%;
   }
 
+  /* ── Dark ── */
+  body.dark {
+    --gold: #C9A84C; --gold-pale: #2A2210; --gold-border: #6A5010;
+    --ink: #EEEAE4; --ink-3: #A09890; --muted: #706860;
+    --rule: #2E2A26; --bg: #111009; --bg-2: #1A1814; --white: #181512;
+  }
   body.dark .masthead { background: var(--white); }
-  body.dark .toolbar-btn.active { background: var(--ink-2); color: var(--bg); }
-  body.dark .mobile-cat-btn.active { background: var(--gold); color: #111; }
-  body.dark #articleFeed.grid .article { background: var(--white); }
+  body.dark .analyse-toggle { background: var(--bg-2); }
+  body.dark .analyse-toggle.on { color: #111; }
+  body.dark .analysis-block { background: var(--bg-2); }
+  body.dark .mobile-analyse-btn.on { color: #111; }
 
   /* ── Masthead ── */
-  .masthead { background: var(--white); border-bottom: 2px solid var(--ink); padding: 0 24px; }
-  .masthead-inner { max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 18px 0 14px; gap: 16px; }
-  .masthead-date { font-size: 11px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); font-weight: 500; }
-  .logo-block { text-align: center; }
-  .logo { font-family: 'Lora', serif; font-size: 28px; letter-spacing: -0.5px; line-height: 1; display: block; }
+  .masthead {
+    background: var(--white);
+    border-bottom: 2px solid var(--ink);
+    padding: 0 20px;
+  }
+
+  .masthead-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 0;
+    gap: 12px;
+  }
+
+  .logo {
+    font-family: 'Lora', serif;
+    font-size: 26px;
+    letter-spacing: -0.5px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
   .logo-bright { font-weight: 700; color: var(--ink); }
   .logo-dash { font-style: italic; color: var(--gold); }
-  .logo-sub { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); margin-top: 5px; display: block; }
-  .masthead-right { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
-  .updated-label { font-size: 11px; color: var(--muted); }
-  .refresh-btn, .theme-toggle { background: none; border: 1px solid var(--rule); border-radius: 4px; color: var(--muted); font-family: 'Instrument Sans', sans-serif; font-size: 11px; font-weight: 500; padding: 6px 10px; cursor: pointer; transition: all 0.15s; text-transform: uppercase; letter-spacing: 0.5px; }
-  .theme-toggle { font-size: 14px; padding: 5px 8px; }
-  .refresh-btn:hover, .theme-toggle:hover { border-color: var(--gold); color: var(--gold); }
 
-  /* ── Page ── */
-  .page { max-width: 1160px; margin: 0 auto; padding: 32px 24px; display: grid; grid-template-columns: 210px 1fr; gap: 44px; align-items: start; }
-  @media (max-width: 860px) { .page { grid-template-columns: 1fr; padding-bottom: 80px; } .sidebar { display: none; } }
+  .masthead-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .updated-label {
+    font-size: 11px;
+    color: var(--muted);
+    display: none;
+  }
+
+  @media (min-width: 600px) { .updated-label { display: block; } }
+
+  .icon-btn {
+    background: none;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    color: var(--muted);
+    font-size: 16px;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .icon-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ── Page layout ── */
+  .page {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 28px 20px;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 44px;
+    align-items: start;
+  }
+
+  @media (max-width: 860px) {
+    .page {
+      grid-template-columns: 1fr;
+      padding: 20px 16px 120px;
+      gap: 0;
+    }
+    .sidebar { display: none; }
+  }
 
   /* ── Sidebar ── */
   .sidebar { position: sticky; top: 24px; }
-  .nav-section { margin-bottom: 20px; }
-  .nav-section-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.8px; color: var(--muted); padding: 0 10px; margin-bottom: 4px; }
 
-  /* Single-select items (Alles, NL, EN, Opgeslagen) */
-  .nav-item {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 7px 10px; border-radius: 5px; cursor: pointer;
-    transition: background 0.12s, color 0.12s; font-size: 13.5px;
-    color: var(--ink-3); user-select: none; border: none; background: none;
-    width: 100%; text-align: left; font-family: 'Instrument Sans', sans-serif;
+  .analyse-toggle {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1.5px solid var(--rule);
+    background: var(--white);
+    cursor: pointer;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink-3);
+    text-align: center;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+    margin-bottom: 20px;
   }
+
+  .analyse-toggle:hover { border-color: var(--gold); color: var(--gold); }
+
+  .analyse-toggle.on {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--white);
+    box-shadow: 0 3px 14px rgba(184,146,42,0.35);
+  }
+
+  .nav-section { margin-bottom: 20px; }
+
+  .nav-section-title {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    color: var(--muted);
+    padding: 0 10px;
+    margin-bottom: 4px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--ink-3);
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    font-family: 'Instrument Sans', sans-serif;
+    transition: background 0.12s, color 0.12s;
+  }
+
   .nav-item:hover { background: var(--bg-2); color: var(--ink); }
   .nav-item.active { background: var(--gold-pale); color: var(--ink); font-weight: 600; }
   body.dark .nav-item.active { background: #2A2010; }
 
-  /* Multi-select theme items */
   .nav-theme {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 7px 10px; border-radius: 5px; cursor: pointer;
-    transition: all 0.12s; font-size: 13.5px;
-    color: var(--ink-3); user-select: none; border: 1px solid transparent;
-    background: none; width: 100%; text-align: left; font-family: 'Instrument Sans', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--ink-3);
+    border: 1px solid transparent;
+    background: none;
+    width: 100%;
+    text-align: left;
+    font-family: 'Instrument Sans', sans-serif;
+    transition: all 0.12s;
     margin-bottom: 1px;
   }
+
   .nav-theme:hover { background: var(--bg-2); color: var(--ink); }
 
-  /* Selected state — gold fill */
   .nav-theme.selected {
     background: var(--gold-pale);
     border-color: var(--gold-border);
     color: var(--ink);
     font-weight: 600;
   }
-  body.dark .nav-theme.selected { background: #2A2010; border-color: #6A5010; }
 
+  body.dark .nav-theme.selected { background: #2A2010; border-color: #6A5010; }
   .nav-theme.selected .nav-item-count { color: var(--gold); font-weight: 600; }
 
-  /* Checkmark indicator */
-  .nav-theme-left { display: flex; align-items: center; gap: 7px; }
+  .nav-theme-left { display: flex; align-items: center; gap: 8px; }
+
   .nav-check {
-    width: 14px; height: 14px; border-radius: 3px;
-    border: 1.5px solid var(--rule); background: var(--white);
+    width: 15px; height: 15px;
+    border-radius: 3px;
+    border: 1.5px solid var(--rule);
+    background: var(--white);
     display: flex; align-items: center; justify-content: center;
-    font-size: 9px; color: transparent; transition: all 0.12s; flex-shrink: 0;
+    font-size: 9px; color: transparent;
+    transition: all 0.12s; flex-shrink: 0;
   }
+
   .nav-theme.selected .nav-check { background: var(--gold); border-color: var(--gold); color: #fff; }
-  body.dark .nav-theme.selected .nav-check { color: #111; }
 
   .nav-item-count { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
   .nav-item.active .nav-item-count { color: var(--gold); font-weight: 600; }
 
-  .nav-divider { border: none; border-top: 1px solid var(--rule); margin: 14px 0; }
+  .nav-divider { border: none; border-top: 1px solid var(--rule); margin: 16px 0; }
 
-  /* ── Analyse toggle ── */
-  .analyse-toggle {
-    width: 100%; padding: 10px 12px; border-radius: 7px; border: 1.5px solid var(--rule);
-    background: var(--white); cursor: pointer; font-family: 'Instrument Sans', sans-serif;
-    font-size: 13px; font-weight: 600; color: var(--ink-3); text-align: center;
-    transition: all 0.2s; margin-top: 4px; letter-spacing: 0.2px;
-  }
-  .analyse-toggle:hover { border-color: var(--gold); color: var(--gold); }
-  .analyse-toggle.on {
-    background: var(--gold);
-    border-color: var(--gold);
-    color: var(--white);
-    box-shadow: 0 2px 12px rgba(184,146,42,0.3);
-  }
-  body.dark .analyse-toggle { background: var(--bg-2); }
-  body.dark .analyse-toggle.on { color: #111; box-shadow: 0 2px 12px rgba(201,168,76,0.25); }
-
-  .bhb-badge { padding: 10px; margin-top: 4px; }
+  .bhb-badge { padding: 10px; }
   .bhb-logo { font-family: 'Lora', serif; font-size: 12px; color: var(--ink-3); }
   .bhb-logo span { color: var(--gold); font-style: italic; }
 
   /* ── Feed ── */
   .feed { min-width: 0; }
 
-  .feed-toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); flex-wrap: wrap; }
-  .feed-title { font-family: 'Lora', serif; font-size: 20px; font-weight: 700; color: var(--ink); flex: 1; min-width: 80px; }
-  .feed-count { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .feed-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--rule);
+    flex-wrap: wrap;
+  }
 
-  .toolbar-group { display: flex; background: var(--bg-2); border: 1px solid var(--rule); border-radius: 5px; padding: 2px; gap: 1px; }
-  .toolbar-btn { padding: 5px 11px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; color: var(--muted); cursor: pointer; border: none; background: none; font-family: 'Instrument Sans', sans-serif; transition: all 0.12s; white-space: nowrap; }
+  .feed-title {
+    font-family: 'Lora', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+    flex: 1;
+    min-width: 80px;
+  }
+
+  .feed-count { font-size: 13px; color: var(--muted); }
+
+  .toolbar-group {
+    display: flex;
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 2px;
+    gap: 1px;
+  }
+
+  .toolbar-btn {
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--muted);
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: 'Instrument Sans', sans-serif;
+    transition: all 0.12s;
+    white-space: nowrap;
+  }
+
   .toolbar-btn:hover { color: var(--ink); }
   .toolbar-btn.active { background: var(--white); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  body.dark .toolbar-btn.active { background: #2A2520; color: var(--ink); }
 
-  /* ── Articles ── */
-  .article { padding: 32px 0; border-bottom: 1px solid var(--rule); animation: fadeIn 0.3s ease both; }
+  /* ── Article ── */
+  .article {
+    padding: 32px 0;
+    border-bottom: 1px solid var(--rule);
+    animation: fadeIn 0.3s ease both;
+  }
+
   .article:first-child { padding-top: 0; }
   .article:last-child { border-bottom: none; }
 
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; } }
 
-  #articleFeed.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
-  #articleFeed.grid .article { padding: 18px; border: 1px solid var(--rule); border-radius: 6px; background: var(--white); }
+  /* Grid view */
+  #articleFeed.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+  #articleFeed.grid .article { padding: 20px; border: 1px solid var(--rule); border-radius: 8px; background: var(--white); }
   #articleFeed.grid .article:last-child { border-bottom: 1px solid var(--rule); }
 
-  .article-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
-  .article-source { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+
+  .article-source {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--muted);
+  }
+
   .article-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--rule); flex-shrink: 0; }
-  .article-date { font-size: 11px; color: var(--muted); }
-  .article-category-badge { margin-left: auto; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; padding: 2px 8px; border-radius: 3px; background: var(--gold-pale); color: var(--gold); border: 1px solid var(--gold-border); }
-  .save-btn { background: none; border: none; cursor: pointer; font-size: 14px; color: var(--muted); padding: 0 2px; transition: color 0.15s; line-height: 1; }
+  .article-date { font-size: 12px; color: var(--muted); }
+
+  .article-category-badge {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 3px 9px;
+    border-radius: 4px;
+    background: var(--gold-pale);
+    color: var(--gold);
+    border: 1px solid var(--gold-border);
+  }
+
+  .save-btn {
+    background: none; border: none; cursor: pointer;
+    font-size: 16px; color: var(--muted);
+    padding: 0 2px; transition: color 0.15s; line-height: 1;
+    margin-left: auto;
+  }
+
   .save-btn:hover, .save-btn.saved { color: var(--gold); }
 
-  .article-title { font-family: 'Lora', serif; font-size: 21px; font-weight: 700; line-height: 1.3; color: var(--ink); margin-bottom: 14px; text-decoration: none; display: block; transition: color 0.15s; }
+  /* Titel — het allerbelangrijkste element */
+  .article-title {
+    font-family: 'Lora', serif;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--ink);
+    margin-bottom: 10px;
+    text-decoration: none;
+    display: block;
+    transition: color 0.15s;
+  }
+
+  @media (max-width: 600px) {
+    .article-title { font-size: 20px; }
+  }
+
   .article-title:hover { color: var(--gold); }
 
-  .analysis { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
-  .chip { display: flex; align-items: baseline; gap: 10px; padding: 11px 16px; border-radius: 6px; line-height: 1.6; font-size: 14px; }
-  .chip-kern { background: var(--chip-kern-bg); color: var(--chip-kern-text); border: 1px solid var(--chip-kern-border); }
-  .chip-betekenis { background: var(--chip-bet-bg); color: var(--chip-bet-text); border: 1px solid var(--chip-bet-border); }
-  .chip-actie { background: var(--chip-act-bg); color: var(--chip-act-text); border: 1px solid var(--chip-act-border); }
-  .chip-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.6; flex-shrink: 0; min-width: 72px; }
-  .chip-text { flex: 1; }
+  /* Beschrijving */
+  .article-description {
+    font-size: 15px;
+    color: var(--ink-3);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
 
-  .analysis-loading { display: flex; align-items: center; gap: 10px; padding: 10px 0; color: var(--muted); font-size: 13px; }
-  .spinner { width: 13px; height: 13px; border: 2px solid var(--rule); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; flex-shrink: 0; }
+  /* ── Analyse blok — 1 vak ── */
+  .analysis-block {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--gold);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 18px;
+  }
+
+  .analysis-row {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--rule);
+    line-height: 1.65;
+  }
+
+  .analysis-row:last-child { border-bottom: none; }
+
+  .analysis-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--gold);
+    flex-shrink: 0;
+    min-width: 76px;
+    padding-top: 2px;
+  }
+
+  .analysis-text {
+    font-size: 15px;
+    color: var(--ink-3);
+    flex: 1;
+    line-height: 1.65;
+  }
+
+  .analysis-loading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .spinner {
+    width: 14px; height: 14px;
+    border: 2px solid var(--rule);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    flex-shrink: 0;
+  }
+
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  .article-description { font-size: 13.5px; color: var(--ink-3); line-height: 1.65; margin-bottom: 12px; }
-  .article-footer { display: flex; align-items: center; gap: 14px; }
-  .read-link { font-size: 13px; font-weight: 600; color: var(--gold); text-decoration: none; transition: opacity 0.15s; border: 1px solid var(--gold-border); padding: 6px 14px; border-radius: 4px; display: inline-block; }
-  .read-link:hover { opacity: 0.75; background: var(--gold-pale); }
+  /* Lees artikel */
+  .article-footer { padding-top: 4px; }
+
+  .read-link {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gold);
+    text-decoration: none;
+    border: 1px solid var(--gold-border);
+    padding: 8px 18px;
+    border-radius: 5px;
+    display: inline-block;
+    transition: all 0.15s;
+  }
+
+  .read-link:hover { background: var(--gold-pale); }
   .read-link::after { content: ' →'; }
 
-  .load-more { text-align: center; padding: 32px 0 8px; }
-  .load-more-btn { background: none; border: 1px solid var(--ink); color: var(--ink); font-family: 'Instrument Sans', sans-serif; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 11px 30px; cursor: pointer; transition: all 0.15s; border-radius: 3px; }
+  /* Load more */
+  .load-more { text-align: center; padding: 36px 0 8px; }
+  .load-more-btn {
+    background: none;
+    border: 1.5px solid var(--ink);
+    color: var(--ink);
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 12px 32px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-radius: 4px;
+  }
+
   .load-more-btn:hover { background: var(--ink); color: var(--white); }
 
-  /* Mobile */
-  .mobile-filter { display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--ink); border-radius: 40px; padding: 5px 7px; gap: 2px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); z-index: 200; overflow-x: auto; max-width: calc(100vw - 32px); scrollbar-width: none; }
-  .mobile-filter::-webkit-scrollbar { display: none; }
-  @media (max-width: 860px) { .mobile-filter { display: flex; } }
-  .mobile-cat-btn { padding: 7px 13px; border-radius: 30px; font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.45); cursor: pointer; border: none; background: none; font-family: 'Instrument Sans', sans-serif; white-space: nowrap; transition: all 0.15s; }
-  .mobile-cat-btn.active { background: var(--gold); color: var(--ink); }
+  /* ── Mobile bottom bar ── */
+  .mobile-bar {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--white);
+    border-top: 1px solid var(--rule);
+    padding: 10px 16px 20px;
+    z-index: 200;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+  }
 
-  .skeleton { background: linear-gradient(90deg, var(--rule) 25%, var(--bg-2) 50%, var(--rule) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 3px; }
+  body.dark .mobile-bar { background: #1A1814; border-top-color: var(--rule); }
+
+  @media (max-width: 860px) { .mobile-bar { display: block; } }
+
+  /* Simple knop — groot en zichtbaar op mobiel */
+  .mobile-analyse-btn {
+    width: 100%;
+    padding: 13px;
+    border-radius: 8px;
+    border: 1.5px solid var(--rule);
+    background: var(--bg-2);
+    cursor: pointer;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink-3);
+    text-align: center;
+    transition: all 0.2s;
+    margin-bottom: 10px;
+  }
+
+  .mobile-analyse-btn.on {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--white);
+    box-shadow: 0 3px 14px rgba(184,146,42,0.3);
+  }
+
+  /* Categorie pills */
+  .mobile-pills {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+
+  .mobile-pills::-webkit-scrollbar { display: none; }
+
+  .mobile-pill {
+    padding: 7px 14px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    border: 1px solid var(--rule);
+    background: none;
+    font-family: 'Instrument Sans', sans-serif;
+    white-space: nowrap;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+
+  .mobile-pill.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--white);
+  }
+
+  body.dark .mobile-pill { border-color: var(--rule); }
+
+  /* Skeleton */
+  .skeleton { background: linear-gradient(90deg, var(--rule) 25%, var(--bg-2) 50%, var(--rule) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 4px; }
   @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
   .state-box { text-align: center; padding: 60px 20px; color: var(--muted); }
-  .state-box-title { font-family: 'Lora', serif; font-size: 18px; color: var(--ink-3); margin-bottom: 8px; }
+  .state-box-title { font-family: 'Lora', serif; font-size: 20px; color: var(--ink-3); margin-bottom: 8px; }
 </style>
 </head>
 <body>
 
+<!-- Masthead -->
 <header class="masthead">
   <div class="masthead-inner">
-    <div class="masthead-date" id="todayDate"></div>
-    <div class="logo-block">
-      <span class="logo"><span class="logo-bright">Bright</span><span class="logo-dash">Dash</span></span>
-      <span class="logo-sub">Complex tech news · Made simple</span>
+    <div class="logo">
+      <span class="logo-bright">Bright</span><span class="logo-dash">Dash</span>
     </div>
     <div class="masthead-right">
       <span class="updated-label" id="updatedLabel"></span>
-      <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle" title="Wissel thema">☀</button>
-      <button class="refresh-btn" onclick="refreshFeed()" id="refreshBtn">↻ Ververs</button>
+      <button class="icon-btn" onclick="toggleTheme()" id="themeToggle" title="Thema wisselen">☀</button>
+      <button class="icon-btn" onclick="refreshFeed()" id="refreshBtn" title="Ververs">↻</button>
     </div>
   </div>
 </header>
 
+<!-- Page -->
 <div class="page">
 
+  <!-- Sidebar (desktop) -->
   <aside class="sidebar">
 
-    <!-- Analyse toggle -->
     <button class="analyse-toggle" id="analyseToggle" onclick="toggleAnalyse()">Simple</button>
 
-    <hr class="nav-divider">
-
-    <!-- Single-select: scope -->
     <div class="nav-section">
       <button class="nav-item active" onclick="setScope('alles', this)">
         <span>Alles</span><span class="nav-item-count" id="count-alles">—</span>
@@ -248,7 +599,6 @@
 
     <hr class="nav-divider">
 
-    <!-- Multi-select: thema -->
     <div class="nav-section">
       <div class="nav-section-title">Thema</div>
       <button class="nav-theme" onclick="toggleTheme2('AI', this)" id="theme-AI">
@@ -288,6 +638,7 @@
     </div>
   </aside>
 
+  <!-- Feed -->
   <main class="feed">
     <div class="feed-toolbar">
       <span class="feed-title" id="feedTitle">Alles</span>
@@ -304,18 +655,18 @@
     </div>
 
     <div id="articleFeed">
-      <div style="padding:26px 0;border-bottom:1px solid var(--rule)">
-        <div class="skeleton" style="height:11px;width:110px;margin-bottom:13px"></div>
-        <div class="skeleton" style="height:22px;width:80%;margin-bottom:16px"></div>
-        <div class="skeleton" style="height:44px;width:100%;margin-bottom:7px"></div>
-        <div class="skeleton" style="height:44px;width:100%;margin-bottom:7px"></div>
-        <div class="skeleton" style="height:44px;width:92%"></div>
+      <div style="padding:32px 0;border-bottom:1px solid var(--rule)">
+        <div class="skeleton" style="height:12px;width:120px;margin-bottom:12px"></div>
+        <div class="skeleton" style="height:26px;width:85%;margin-bottom:10px"></div>
+        <div class="skeleton" style="height:26px;width:60%;margin-bottom:16px"></div>
+        <div class="skeleton" style="height:16px;width:100%;margin-bottom:6px"></div>
+        <div class="skeleton" style="height:16px;width:90%"></div>
       </div>
-      <div style="padding:26px 0">
-        <div class="skeleton" style="height:11px;width:90px;margin-bottom:13px"></div>
-        <div class="skeleton" style="height:22px;width:65%;margin-bottom:16px"></div>
-        <div class="skeleton" style="height:44px;width:100%;margin-bottom:7px"></div>
-        <div class="skeleton" style="height:44px;width:100%"></div>
+      <div style="padding:32px 0">
+        <div class="skeleton" style="height:12px;width:100px;margin-bottom:12px"></div>
+        <div class="skeleton" style="height:26px;width:75%;margin-bottom:10px"></div>
+        <div class="skeleton" style="height:26px;width:50%;margin-bottom:16px"></div>
+        <div class="skeleton" style="height:16px;width:100%"></div>
       </div>
     </div>
 
@@ -325,14 +676,19 @@
   </main>
 </div>
 
-<div class="mobile-filter">
-  <button class="mobile-cat-btn active" onclick="mobileFilter('alles', this)">Alles</button>
-  <button class="mobile-cat-btn" onclick="mobileFilter('AI', this)">AI</button>
-  <button class="mobile-cat-btn" onclick="mobileFilter('Tech', this)">Tech</button>
-  <button class="mobile-cat-btn" onclick="mobileFilter('Overheid', this)">Overheid</button>
-  <button class="mobile-cat-btn" onclick="mobileFilter('HR', this)">HR</button>
-  <button class="mobile-cat-btn" onclick="mobileFilter('Media', this)">Media</button>
-  <button class="mobile-cat-btn" onclick="mobileFilter('WoW', this)">WoW</button>
+<!-- Mobile bottom bar -->
+<div class="mobile-bar">
+  <button class="mobile-analyse-btn" id="mobileAnalyseBtn" onclick="toggleAnalyse()">Simple</button>
+  <div class="mobile-pills">
+    <button class="mobile-pill active" onclick="mobilePill('alles', this)">Alles</button>
+    <button class="mobile-pill" onclick="mobilePill('AI', this)">AI</button>
+    <button class="mobile-pill" onclick="mobilePill('Tech', this)">Tech</button>
+    <button class="mobile-pill" onclick="mobilePill('Overheid', this)">Overheid</button>
+    <button class="mobile-pill" onclick="mobilePill('Media', this)">Media</button>
+    <button class="mobile-pill" onclick="mobilePill('Organisatie', this)">Organisatie</button>
+    <button class="mobile-pill" onclick="mobilePill('WoW', this)">WoW</button>
+    <button class="mobile-pill" onclick="mobilePill('HR', this)">HR</button>
+  </div>
 </div>
 
 <script>
@@ -340,18 +696,13 @@ let allArticles = [], filteredArticles = [];
 let displayedCount = 8;
 const PAGE_SIZE = 8;
 let activeScope = 'alles';
-let selectedThemes = new Set();   // leeg = alle thema's
+let selectedThemes = new Set();
 let activeSort = 'nieuwste';
 let activeView = 'lijst';
 let analyseOn = false;
 let savedLinks = JSON.parse(localStorage.getItem('bd_saved') || '[]');
 
-document.addEventListener('DOMContentLoaded', () => { initTheme(); setDate(); loadFeed(); });
-
-function setDate() {
-  document.getElementById('todayDate').textContent =
-    new Date().toLocaleDateString('nl-NL', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-}
+document.addEventListener('DOMContentLoaded', () => { initTheme(); loadFeed(); });
 
 // ── Theme (dark/light) ──
 function toggleTheme() {
@@ -359,11 +710,25 @@ function toggleTheme() {
   document.getElementById('themeToggle').textContent = dark ? '☾' : '☀';
   localStorage.setItem('bd_theme', dark ? 'dark' : 'light');
 }
+
 function initTheme() {
   if (localStorage.getItem('bd_theme') === 'dark') {
     document.body.classList.add('dark');
     document.getElementById('themeToggle').textContent = '☾';
   }
+}
+
+// ── Analyse toggle ──
+function toggleAnalyse() {
+  analyseOn = !analyseOn;
+  const label = analyseOn ? 'Making it simple!' : 'Simple';
+  const desktopBtn = document.getElementById('analyseToggle');
+  const mobileBtn = document.getElementById('mobileAnalyseBtn');
+  desktopBtn.textContent = label;
+  mobileBtn.textContent = label;
+  desktopBtn.classList.toggle('on', analyseOn);
+  mobileBtn.classList.toggle('on', analyseOn);
+  renderArticles();
 }
 
 // ── Load ──
@@ -373,7 +738,7 @@ async function loadFeed() {
     const data = await res.json();
     allArticles = (data.articles || data.items || []).sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
     if (data.updatedAt) {
-      const t = new Date(data.updatedAt).toLocaleTimeString('nl-NL', { hour:'2-digit', minute:'2-digit' });
+      const t = new Date(data.updatedAt).toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
       document.getElementById('updatedLabel').textContent = 'Bijgewerkt ' + t;
     }
     updateCounts();
@@ -400,80 +765,65 @@ function updateCounts() {
   cats.forEach(c => { const el = document.getElementById('count-' + c); if (el) el.textContent = counts[c] || 0; });
 }
 
-// ── Scope filter (single select) ──
+// ── Scope (single select) ──
 function setScope(scope, el) {
   activeScope = scope;
   document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
   el.classList.add('active');
+  const labels = { alles:'Alles', nl:'Nederlands', en:'Internationaal', opgeslagen:'Opgeslagen' };
+  document.getElementById('feedTitle').textContent = labels[scope] || scope;
   displayedCount = PAGE_SIZE;
-  updateFeedTitle();
   applyFilter();
 }
 
-// ── Theme filter (multi select) ──
+// ── Theme multi-select ──
 function toggleTheme2(theme, el) {
-  if (selectedThemes.has(theme)) {
-    selectedThemes.delete(theme);
-    el.classList.remove('selected');
-  } else {
-    selectedThemes.add(theme);
-    el.classList.add('selected');
-  }
+  if (selectedThemes.has(theme)) { selectedThemes.delete(theme); el.classList.remove('selected'); }
+  else { selectedThemes.add(theme); el.classList.add('selected'); }
   displayedCount = PAGE_SIZE;
   updateFeedTitle();
   applyFilter();
 }
 
 function updateFeedTitle() {
-  const scopeLabels = { alles:'Alles', nl:'Nederlands', en:'Internationaal', opgeslagen:'Opgeslagen' };
-  if (selectedThemes.size === 0) {
-    document.getElementById('feedTitle').textContent = scopeLabels[activeScope] || activeScope;
-  } else if (selectedThemes.size === 1) {
-    const themeLabels = { AI:'AI', Tech:'Tech', Media:'Media & Marketing', Overheid:'Overheid', Organisatie:'Organisatie', WoW:'Way of Working', HR:'HR & Werk' };
-    document.getElementById('feedTitle').textContent = themeLabels[[...selectedThemes][0]] || [...selectedThemes][0];
-  } else {
-    document.getElementById('feedTitle').textContent = selectedThemes.size + ' thema\'s';
-  }
+  const labels = { alles:'Alles', nl:'Nederlands', en:'Internationaal', opgeslagen:'Opgeslagen', AI:'AI', Tech:'Tech', Media:'Media & Marketing', Overheid:'Overheid', Organisatie:'Organisatie', WoW:'Way of Working', HR:'HR & Werk' };
+  if (selectedThemes.size === 0) document.getElementById('feedTitle').textContent = labels[activeScope] || activeScope;
+  else if (selectedThemes.size === 1) document.getElementById('feedTitle').textContent = labels[[...selectedThemes][0]] || [...selectedThemes][0];
+  else document.getElementById('feedTitle').textContent = selectedThemes.size + ' thema\'s';
 }
 
-// ── Analyse toggle ──
-function toggleAnalyse() {
-  analyseOn = !analyseOn;
-  const btn = document.getElementById('analyseToggle');
-  if (analyseOn) {
-    btn.textContent = 'Making it simple!';
-    btn.classList.add('on');
+// ── Mobile pills ──
+function mobilePill(filter, el) {
+  document.querySelectorAll('.mobile-pill').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  const scopeFilters = ['alles','nl','en','opgeslagen'];
+  if (scopeFilters.includes(filter)) {
+    selectedThemes.clear();
+    document.querySelectorAll('.nav-theme').forEach(b => b.classList.remove('selected'));
+    activeScope = filter;
+    const sidebarEl = document.querySelector(`[onclick="setScope('${filter}', this)"]`);
+    if (sidebarEl) { document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active')); sidebarEl.classList.add('active'); }
   } else {
-    btn.textContent = 'Simple';
-    btn.classList.remove('on');
+    selectedThemes.clear();
+    selectedThemes.add(filter);
   }
-  renderArticles();
+  updateFeedTitle();
+  displayedCount = PAGE_SIZE;
+  applyFilter();
 }
 
 // ── Apply filter ──
 function applyFilter() {
   let items = [...allArticles];
-
-  // Scope
   if (activeScope === 'nl') items = items.filter(a => (a.lang||'').toLowerCase() === 'nl');
   else if (activeScope === 'en') items = items.filter(a => (a.lang||'').toLowerCase() !== 'nl');
   else if (activeScope === 'opgeslagen') items = items.filter(a => savedLinks.includes(a.link));
-
-  // Thema (multi) — als er thema's geselecteerd zijn, toon alleen die
-  if (selectedThemes.size > 0) {
-    items = items.filter(a => {
-      const tag = (a.tag || a.category || '').toLowerCase();
-      return [...selectedThemes].some(t => tag.includes(t.toLowerCase()));
-    });
-  }
-
-  // Sort
-  if (activeSort === 'analyse') items = [...items.filter(a => a.insight), ...items.filter(a => !a.insight)];
-
+  if (selectedThemes.size > 0) items = items.filter(a => [...selectedThemes].some(t => (a.tag||a.category||'').toLowerCase().includes(t.toLowerCase())));
   filteredArticles = items;
   renderArticles();
 }
 
+// ── Sort / View ──
 function setSort(sort, el) {
   activeSort = sort;
   el.closest('.toolbar-group').querySelectorAll('.toolbar-btn').forEach(b => b.classList.remove('active'));
@@ -495,8 +845,7 @@ function renderArticles() {
   document.getElementById('feedCount').textContent = filteredArticles.length + ' berichten';
 
   if (toShow.length === 0) {
-    document.getElementById('articleFeed').innerHTML =
-      '<div class="state-box"><div class="state-box-title">Geen artikelen</div><p>Geen berichten gevonden.</p></div>';
+    document.getElementById('articleFeed').innerHTML = '<div class="state-box"><div class="state-box-title">Geen artikelen</div><p>Geen berichten gevonden.</p></div>';
     document.getElementById('loadMoreContainer').style.display = 'none';
     return;
   }
@@ -505,27 +854,22 @@ function renderArticles() {
   feed.innerHTML = toShow.map((a, i) => renderArticle(a, i)).join('');
   if (activeView === 'grid') feed.classList.add('grid');
   document.getElementById('loadMoreContainer').style.display = filteredArticles.length > displayedCount ? 'block' : 'none';
-
-  // Lazy load analyses alleen als analyse aan staat
-  if (analyseOn) {
-    toShow.filter(a => !a.insight && a.link).forEach(a => lazyLoadAnalysis(a));
-  }
+  if (analyseOn) toShow.filter(a => !a.insight && a.link).forEach(a => lazyLoadAnalysis(a));
 }
 
 function renderArticle(a, i) {
   const date = a.pubDate ? new Date(a.pubDate).toLocaleDateString('nl-NL', { day:'numeric', month:'short' }) : '';
   const tag = a.tag || a.category || '';
-  const desc = a.description ? a.description.replace(/<[^>]+>/g,'').slice(0,160) + '...' : '';
+  const desc = a.description ? a.description.replace(/<[^>]+>/g,'').slice(0, 180) + '...' : '';
   const id = safeId(a.link || i);
   const isSaved = savedLinks.includes(a.link);
 
-  // Analyse blok — alleen tonen als analyseOn
   let analysisHtml = '';
   if (analyseOn) {
     if (a.insight) {
-      analysisHtml = `<div class="analysis" id="analysis-${id}">${renderChips(a.insight)}</div>`;
+      analysisHtml = renderAnalysisBlock(a.insight, id);
     } else {
-      analysisHtml = `<div class="analysis" id="analysis-${id}"><div class="analysis-loading"><div class="spinner"></div><span>Analyse laden...</span></div></div>`;
+      analysisHtml = `<div class="analysis-block" id="analysis-${id}"><div class="analysis-loading"><div class="spinner"></div><span>Analyse laden...</span></div></div>`;
     }
   }
 
@@ -546,17 +890,20 @@ function renderArticle(a, i) {
   </article>`;
 }
 
-function renderChips(insight) {
+function renderAnalysisBlock(insight, id) {
   const kern = insight.match(/Kern:\s*(.+?)(?=\nBetekenis:|$)/s)?.[1]?.trim();
   const betekenis = insight.match(/Betekenis:\s*(.+?)(?=\nActie:|$)/s)?.[1]?.trim();
   const actie = insight.match(/Actie:\s*(.+?)$/s)?.[1]?.trim();
-  if (!kern && !betekenis && !actie)
-    return `<div class="chip chip-kern"><span class="chip-label">Analyse</span><span class="chip-text">${insight}</span></div>`;
-  return [
-    kern ? `<div class="chip chip-kern"><span class="chip-label">Kern</span><span class="chip-text">${kern}</span></div>` : '',
-    betekenis ? `<div class="chip chip-betekenis"><span class="chip-label">Betekenis</span><span class="chip-text">${betekenis}</span></div>` : '',
-    actie ? `<div class="chip chip-actie"><span class="chip-label">Actie</span><span class="chip-text">${actie}</span></div>` : ''
-  ].join('');
+
+  if (!kern && !betekenis && !actie) {
+    return `<div class="analysis-block" id="analysis-${id}"><div class="analysis-row"><span class="analysis-label">Analyse</span><span class="analysis-text">${insight}</span></div></div>`;
+  }
+
+  return `<div class="analysis-block" id="analysis-${id}">
+    ${kern ? `<div class="analysis-row"><span class="analysis-label">Kern</span><span class="analysis-text">${kern}</span></div>` : ''}
+    ${betekenis ? `<div class="analysis-row"><span class="analysis-label">Betekenis</span><span class="analysis-text">${betekenis}</span></div>` : ''}
+    ${actie ? `<div class="analysis-row"><span class="analysis-label">Actie</span><span class="analysis-text">${actie}</span></div>` : ''}
+  </div>`;
 }
 
 async function lazyLoadAnalysis(article) {
@@ -569,7 +916,7 @@ async function lazyLoadAnalysis(article) {
     if (data.insight) {
       article.insight = data.insight;
       const el = document.getElementById('analysis-' + id);
-      if (el) el.innerHTML = renderChips(data.insight);
+      if (el) el.outerHTML = renderAnalysisBlock(data.insight, id);
     }
   } catch {}
 }
@@ -582,28 +929,16 @@ function toggleSave(link, btn) {
   document.getElementById('count-opgeslagen').textContent = savedLinks.length;
 }
 
-function mobileFilter(filter, el) {
-  document.querySelectorAll('.mobile-cat-btn').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-  if (['alles','nl','en','opgeslagen'].includes(filter)) {
-    const sidebarEl = document.querySelector(`[onclick="setScope('${filter}', this)"]`);
-    if (sidebarEl) setScope(filter, sidebarEl);
-  } else {
-    const sidebarEl = document.getElementById('theme-' + filter);
-    if (sidebarEl) toggleTheme2(filter, sidebarEl);
-  }
-}
-
 function loadMore() { displayedCount += PAGE_SIZE; renderArticles(); }
 
 async function refreshFeed() {
   const btn = document.getElementById('refreshBtn');
-  btn.textContent = '↻ Laden...'; btn.disabled = true;
-  allArticles = []; filteredArticles = [];
+  btn.textContent = '⟳'; btn.disabled = true;
   document.getElementById('articleFeed').innerHTML =
-    '<div style="padding:26px 0"><div class="skeleton" style="height:11px;width:110px;margin-bottom:13px"></div><div class="skeleton" style="height:22px;width:75%;margin-bottom:16px"></div><div class="skeleton" style="height:44px;width:100%"></div></div>';
+    '<div style="padding:32px 0"><div class="skeleton" style="height:26px;width:75%;margin-bottom:12px"></div><div class="skeleton" style="height:16px;width:100%;margin-bottom:6px"></div><div class="skeleton" style="height:16px;width:90%"></div></div>';
+  allArticles = []; filteredArticles = [];
   await loadFeed();
-  btn.textContent = '↻ Ververs'; btn.disabled = false;
+  btn.textContent = '↻'; btn.disabled = false;
 }
 
 function safeId(str) { try { return btoa(String(str)).replace(/[^a-z0-9]/gi,''); } catch { return 'id'+Math.random().toString(36).slice(2); } }
