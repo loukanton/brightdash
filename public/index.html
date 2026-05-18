@@ -133,16 +133,19 @@
     border: 1.5px solid var(--rule);
     border-radius: 30px;
     color: var(--muted);
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 700;
-    padding: 7px 20px;
+    padding: 8px 24px;
     cursor: pointer;
     transition: all 0.2s;
     font-family: 'Instrument Sans', sans-serif;
     letter-spacing: 0.3px;
     white-space: nowrap;
-    margin-top: 4px;
+    margin-top: 6px;
+    display: none;
   }
+
+  @media (max-width: 860px) { .simple-main-btn { display: inline-block; } }
 
   .simple-main-btn:hover { border-color: var(--gold); color: var(--gold); }
 
@@ -566,59 +569,168 @@
 
   .load-more-btn:hover { background: var(--ink); color: var(--white); }
 
-  /* ── Mobile filter bar ── */
-  .mobile-bar {
+  /* ── Mobile FAB + slide-in menu ── */
+  .mobile-fab {
     display: none;
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: var(--white);
-    border-bottom: 1px solid var(--rule);
-    padding: 8px 16px;
-    z-index: 100;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    bottom: 28px;
+    right: 20px;
+    z-index: 300;
   }
 
-  body.dark .mobile-bar { background: #1A1814; border-bottom-color: var(--rule); }
-
   @media (max-width: 860px) {
-    .mobile-bar { display: block; }
-    .masthead { margin-top: 44px; }
+    .mobile-fab { display: block; }
     .page { padding-bottom: 20px; }
   }
 
-  .mobile-bar-row {
+  .mobile-fab-btn {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--ink);
+    border: none;
+    color: var(--white);
+    cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    transition: all 0.2s;
   }
 
-  .mobile-filter-toggle {
-    background: var(--bg-2);
+  body.dark .mobile-fab-btn { background: var(--gold); color: #111; }
+  .mobile-fab-btn:hover { transform: scale(1.08); }
+
+  /* Overlay */
+  .mobile-menu-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 400;
+  }
+
+  .mobile-menu-overlay.open { display: block; }
+
+  /* Slide-in menu */
+  .mobile-menu {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--white);
+    border-radius: 20px 20px 0 0;
+    padding: 0 0 32px;
+    z-index: 500;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 -8px 32px rgba(0,0,0,0.15);
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+
+  body.dark .mobile-menu { background: #1A1814; }
+
+  .mobile-menu.open { transform: translateY(0); }
+
+  .mobile-menu-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid var(--rule);
+    position: sticky;
+    top: 0;
+    background: var(--white);
+    z-index: 1;
+  }
+
+  body.dark .mobile-menu-header { background: #1A1814; }
+
+  .mobile-menu-title {
+    font-family: 'Lora', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .mobile-menu-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .mobile-menu-section {
+    padding: 16px 20px 0;
+  }
+
+  .mobile-menu-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .mobile-sort-group {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .mobile-sort-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
     border: 1px solid var(--rule);
-    border-radius: 6px;
+    background: var(--bg-2);
     color: var(--ink-3);
     font-family: 'Instrument Sans', sans-serif;
     font-size: 13px;
     font-weight: 600;
-    padding: 6px 14px;
     cursor: pointer;
     transition: all 0.15s;
+    text-align: center;
   }
 
-  .mobile-filter-toggle:hover { border-color: var(--gold); color: var(--gold); }
-
-  .mobile-pills {
-    display: flex;
-    gap: 6px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    padding-top: 8px;
-    flex-wrap: nowrap;
+  .mobile-sort-btn.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--white);
   }
 
-  .mobile-pills::-webkit-scrollbar { display: none; }
+  body.dark .mobile-sort-btn.active { background: var(--gold); border-color: var(--gold); color: #111; }
+
+  .mobile-theme-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+
+  .mobile-theme-btn {
+    padding: 10px 6px;
+    border-radius: 8px;
+    border: 1px solid var(--rule);
+    background: var(--bg-2);
+    color: var(--ink-3);
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mobile-theme-btn.active {
+    background: var(--gold-pale);
+    border-color: var(--gold-border);
+    color: var(--ink);
+  }
+
+  body.dark .mobile-theme-btn.active { background: #2A2010; border-color: #6A5010; }
 
   /* Categorie pills */
   .mobile-pills {
@@ -689,7 +801,7 @@
   <!-- Sidebar (desktop) -->
   <aside class="sidebar">
 
-    <button class="analyse-toggle" id="analyseToggle" onclick="toggleAnalyse()">Simple</button>
+    <button class="analyse-toggle" id="analyseToggle" onclick="toggleAnalyse()">✦ Make it all simple</button>
 
     <div class="nav-section">
       <button class="nav-item active" onclick="setScope('alles', this)">
@@ -785,22 +897,57 @@
   </main>
 </div>
 
-<!-- Mobile filter bar -->
-<div class="mobile-bar" id="mobileBar">
-  <div class="mobile-bar-row">
-    <button class="mobile-filter-toggle" onclick="toggleMobileFilter()" id="mobileFilterToggle">
-      ☰ Filter <span id="mobileActiveFilter">Alles</span>
-    </button>
+<!-- Mobile filter knop + slide-in menu -->
+<div class="mobile-fab" id="mobileFab">
+  <button class="mobile-fab-btn" onclick="toggleMobileMenu()" id="mobileFabBtn" title="Filter">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="2" y1="5" x2="18" y2="5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="5" y1="10" x2="15" y2="10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="8" y1="15" x2="12" y2="15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+  </button>
+</div>
+
+<!-- Mobile slide-in menu -->
+<div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="toggleMobileMenu()"></div>
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu-header">
+    <span class="mobile-menu-title">Filter</span>
+    <div class="mobile-menu-actions">
+      <button class="icon-btn" onclick="toggleTheme()" id="themeToggleMobile" title="Thema">☀</button>
+      <button class="icon-btn" onclick="refreshFeed(); toggleMobileMenu()" title="Ververs">↻</button>
+      <button class="icon-btn" onclick="toggleMobileMenu()" title="Sluiten">✕</button>
+    </div>
   </div>
-  <div class="mobile-pills" id="mobilePills" style="display:none">
-    <button class="mobile-pill active" onclick="mobilePill('alles', this)">Alles</button>
-    <button class="mobile-pill" onclick="mobilePill('AI', this)">AI</button>
-    <button class="mobile-pill" onclick="mobilePill('Tech', this)">Tech</button>
-    <button class="mobile-pill" onclick="mobilePill('Overheid', this)">Overheid</button>
-    <button class="mobile-pill" onclick="mobilePill('Media', this)">Media</button>
-    <button class="mobile-pill" onclick="mobilePill('Organisatie', this)">Organisatie</button>
-    <button class="mobile-pill" onclick="mobilePill('WoW', this)">WoW</button>
-    <button class="mobile-pill" onclick="mobilePill('HR', this)">HR</button>
+
+  <div class="mobile-menu-section">
+    <div class="mobile-menu-label">Sortering</div>
+    <div class="mobile-sort-group">
+      <button class="mobile-sort-btn active" id="msort-nieuwste" onclick="setSort('nieuwste', this); updateMobileSort(this)">Nieuwste</button>
+      <button class="mobile-sort-btn" id="msort-populair" onclick="setSort('populair', this); updateMobileSort(this)">Populair</button>
+    </div>
+  </div>
+
+  <div class="mobile-menu-section">
+    <div class="mobile-menu-label">Weergave</div>
+    <div class="mobile-sort-group">
+      <button class="mobile-sort-btn active" id="mview-lijst" onclick="setView('lijst', this); updateMobileView(this)">Lijst</button>
+      <button class="mobile-sort-btn" id="mview-grid" onclick="setView('grid', this); updateMobileView(this)">Grid</button>
+    </div>
+  </div>
+
+  <div class="mobile-menu-section">
+    <div class="mobile-menu-label">Thema</div>
+    <div class="mobile-theme-grid">
+      <button class="mobile-theme-btn active" onclick="mobilePill('alles', this)" data-filter="alles">Alles</button>
+      <button class="mobile-theme-btn" onclick="mobilePill('AI', this)" data-filter="AI">AI</button>
+      <button class="mobile-theme-btn" onclick="mobilePill('Tech', this)" data-filter="Tech">Tech</button>
+      <button class="mobile-theme-btn" onclick="mobilePill('Overheid', this)" data-filter="Overheid">Overheid</button>
+      <button class="mobile-theme-btn" onclick="mobilePill('Media', this)" data-filter="Media">Media</button>
+      <button class="mobile-theme-btn" onclick="mobilePill('Organisatie', this)" data-filter="Organisatie">Organisatie</button>
+      <button class="mobile-theme-btn" onclick="mobilePill('WoW', this)" data-filter="WoW">WoW</button>
+      <button class="mobile-theme-btn" onclick="mobilePill('HR', this)" data-filter="HR">HR</button>
+    </div>
   </div>
 </div>
 
@@ -820,7 +967,10 @@ document.addEventListener('DOMContentLoaded', () => { initTheme(); loadFeed(); }
 // ── Theme (dark/light) ──
 function toggleTheme() {
   const dark = document.body.classList.toggle('dark');
-  document.getElementById('themeToggle').textContent = dark ? '☾' : '☀';
+  ['themeToggle','themeToggleMobile'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = dark ? '☾' : '☀';
+  });
   localStorage.setItem('bd_theme', dark ? 'dark' : 'light');
 }
 
@@ -828,26 +978,65 @@ function initTheme() {
   if (localStorage.getItem('bd_theme') === 'dark') {
     document.body.classList.add('dark');
     document.getElementById('themeToggle').textContent = '☾';
+    const mob = document.getElementById('themeToggleMobile');
+    if (mob) mob.textContent = '☾';
   }
 }
 
 // ── Analyse toggle ──
 function toggleAnalyse() {
   analyseOn = !analyseOn;
-  const label = analyseOn ? 'Making it simple!' : 'Simple';
+
+  // Update beide knoppen
   ['analyseToggle', 'simpleHeaderBtn'].forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
-    el.textContent = analyseOn ? '✦ Made simple — klik om te verbergen' : '✦ Make it all simple';
+    el.textContent = analyseOn ? '✦ Made simple' : '✦ Make it all simple';
     el.classList.toggle('on', analyseOn);
   });
-  renderArticles();
+
+  // Sync dark/light toggle in mobile menu
+  const mob = document.getElementById('themeToggleMobile');
+  if (mob) mob.textContent = document.body.classList.contains('dark') ? '☾' : '☀';
+
+  if (!analyseOn) {
+    // Verberg alle zichtbare analyse-blokken direct (ook per-artikel geladen)
+    document.querySelectorAll('.analysis-block').forEach(el => el.style.display = 'none');
+    // Reset per-artikel knoppen
+    document.querySelectorAll('.analyse-btn.done').forEach(btn => {
+      btn.textContent = '✦ Make it simple';
+      btn.classList.remove('done');
+      const link = btn.getAttribute('data-link');
+      if (link) btn.onclick = () => analyseArtikel(link);
+    });
+  } else {
+    // Toon eerder verborgen blokken weer, of render opnieuw
+    const hidden = document.querySelectorAll('.analysis-block[style*="display: none"]');
+    if (hidden.length > 0) {
+      hidden.forEach(el => el.style.display = '');
+    } else {
+      renderArticles();
+    }
+  }
 }
 
-function toggleMobileFilter() {
-  const pills = document.getElementById('mobilePills');
-  const isOpen = pills.style.display !== 'none';
-  pills.style.display = isOpen ? 'none' : 'flex';
+function toggleMobileMenu() {
+  const menu = document.getElementById('mobileMenu');
+  const overlay = document.getElementById('mobileMenuOverlay');
+  const isOpen = menu.classList.contains('open');
+  menu.classList.toggle('open', !isOpen);
+  overlay.classList.toggle('open', !isOpen);
+  document.body.style.overflow = isOpen ? '' : 'hidden';
+}
+
+function updateMobileSort(el) {
+  document.querySelectorAll('.mobile-sort-btn[id^="msort-"]').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function updateMobileView(el) {
+  document.querySelectorAll('.mobile-sort-btn[id^="mview-"]').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
 }
 
 function syncMobileSort(el) {
@@ -923,12 +1112,10 @@ function updateFeedTitle() {
 
 // ── Mobile pills ──
 function mobilePill(filter, el) {
-  document.querySelectorAll('.mobile-pill').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.mobile-theme-btn').forEach(b => b.classList.remove('active'));
   el.classList.add('active');
-  // Update label en sluit pills
-  const lbl = document.getElementById('mobileActiveFilter');
-  if (lbl) lbl.textContent = el.textContent;
-  document.getElementById('mobilePills').style.display = 'none';
+  // Sluit menu na selectie
+  setTimeout(() => toggleMobileMenu(), 200);
   const scopeFilters = ['alles','nl','en','opgeslagen'];
   if (scopeFilters.includes(filter)) {
     selectedThemes.clear();
@@ -1019,7 +1206,7 @@ function renderArticle(a, i) {
     ${analysisHtml}
     <div class="article-footer">
       ${a.link ? `<a class="read-link" href="${a.link}" target="_blank" rel="noopener">Lees artikel</a>` : ''}
-      ${!a.insight && !analyseOn ? `<button class="analyse-btn" id="abtn-${id}" onclick="analyseArtikel('${(a.link||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">✦ Make it simple</button>` : ''}
+      ${!a.insight && !analyseOn ? `<button class="analyse-btn" id="abtn-${id}" data-link="${(a.link||'').replace(/"/g,'&quot;')}" onclick="analyseArtikel('${(a.link||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">✦ Make it simple</button>` : ''}
     </div>
   </article>`;
 }
@@ -1106,11 +1293,37 @@ async function analyseArtikel(link) {
         btn.classList.remove('loading');
         btn.classList.add('done');
         btn.textContent = '✦ Made simple';
-        btn.disabled = true;
+        btn.disabled = false;
+        btn.onclick = () => verbergAnalyse(link, btn);
       }
     }
   } catch {
     if (btn) { btn.textContent = '✦ Make it simple'; btn.classList.remove('loading'); btn.disabled = false; }
+  }
+}
+
+function verbergAnalyse(link, btn) {
+  const id = safeId(link);
+  const block = document.getElementById('analysis-' + id);
+  if (block) {
+    block.style.display = 'none';
+    btn.textContent = '✦ Make it simple';
+    btn.classList.remove('done');
+    btn.onclick = () => toonAnalyse(link, btn);
+  }
+}
+
+function toonAnalyse(link, btn) {
+  const id = safeId(link);
+  const block = document.getElementById('analysis-' + id);
+  if (block) {
+    block.style.display = '';
+    btn.textContent = '✦ Made simple';
+    btn.classList.add('done');
+    btn.onclick = () => verbergAnalyse(link, btn);
+  } else {
+    // Nog niet geladen — alsnog ophalen
+    analyseArtikel(link);
   }
 }
 
