@@ -109,6 +109,30 @@
 
   .icon-btn:hover { border-color: var(--gold); color: var(--gold); }
 
+  .simple-icon-btn {
+    background: none;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 0 10px;
+    height: 36px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'Instrument Sans', sans-serif;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+  }
+
+  .simple-icon-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+  .simple-icon-btn.on {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--white);
+  }
+
   /* ── Page layout ── */
   .page {
     max-width: 1160px;
@@ -522,63 +546,73 @@
 
   .load-more-btn:hover { background: var(--ink); color: var(--white); }
 
-  /* ── Mobile bottom bar ── */
+  /* ── Mobile top bar ── */
   .mobile-bar {
     display: none;
     position: fixed;
-    bottom: 0;
+    top: 57px;
     left: 0;
     right: 0;
     background: var(--white);
-    border-top: 1px solid var(--rule);
-    padding: 10px 16px 20px;
-    z-index: 200;
-    box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+    border-bottom: 1px solid var(--rule);
+    padding: 8px 12px;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    overflow-x: hidden;
   }
 
-  body.dark .mobile-bar { background: #1A1814; border-top-color: var(--rule); }
+  body.dark .mobile-bar { background: #1A1814; border-bottom-color: var(--rule); }
 
-  @media (max-width: 860px) { .mobile-bar { display: block; } }
+  @media (max-width: 860px) {
+    .mobile-bar { display: block; }
+    .page { padding-top: 100px; padding-bottom: 20px; }
+  }
 
-  /* Mobile bar top row */
-  .mobile-bar-top {
+  /* Row 1: thema pills */
+  .mobile-pills {
     display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin-bottom: 7px;
+  }
+
+  .mobile-pills::-webkit-scrollbar { display: none; }
+
+  /* Row 2: sort/view knoppen */
+  .mobile-controls {
+    display: flex;
+    gap: 6px;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
   }
 
-  .mobile-bar-label {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--muted);
-    flex-shrink: 0;
-  }
-
-  /* Simple knop — groot en zichtbaar op mobiel */
-  .mobile-analyse-btn {
-    flex: 1;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1.5px solid var(--rule);
+  .mobile-ctrl-group {
+    display: flex;
     background: var(--bg-2);
-    cursor: pointer;
-    font-family: 'Instrument Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--ink-3);
-    text-align: center;
-    transition: all 0.2s;
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    padding: 2px;
+    gap: 1px;
   }
 
-  .mobile-analyse-btn.on {
-    background: var(--gold);
-    border-color: var(--gold);
-    color: var(--white);
-    box-shadow: 0 3px 14px rgba(184,146,42,0.3);
+  .mobile-ctrl-btn {
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--muted);
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: 'Instrument Sans', sans-serif;
+    transition: all 0.12s;
+    white-space: nowrap;
   }
+
+  .mobile-ctrl-btn.active { background: var(--white); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  body.dark .mobile-ctrl-btn.active { background: #2A2520; }
 
   /* Categorie pills */
   .mobile-pills {
@@ -592,7 +626,7 @@
   .mobile-pills::-webkit-scrollbar { display: none; }
 
   .mobile-pill {
-    padding: 7px 14px;
+    padding: 6px 13px;
     border-radius: 30px;
     font-size: 13px;
     font-weight: 600;
@@ -635,6 +669,7 @@
     </div>
     <div class="masthead-right">
       <span class="updated-label" id="updatedLabel"></span>
+      <button class="simple-icon-btn" id="simpleHeaderBtn" onclick="toggleAnalyse()" title="Analyse aan/uit">Simple</button>
       <button class="icon-btn" onclick="toggleTheme()" id="themeToggle" title="Thema wisselen">☀</button>
       <button class="icon-btn" onclick="refreshFeed()" id="refreshBtn" title="Ververs">↻</button>
     </div>
@@ -743,12 +778,8 @@
   </main>
 </div>
 
-<!-- Mobile bottom bar -->
+<!-- Mobile top filter bar -->
 <div class="mobile-bar">
-  <div class="mobile-bar-top">
-    <div class="mobile-bar-label">Thema</div>
-    <button class="mobile-analyse-btn" id="mobileAnalyseBtn" onclick="toggleAnalyse()">Simple</button>
-  </div>
   <div class="mobile-pills">
     <button class="mobile-pill active" onclick="mobilePill('alles', this)">Alles</button>
     <button class="mobile-pill" onclick="mobilePill('AI', this)">AI</button>
@@ -758,6 +789,16 @@
     <button class="mobile-pill" onclick="mobilePill('Organisatie', this)">Organisatie</button>
     <button class="mobile-pill" onclick="mobilePill('WoW', this)">WoW</button>
     <button class="mobile-pill" onclick="mobilePill('HR', this)">HR</button>
+  </div>
+  <div class="mobile-controls">
+    <div class="mobile-ctrl-group">
+      <button class="mobile-ctrl-btn active" onclick="setSort('nieuwste', this); syncMobileSort(this)">Nieuwste</button>
+      <button class="mobile-ctrl-btn" onclick="setSort('populair', this); syncMobileSort(this)">Populair</button>
+    </div>
+    <div class="mobile-ctrl-group">
+      <button class="mobile-ctrl-btn active" onclick="setView('lijst', this); syncMobileView(this)">Lijst</button>
+      <button class="mobile-ctrl-btn" onclick="setView('grid', this); syncMobileView(this)">Grid</button>
+    </div>
   </div>
 </div>
 
@@ -792,13 +833,21 @@ function initTheme() {
 function toggleAnalyse() {
   analyseOn = !analyseOn;
   const label = analyseOn ? 'Making it simple!' : 'Simple';
-  const desktopBtn = document.getElementById('analyseToggle');
-  const mobileBtn = document.getElementById('mobileAnalyseBtn');
-  desktopBtn.textContent = label;
-  mobileBtn.textContent = label;
-  desktopBtn.classList.toggle('on', analyseOn);
-  mobileBtn.classList.toggle('on', analyseOn);
+  ['analyseToggle', 'simpleHeaderBtn'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.textContent = label; el.classList.toggle('on', analyseOn); }
+  });
   renderArticles();
+}
+
+function syncMobileSort(el) {
+  el.closest('.mobile-ctrl-group').querySelectorAll('.mobile-ctrl-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function syncMobileView(el) {
+  el.closest('.mobile-ctrl-group').querySelectorAll('.mobile-ctrl-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
 }
 
 // ── Load ──
@@ -928,7 +977,7 @@ function renderArticles() {
 }
 
 function renderArticle(a, i) {
-  const date = a.pubDate ? new Date(a.pubDate).toLocaleDateString('nl-NL', { day:'numeric', month:'short' }) : '';
+  const date = a.pubDate ? new Date(a.pubDate).toLocaleString('nl-NL', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }) : '';
   const tag = a.tag || a.category || '';
   const desc = a.description ? a.description.replace(/<[^>]+>/g,'').slice(0, 180) + '...' : '';
   const id = safeId(a.link || i);
