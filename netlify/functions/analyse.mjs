@@ -47,9 +47,9 @@ export default async (req) => {
 
 Geef precies deze 3 onderdelen terug, elk op een nieuwe regel:
 
-Kern: [Wat er feitelijk gebeurt, max 1 zin]
-Betekenis: [Strategische betekenis voor Nederlandse organisaties, max 1 zin]
-Actie: [Wat een organisatie concreet moet doen of overwegen, 1 actieve zin]
+Kern: [Wat er feitelijk gebeurt, max 2 zinnen]
+Betekenis: [Strategische betekenis voor Nederlandse organisaties, max 2 zinnen]
+Actie: [Wat een organisatie concreet moet doen of overwegen, max 2 actieve zinnen]
 
 Titel: {{title}}
 Bron: {{source}}
