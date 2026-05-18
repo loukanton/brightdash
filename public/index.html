@@ -97,12 +97,21 @@
   /* Hamburger */
   .rail-menu { width: 40px; height: 40px; border-radius: 10px; background: none; border: none; color: var(--muted); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; transition: all 0.15s; padding: 10px; }
   .rail-menu:hover, .rail-menu.open { background: var(--bg-2); color: var(--ink); }
+
+  /* Menu tooltip */
+  .rail-menu-wrap { position: relative; }
+  .rail-menu-wrap .tooltip { position: absolute; left: 52px; top: 50%; transform: translateY(-50%) translateX(-4px); background: var(--ink); color: var(--white); font-family: 'Instrument Sans', sans-serif; font-size: 12px; font-weight: 600; padding: 7px 12px; border-radius: 6px; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.15s, transform 0.15s; z-index: 400; }
+  .rail-menu-wrap .tooltip::before { content: ''; position: absolute; right: 100%; top: 50%; transform: translateY(-50%); border: 5px solid transparent; border-right-color: var(--ink); }
+  .rail-menu-wrap:hover .tooltip { opacity: 1; transform: translateY(-50%) translateX(0); }
   .h-line { width: 18px; height: 2px; background: currentColor; border-radius: 2px; transition: all 0.25s; transform-origin: center; }
   .rail-menu.open .h-line:nth-child(1) { transform: translateY(6px) rotate(45deg); }
   .rail-menu.open .h-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
   .rail-menu.open .h-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
   /* Slide panel — staat BUITEN rail, direct na rail in DOM */
+  .panel-overlay { display: none; position: fixed; inset: 0; z-index: 240; cursor: pointer; }
+  .panel-overlay.open { display: block; }
+
   .slide-panel { position: fixed; left: 56px; top: 57px; width: 230px; height: calc(100vh - 57px); background: var(--white); border-right: 1px solid var(--rule); box-shadow: 4px 0 24px rgba(0,0,0,0.1); transform: translateX(-110%); opacity: 0; transition: transform 0.28s cubic-bezier(0.4,0,0.2,1), opacity 0.22s; overflow-y: auto; z-index: 250; padding: 16px 0 32px; pointer-events: none; }
   .slide-panel.open { transform: translateX(0); opacity: 1; pointer-events: all; }
 
@@ -217,7 +226,8 @@
   .load-more-btn:hover { background: var(--ink); color: var(--white); }
 
   /* Mobile bottom bar */
-  .mobile-bar { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--white); border-top: 1px solid var(--rule); padding: 10px 16px 24px; z-index: 300; box-shadow: 0 -4px 20px rgba(0,0,0,0.08); }
+  .mobile-bar { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--white); border-top: 1px solid var(--rule); padding: 8px 16px 24px; z-index: 300; box-shadow: 0 -4px 20px rgba(0,0,0,0.08); }
+  .mobile-updated { font-size: 10px; color: var(--muted); text-align: center; margin-bottom: 6px; }
   body.dark .mobile-bar { background: #1A1814; }
   @media (max-width: 600px) { .mobile-bar { display: block; } .feed-wrapper { padding-bottom: 100px; } }
   .mobile-bar-row { display: flex; gap: 8px; margin-bottom: 10px; }
@@ -258,6 +268,19 @@
   .skeleton { background: linear-gradient(90deg, var(--rule) 25%, var(--bg-2) 50%, var(--rule) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 3px; }
   @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
   .state-box { text-align: center; padding: 60px 20px; color: var(--muted); }
+
+  /* Terug naar boven */
+  /* Voortgangsbalk */
+  .progress-bar { position: fixed; top: 57px; left: 0; right: 0; height: 3px; background: var(--rule); z-index: 500; opacity: 0; transition: opacity 0.3s; }
+  .progress-bar.visible { opacity: 1; }
+  .progress-fill { height: 100%; background: var(--gold); width: 0%; transition: width 0.4s; }
+  .progress-label { position: fixed; top: 64px; right: 20px; font-size: 11px; color: var(--muted); background: var(--white); padding: 2px 8px; border-radius: 4px; z-index: 500; opacity: 0; transition: opacity 0.3s; }
+  .progress-label.visible { opacity: 1; }
+
+  .back-to-top { position: fixed; bottom: 32px; right: 24px; width: 40px; height: 40px; border-radius: 50%; background: var(--ink); color: var(--white); border: none; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 12px rgba(0,0,0,0.2); opacity: 0; transform: translateY(10px); transition: all 0.2s; z-index: 100; pointer-events: none; }
+  .back-to-top.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
+  .back-to-top:hover { background: var(--gold); }
+  @media (max-width: 600px) { .back-to-top { bottom: 90px; } }
   .state-box-title { font-family: 'Lora', serif; font-size: 20px; color: var(--ink-3); margin-bottom: 8px; }
 
   /* Footer */
@@ -296,12 +319,18 @@
       <div class="tooltip" id="simpleTooltip">✦ Make it all simple — klik om analyses te tonen</div>
     </div>
     <div class="rail-divider"></div>
-    <button class="rail-menu" id="railMenu" onclick="togglePanel()">
-      <div class="h-line"></div>
-      <div class="h-line"></div>
-      <div class="h-line"></div>
-    </button>
+    <div class="rail-menu-wrap">
+      <button class="rail-menu" id="railMenu" onclick="togglePanel()">
+        <div class="h-line"></div>
+        <div class="h-line"></div>
+        <div class="h-line"></div>
+      </button>
+      <div class="tooltip">Filter &amp; instellingen</div>
+    </div>
   </div>
+
+  <!-- Panel overlay -->
+  <div class="panel-overlay" id="panelOverlay" onclick="togglePanel()"></div>
 
   <!-- Slide panel — direct na rail, NIET erin -->
   <div class="slide-panel" id="slidePanel">
@@ -388,6 +417,7 @@
 
 <!-- Mobile bottom bar -->
 <div class="mobile-bar">
+  <div class="mobile-updated" id="mobileUpdatedLabel"></div>
   <div class="mobile-bar-row">
     <button class="mobile-simple-btn" id="mobileSimpleBtn" onclick="toggleAnalyse()">✦ Make it all simple</button>
     <button class="mobile-filter-btn" onclick="toggleSheet()">
@@ -481,6 +511,7 @@ function togglePanel() {
   panelOpen = !panelOpen;
   document.getElementById('slidePanel').classList.toggle('open', panelOpen);
   document.getElementById('railMenu').classList.toggle('open', panelOpen);
+  document.getElementById('panelOverlay').classList.toggle('open', panelOpen);
 }
 
 function toggleAnalyse() {
@@ -502,11 +533,18 @@ function toggleAnalyse() {
     mobileBtn.textContent = analyseOn ? '✦ Made simple' : '✦ Make it all simple';
     mobileBtn.classList.toggle('on', analyseOn);
   }
-  if (!analyseOn) renderArticles();
-  else {
+  if (!analyseOn) {
+    renderArticles();
+  } else {
     const hidden = document.querySelectorAll('.analysis-block[style*="display: none"]');
-    if (hidden.length > 0) hidden.forEach(el => el.style.display = '');
-    else renderArticles();
+    if (hidden.length > 0) {
+      hidden.forEach(el => el.style.display = '');
+    } else {
+      renderArticles();
+      // Toon voortgang
+      const noInsight = filteredArticles.slice(0, displayedCount).filter(a => !a.insight).length;
+      if (noInsight > 0) showProgress(noInsight);
+    }
   }
 }
 
@@ -515,9 +553,22 @@ async function loadFeed() {
     const res = await fetch('/api/articles');
     const data = await res.json();
     allArticles = (data.articles || data.items || []).sort((a,b) => new Date(b.pubDate) - new Date(a.pubDate));
+    // Ongelezen tellen
+    const lastVisit = localStorage.getItem('bd_lastvisit');
+    const newCount = lastVisit ? allArticles.filter(a => new Date(a.pubDate) > new Date(lastVisit)).length : 0;
+    if (newCount > 0) {
+      const badge = document.createElement('span');
+      badge.style.cssText = 'background:var(--gold);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;margin-left:8px;';
+      badge.textContent = newCount + ' nieuw';
+      document.querySelector('.masthead-brand').appendChild(badge);
+    }
+    localStorage.setItem('bd_lastvisit', new Date().toISOString());
+
     if (data.updatedAt) {
       const t = new Date(data.updatedAt).toLocaleTimeString('nl-NL', { hour:'2-digit', minute:'2-digit' });
       document.getElementById('updatedLabel').textContent = 'Bijgewerkt ' + t;
+      const mob = document.getElementById('mobileUpdatedLabel');
+      if (mob) mob.textContent = 'Bijgewerkt om ' + t;
     }
     updateCounts();
     applyFilter();
@@ -560,6 +611,9 @@ function setPanelView(view, el) {
 
 function setScope(scope, el) {
   activeScope = scope;
+  // Reset thema's bij alles/nl/en/opgeslagen
+  selectedThemes.clear();
+  document.querySelectorAll('.panel-theme-item').forEach(b => b.classList.remove('selected'));
   document.querySelectorAll('.panel-item').forEach(b => b.classList.remove('active'));
   el.classList.add('active');
   const labels = { alles:'Alles', nl:'Nederlands', en:'Internationaal', opgeslagen:'Opgeslagen' };
@@ -627,7 +681,13 @@ function renderArticle(a, i) {
   const maxDesc = activeView === 'grid' ? 120 : 320;
   const date = a.pubDate ? new Date(a.pubDate).toLocaleString('nl-NL', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }) : '';
   const tag = a.tag || a.category || '';
-  const desc = a.description ? a.description.replace(/<[^>]+>/g,'').slice(0, maxDesc) + '...' : '';
+  const rawDesc = a.description ? a.description.replace(/<[^>]+>/g,'') : '';
+  let desc = '';
+  if (rawDesc) {
+    const cut = rawDesc.slice(0, maxDesc);
+    const lastPunct = Math.max(cut.lastIndexOf('. '), cut.lastIndexOf(', '), cut.lastIndexOf('! '), cut.lastIndexOf('? '));
+    desc = (lastPunct > maxDesc * 0.6 ? cut.slice(0, lastPunct + 1) : cut) + (rawDesc.length > maxDesc ? '...' : '');
+  }
   const id = safeId(a.link || i);
   const isSaved = savedLinks.includes(a.link);
   let analysisHtml = '';
@@ -648,7 +708,7 @@ function renderArticle(a, i) {
     ${analysisHtml}
     <div class="article-footer">
       ${a.link ? `<a class="read-link" href="${a.link}" target="_blank" rel="noopener">Lees artikel</a>` : ''}
-      ${!a.insight && !analyseOn ? `<button class="analyse-btn" id="abtn-${id}" data-link="${(a.link||'').replace(/"/g,'&quot;')}" onclick="analyseArtikel('${(a.link||'').replace(/'/g,"\\'")}')">✦ Make it simple</button>` : ''}
+      ${!analyseOn ? `<button class="analyse-btn ${a.insight ? 'done' : ''}" id="abtn-${id}" data-link="${(a.link||'').replace(/"/g,'&quot;')}" onclick="${a.insight ? `toonAnalyse('${(a.link||'').replace(/'/g,"\\'")}', this)` : `analyseArtikel('${(a.link||'').replace(/'/g,"\\'")}', this)`}">${a.insight ? '✦ Made simple' : '✦ Make it simple'}</button>` : ''}
     </div>
   </article>`;
 }
@@ -670,8 +730,21 @@ async function lazyLoadAnalysis(article) {
   try {
     const res = await fetch('/api/analyse', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ title:article.title, description:article.description, link:article.link, source:article.source, category:article.tag||article.category }) });
     const data = await res.json();
-    if (data.insight) { article.insight = data.insight; const el = document.getElementById('analysis-' + id); if (el) el.outerHTML = renderAnalysisBlock(data.insight, id); }
-  } catch {}
+    if (data.insight) {
+      article.insight = data.insight;
+      const el = document.getElementById('analysis-' + id);
+      if (el) el.outerHTML = renderAnalysisBlock(data.insight, id);
+    } else {
+      const el = document.getElementById('analysis-' + id);
+      if (el) el.innerHTML = '<div style="font-size:12px;color:var(--muted);padding:8px 0">Analyse niet beschikbaar</div>';
+    }
+  } catch {
+    const el = document.getElementById('analysis-' + id);
+    if (el) el.innerHTML = '<div style="font-size:12px;color:var(--muted);padding:8px 0">Analyse tijdelijk niet beschikbaar</div>';
+  } finally {
+    progressDone++;
+    updateProgress();
+  }
 }
 
 async function analyseArtikel(link) {
@@ -703,9 +776,10 @@ function verbergAnalyse(link, btn) {
 }
 
 function toonAnalyse(link, btn) {
+  if (!btn) btn = document.getElementById('abtn-' + safeId(link));
   const block = document.getElementById('analysis-' + safeId(link));
   if (block) { block.style.display = ''; btn.textContent = '✦ Made simple'; btn.classList.add('done'); btn.onclick = () => verbergAnalyse(link, btn); }
-  else analyseArtikel(link);
+  else analyseArtikel(link, btn);
 }
 
 function toggleSave(link, btn) {
@@ -765,7 +839,36 @@ function mobileToggleTheme(filter, el) {
   updateFeedTitle(); displayedCount = PAGE_SIZE; applyFilter();
 }
 
+// Voortgang
+let progressTotal = 0, progressDone = 0;
+function showProgress(total) {
+  progressTotal = total; progressDone = 0;
+  document.getElementById('progressBar').classList.add('visible');
+  document.getElementById('progressLabel').classList.add('visible');
+  updateProgress();
+}
+function updateProgress() {
+  const pct = progressTotal > 0 ? Math.round((progressDone / progressTotal) * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = progressDone + ' / ' + progressTotal + ' analyses';
+  if (progressDone >= progressTotal) {
+    setTimeout(() => {
+      document.getElementById('progressBar').classList.remove('visible');
+      document.getElementById('progressLabel').classList.remove('visible');
+    }, 1500);
+  }
+}
+
+// Terug naar boven
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('backToTop');
+  if (btn) btn.classList.toggle('visible', window.scrollY > 400);
+});
+
 function safeId(str) { try { return btoa(String(str)).replace(/[^a-z0-9]/gi,''); } catch { return 'id'+Math.random().toString(36).slice(2); } }
 </script>
+<div class="progress-bar" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="progress-label" id="progressLabel"></div>
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Terug naar boven">↑</button>
 </body>
 </html>
