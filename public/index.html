@@ -77,10 +77,29 @@
   .logo-tagline { font-size: 12px; color: var(--muted); letter-spacing: 0.2px; display: none; }
   @media (min-width: 480px) { .logo-tagline { display: block; } }
 
+  .masthead-inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+  }
+
+  .masthead-left-slot { }
+
+  .masthead-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 14px 0 12px;
+    text-align: center;
+  }
+
   .masthead-right {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 8px;
+    padding-top: 14px;
   }
 
   .updated-label {
@@ -109,28 +128,29 @@
 
   .icon-btn:hover { border-color: var(--gold); color: var(--gold); }
 
-  .simple-icon-btn {
+  .simple-main-btn {
     background: none;
-    border: 1px solid var(--rule);
-    border-radius: 6px;
+    border: 1.5px solid var(--rule);
+    border-radius: 30px;
     color: var(--muted);
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 700;
-    padding: 0 10px;
-    height: 36px;
+    padding: 7px 20px;
     cursor: pointer;
-    transition: all 0.15s;
+    transition: all 0.2s;
     font-family: 'Instrument Sans', sans-serif;
     letter-spacing: 0.3px;
     white-space: nowrap;
+    margin-top: 4px;
   }
 
-  .simple-icon-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .simple-main-btn:hover { border-color: var(--gold); color: var(--gold); }
 
-  .simple-icon-btn.on {
+  .simple-main-btn.on {
     background: var(--gold);
     border-color: var(--gold);
     color: var(--white);
+    box-shadow: 0 3px 14px rgba(184,146,42,0.3);
   }
 
   /* ── Page layout ── */
@@ -546,73 +566,59 @@
 
   .load-more-btn:hover { background: var(--ink); color: var(--white); }
 
-  /* ── Mobile top bar ── */
+  /* ── Mobile filter bar ── */
   .mobile-bar {
     display: none;
     position: fixed;
-    top: 57px;
+    top: 0;
     left: 0;
     right: 0;
     background: var(--white);
     border-bottom: 1px solid var(--rule);
-    padding: 8px 12px;
+    padding: 8px 16px;
     z-index: 100;
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    overflow-x: hidden;
   }
 
   body.dark .mobile-bar { background: #1A1814; border-bottom-color: var(--rule); }
 
   @media (max-width: 860px) {
     .mobile-bar { display: block; }
-    .page { padding-top: 100px; padding-bottom: 20px; }
+    .masthead { margin-top: 44px; }
+    .page { padding-bottom: 20px; }
   }
 
-  /* Row 1: thema pills */
+  .mobile-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .mobile-filter-toggle {
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    color: var(--ink-3);
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .mobile-filter-toggle:hover { border-color: var(--gold); color: var(--gold); }
+
   .mobile-pills {
     display: flex;
     gap: 6px;
     overflow-x: auto;
     scrollbar-width: none;
-    margin-bottom: 7px;
+    padding-top: 8px;
+    flex-wrap: nowrap;
   }
 
   .mobile-pills::-webkit-scrollbar { display: none; }
-
-  /* Row 2: sort/view knoppen */
-  .mobile-controls {
-    display: flex;
-    gap: 6px;
-    align-items: center;
-  }
-
-  .mobile-ctrl-group {
-    display: flex;
-    background: var(--bg-2);
-    border: 1px solid var(--rule);
-    border-radius: 5px;
-    padding: 2px;
-    gap: 1px;
-  }
-
-  .mobile-ctrl-btn {
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-    color: var(--muted);
-    cursor: pointer;
-    border: none;
-    background: none;
-    font-family: 'Instrument Sans', sans-serif;
-    transition: all 0.12s;
-    white-space: nowrap;
-  }
-
-  .mobile-ctrl-btn.active { background: var(--white); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-  body.dark .mobile-ctrl-btn.active { background: #2A2520; }
 
   /* Categorie pills */
   .mobile-pills {
@@ -661,15 +667,16 @@
 <!-- Masthead -->
 <header class="masthead">
   <div class="masthead-inner">
-    <div class="masthead-brand">
+    <div class="masthead-left-slot"></div>
+    <div class="masthead-center">
       <div class="logo">
         <span class="logo-bright">Bright</span><span class="logo-dash">Dash</span>
       </div>
       <div class="logo-tagline">Complex tech news. Made simple.</div>
+      <button class="simple-main-btn" id="simpleHeaderBtn" onclick="toggleAnalyse()">✦ Make it all simple</button>
     </div>
     <div class="masthead-right">
       <span class="updated-label" id="updatedLabel"></span>
-      <button class="simple-icon-btn" id="simpleHeaderBtn" onclick="toggleAnalyse()" title="Analyse aan/uit">Simple</button>
       <button class="icon-btn" onclick="toggleTheme()" id="themeToggle" title="Thema wisselen">☀</button>
       <button class="icon-btn" onclick="refreshFeed()" id="refreshBtn" title="Ververs">↻</button>
     </div>
@@ -778,9 +785,14 @@
   </main>
 </div>
 
-<!-- Mobile top filter bar -->
-<div class="mobile-bar">
-  <div class="mobile-pills">
+<!-- Mobile filter bar -->
+<div class="mobile-bar" id="mobileBar">
+  <div class="mobile-bar-row">
+    <button class="mobile-filter-toggle" onclick="toggleMobileFilter()" id="mobileFilterToggle">
+      ☰ Filter <span id="mobileActiveFilter">Alles</span>
+    </button>
+  </div>
+  <div class="mobile-pills" id="mobilePills" style="display:none">
     <button class="mobile-pill active" onclick="mobilePill('alles', this)">Alles</button>
     <button class="mobile-pill" onclick="mobilePill('AI', this)">AI</button>
     <button class="mobile-pill" onclick="mobilePill('Tech', this)">Tech</button>
@@ -789,16 +801,6 @@
     <button class="mobile-pill" onclick="mobilePill('Organisatie', this)">Organisatie</button>
     <button class="mobile-pill" onclick="mobilePill('WoW', this)">WoW</button>
     <button class="mobile-pill" onclick="mobilePill('HR', this)">HR</button>
-  </div>
-  <div class="mobile-controls">
-    <div class="mobile-ctrl-group">
-      <button class="mobile-ctrl-btn active" onclick="setSort('nieuwste', this); syncMobileSort(this)">Nieuwste</button>
-      <button class="mobile-ctrl-btn" onclick="setSort('populair', this); syncMobileSort(this)">Populair</button>
-    </div>
-    <div class="mobile-ctrl-group">
-      <button class="mobile-ctrl-btn active" onclick="setView('lijst', this); syncMobileView(this)">Lijst</button>
-      <button class="mobile-ctrl-btn" onclick="setView('grid', this); syncMobileView(this)">Grid</button>
-    </div>
   </div>
 </div>
 
@@ -835,9 +837,17 @@ function toggleAnalyse() {
   const label = analyseOn ? 'Making it simple!' : 'Simple';
   ['analyseToggle', 'simpleHeaderBtn'].forEach(id => {
     const el = document.getElementById(id);
-    if (el) { el.textContent = label; el.classList.toggle('on', analyseOn); }
+    if (!el) return;
+    el.textContent = analyseOn ? '✦ Made simple — klik om te verbergen' : '✦ Make it all simple';
+    el.classList.toggle('on', analyseOn);
   });
   renderArticles();
+}
+
+function toggleMobileFilter() {
+  const pills = document.getElementById('mobilePills');
+  const isOpen = pills.style.display !== 'none';
+  pills.style.display = isOpen ? 'none' : 'flex';
 }
 
 function syncMobileSort(el) {
@@ -915,6 +925,10 @@ function updateFeedTitle() {
 function mobilePill(filter, el) {
   document.querySelectorAll('.mobile-pill').forEach(b => b.classList.remove('active'));
   el.classList.add('active');
+  // Update label en sluit pills
+  const lbl = document.getElementById('mobileActiveFilter');
+  if (lbl) lbl.textContent = el.textContent;
+  document.getElementById('mobilePills').style.display = 'none';
   const scopeFilters = ['alles','nl','en','opgeslagen'];
   if (scopeFilters.includes(filter)) {
     selectedThemes.clear();
