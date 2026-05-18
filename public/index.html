@@ -251,7 +251,7 @@
   .mobile-fab {
     display: none;
     position: fixed;
-    bottom: 70px;
+    bottom: 90px;
     right: 20px;
     z-index: 350;
   }
@@ -333,7 +333,7 @@
   .back-to-top { position: fixed; bottom: 32px; right: 24px; width: 40px; height: 40px; border-radius: 50%; background: var(--ink); color: var(--white); border: none; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 12px rgba(0,0,0,0.2); opacity: 0; transform: translateY(10px); transition: all 0.2s; z-index: 100; pointer-events: none; }
   .back-to-top.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
   .back-to-top:hover { background: var(--gold); }
-  @media (max-width: 600px) { .back-to-top { bottom: 90px; } }
+  @media (max-width: 600px) { .back-to-top { bottom: 150px; right: 16px; } }
   .state-box-title { font-family: 'Lora', serif; font-size: 20px; color: var(--ink-3); margin-bottom: 8px; }
 
   /* Footer */
@@ -612,6 +612,7 @@ async function loadFeed() {
     if (data.updatedAt) {
       const t = new Date(data.updatedAt).toLocaleTimeString('nl-NL', { hour:'2-digit', minute:'2-digit' });
       document.getElementById('updatedLabel').textContent = 'Bijgewerkt ' + t;
+      const fu = document.getElementById('feedUpdated'); if (fu) fu.textContent = 'Bijgewerkt ' + t + ' ·';
       const mob = document.getElementById('mobileUpdatedLabel');
       if (mob) mob.textContent = 'Bijgewerkt om ' + t;
     }
