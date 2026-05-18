@@ -1,33 +1,30 @@
 import { getStore } from '@netlify/blobs';
 
-const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
-
 const FEEDS = [
-  { name: 'TLDR AI',        lang: 'en', url: 'https://tldr.tech/api/rss/ai' },
-  { name: 'TLDR Tech',      lang: 'en', url: 'https://tldr.tech/api/rss/tech' },
-  { name: 'The Rundown',    lang: 'en', url: 'https://rss.beehiiv.com/feeds/2R3C6Bt5wj.xml' },
-  { name: 'VentureBeat',    lang: 'en', url: 'https://venturebeat.com/category/ai/feed/' },
-  { name: 'The Verge',      lang: 'en', url: 'https://www.theverge.com/rss/index.xml' },
-  { name: 'Ars Technica',   lang: 'en', url: 'https://feeds.arstechnica.com/arstechnica/index' },
-  { name: 'Google AI',      lang: 'en', url: 'https://blog.google/technology/ai/rss/' },
-  { name: 'MIT Tech Rev',   lang: 'en', url: 'https://www.technologyreview.com/feed/' },
-  { name: 'MIT Sloan',      lang: 'en', url: 'https://sloanreview.mit.edu/feed/' },
-  { name: 'McKinsey',       lang: 'en', url: 'https://www.mckinsey.com/insights/rss' },
-  { name: 'The Stack',      lang: 'en', url: 'https://thestack.technology/latest/rss/' },
-  { name: 'Bloomberg Tech', lang: 'en', url: 'https://feeds.bloomberg.com/technology/news.rss' },
-  { name: 'Tweakers',       lang: 'nl', url: 'https://tweakers.net/feeds/nieuws.xml' },
-  { name: 'Emerce',         lang: 'nl', url: 'https://www.emerce.nl/rss' },
-  { name: 'Computable',     lang: 'nl', url: 'https://www.computable.nl/feed/' },
-  { name: 'Frankwatching',  lang: 'nl', url: 'https://www.frankwatching.com/feed/' },
-  { name: 'Marketingfacts', lang: 'nl', url: 'https://www.marketingfacts.nl/feed' },
-  { name: 'AG Connect',     lang: 'nl', url: 'https://www.agconnect.nl/rss.xml' },
-  { name: 'Sprout',         lang: 'nl', url: 'https://www.sprout.nl/feed' },
-  { name: 'NOS Tech',       lang: 'nl', url: 'https://feeds.nos.nl/nosnieuwstech' },
-  { name: 'CIO.nl',         lang: 'nl', url: 'https://www.cio.nl/rss.xml' },
-  { name: 'Techzine',       lang: 'nl', url: 'https://www.techzine.nl/feed/' },
-  { name: 'iGovernment',    lang: 'nl', url: 'https://www.igovernment.nl/rss.xml' },
-  { name: 'Binnenl.Bestuur',lang: 'nl', url: 'https://www.binnenlandsbestuur.nl/rss/digitaal' },
-  { name: "Ben's Bites",    lang: 'en', url: 'https://news.bensbites.com/feed' },
+  { name: 'TLDR AI',        lang: 'en', tag: 'AI',        url: 'https://tldr.tech/api/rss/ai' },
+  { name: 'TLDR Tech',      lang: 'en', tag: 'Tech',      url: 'https://tldr.tech/api/rss/tech' },
+  { name: 'The Rundown',    lang: 'en', tag: 'AI',        url: 'https://rss.beehiiv.com/feeds/2R3C6Bt5wj.xml' },
+  { name: 'VentureBeat',    lang: 'en', tag: 'AI',        url: 'https://venturebeat.com/category/ai/feed/' },
+  { name: 'The Verge',      lang: 'en', tag: 'Tech',      url: 'https://www.theverge.com/rss/index.xml' },
+  { name: 'Ars Technica',   lang: 'en', tag: 'Tech',      url: 'https://feeds.arstechnica.com/arstechnica/index' },
+  { name: 'Google AI',      lang: 'en', tag: 'AI',        url: 'https://blog.google/technology/ai/rss/' },
+  { name: 'MIT Tech Rev',   lang: 'en', tag: 'Tech',      url: 'https://www.technologyreview.com/feed/' },
+  { name: 'MIT Sloan',      lang: 'en', tag: 'Organisatie', url: 'https://sloanreview.mit.edu/feed/' },
+  { name: 'McKinsey',       lang: 'en', tag: 'Organisatie', url: 'https://www.mckinsey.com/insights/rss' },
+  { name: 'The Stack',      lang: 'en', tag: 'Tech',      url: 'https://thestack.technology/latest/rss/' },
+  { name: "Ben's Bites",    lang: 'en', tag: 'AI',        url: 'https://news.bensbites.com/feed' },
+  { name: 'Tweakers',       lang: 'nl', tag: 'Tech',      url: 'https://tweakers.net/feeds/nieuws.xml' },
+  { name: 'Emerce',         lang: 'nl', tag: 'Media',     url: 'https://www.emerce.nl/rss' },
+  { name: 'Computable',     lang: 'nl', tag: 'Tech',      url: 'https://www.computable.nl/feed/' },
+  { name: 'Frankwatching',  lang: 'nl', tag: 'Media',     url: 'https://www.frankwatching.com/feed/' },
+  { name: 'Marketingfacts', lang: 'nl', tag: 'Media',     url: 'https://www.marketingfacts.nl/feed' },
+  { name: 'AG Connect',     lang: 'nl', tag: 'Tech',      url: 'https://www.agconnect.nl/rss.xml' },
+  { name: 'Sprout',         lang: 'nl', tag: 'Organisatie', url: 'https://www.sprout.nl/feed' },
+  { name: 'NOS Tech',       lang: 'nl', tag: 'Tech',      url: 'https://feeds.nos.nl/nosnieuwstech' },
+  { name: 'CIO.nl',         lang: 'nl', tag: 'Tech',      url: 'https://www.cio.nl/rss.xml' },
+  { name: 'Techzine',       lang: 'nl', tag: 'Tech',      url: 'https://www.techzine.nl/feed/' },
+  { name: 'iGovernment',    lang: 'nl', tag: 'Overheid',  url: 'https://www.igovernment.nl/rss.xml' },
+  { name: 'Binnenl.Bestuur',lang: 'nl', tag: 'Overheid',  url: 'https://www.binnenlandsbestuur.nl/rss/digitaal' },
 ];
 
 function extractTag(xml, tag) {
@@ -35,7 +32,7 @@ function extractTag(xml, tag) {
   return m ? (m[1] || m[2] || '').trim() : '';
 }
 
-function parseItems(xml, feedName, lang) {
+function parseItems(xml, feedName, lang, tag) {
   const items = [];
   const blocks = xml.match(/<item[\s>][\s\S]*?<\/item>/gi) || [];
   for (const block of blocks.slice(0, 8)) {
@@ -44,34 +41,47 @@ function parseItems(xml, feedName, lang) {
     const desc  = extractTag(block, 'description').replace(/<[^>]+>/g,'').slice(0,200);
     const date  = extractTag(block, 'pubDate') || extractTag(block, 'published') || new Date().toISOString();
     if (!title || !link) continue;
-    items.push({ title, link, description: desc, pubDate: date, source: feedName, lang });
+    items.push({ title, link, description: desc, pubDate: date, source: feedName, lang, tag });
   }
   return items;
 }
 
 async function fetchFeed(feed) {
   try {
-    const url = CORS_PROXY + encodeURIComponent(feed.url);
-    const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
-    if (!res.ok) return [];
+    const res = await fetch(feed.url, {
+      signal: AbortSignal.timeout(8000),
+      headers: { 'User-Agent': 'BrightDash/1.0 RSS Reader' }
+    });
+    if (!res.ok) {
+      console.warn(`Feed ${feed.name} returned ${res.status}`);
+      return [];
+    }
     const xml = await res.text();
-    return parseItems(xml, feed.name, feed.lang);
-  } catch { return []; }
+    return parseItems(xml, feed.name, feed.lang, feed.tag);
+  } catch (e) {
+    console.warn(`Feed ${feed.name} failed: ${e.message}`);
+    return [];
+  }
 }
 
-async function generateInsight(title, description) {
+async function generateInsight(title, description, customPrompt) {
   try {
-    const prompt = `Je bent een strategisch adviseur voor Nederlandse managers in energie, tech en overheid.
+    const defaultPrompt = `Analyseer dit nieuwsbericht voor Nederlandse managers en bestuurders in energie, overheid en tech.
 
-Analyseer dit artikel in 3 bullets:
-• Relevant? [Waarom relevant voor NL bedrijven/(semi-)overheid]
-• Betekenis: [Strategische betekenis]
-• Actie: [Concrete actie of aandachtspunt]
+Geef precies deze 3 onderdelen terug, elk op een nieuwe regel:
+
+Kern: [Wat er feitelijk gebeurt, max 1 zin]
+Betekenis: [Strategische betekenis voor Nederlandse organisaties, max 1 zin]
+Actie: [Wat een organisatie concreet moet doen of overwegen, 1 actieve zin]
 
 Titel: ${title}
 ${description ? `Info: ${description.slice(0, 200)}` : ''}
 
-Alleen de 3 bullets, geen inleiding.`;
+Wees bondig. Geen inleiding. Geen herhaling van de titel.`;
+
+    const prompt = customPrompt
+      ? customPrompt.replace(/\{\{title\}\}/g, title).replace(/\{\{description\}\}/g, description || '').replace(/\{\{source\}\}/g, '').replace(/\{\{category\}\}/g, '')
+      : defaultPrompt;
 
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -99,11 +109,13 @@ export default async (req, context) => {
     const results = await Promise.allSettled(FEEDS.map(f => fetchFeed(f)));
     let items = results.flatMap(r => r.status === 'fulfilled' ? r.value : []);
 
+    console.log(`Fetched ${items.length} raw items from ${FEEDS.length} feeds`);
+
     // Deduplicate by link
     const seen = new Set();
     items = items.filter(i => { if (seen.has(i.link)) return false; seen.add(i.link); return true; });
 
-    // Sort newest first
+    // Sort newest first, keep top 160
     items.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
     items = items.slice(0, 160);
 
@@ -111,16 +123,23 @@ export default async (req, context) => {
     let cached = {};
     try {
       const raw = await store.get('articles', { type: 'json' });
-      if (raw) raw.forEach(i => { cached[i.link] = i.insight; });
+      if (raw && Array.isArray(raw)) raw.forEach(i => { if (i.link && i.insight) cached[i.link] = i.insight; });
     } catch {}
 
-    // Generate insights for new items (max 40 at a time to stay within time limit)
+    // Load custom prompt if set
+    let customPrompt = null;
+    try {
+      const promptData = await store.get('prompt', { type: 'json' });
+      customPrompt = promptData?.prompt || null;
+    } catch {}
+
+    // Generate insights for new items (max 40)
     let generated = 0;
     for (const item of items) {
       if (cached[item.link]) {
         item.insight = cached[item.link];
       } else if (generated < 40) {
-        item.insight = await generateInsight(item.title, item.description);
+        item.insight = await generateInsight(item.title, item.description, customPrompt);
         generated++;
       }
     }
@@ -145,5 +164,5 @@ export default async (req, context) => {
 };
 
 export const config = {
-  schedule: '0 6,10,14,18 * * *'  // 4x per dag: 08:00, 12:00, 16:00, 20:00 NL-tijd
+  schedule: '0 6,10,14,18 * * *'
 };
