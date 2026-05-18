@@ -34,7 +34,7 @@ function parseItems(xml, feedName, lang, tag) {
   for (const block of blocks.slice(0, 15)) {
     const title = extractTag(block, 'title');
     const link  = extractTag(block, 'link') || (block.match(/<link>([^<]+)/)||[])[1] || '';
-    const desc  = extractTag(block, 'description').replace(/<[^>]+>/g,'').slice(0, 300);
+    const desc  = extractTag(block, 'description').replace(/<[^>]+>/g,'').slice(0, 600);
     const date  = extractTag(block, 'pubDate') || extractTag(block, 'published') || new Date().toISOString();
     if (!title || !link) continue;
     items.push({ title, link, description: desc, pubDate: date, source: feedName, lang, tag });

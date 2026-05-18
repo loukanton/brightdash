@@ -1305,7 +1305,8 @@ function renderArticles() {
 function renderArticle(a, i) {
   const date = a.pubDate ? new Date(a.pubDate).toLocaleString('nl-NL', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }) : '';
   const tag = a.tag || a.category || '';
-  const desc = a.description ? a.description.replace(/<[^>]+>/g,'').slice(0, 180) + '...' : '';
+  const maxDesc = activeView === 'grid' ? 120 : 320;
+  const desc = a.description ? a.description.replace(/<[^>]+>/g,'').slice(0, maxDesc) + '...' : '';
   const id = safeId(a.link || i);
   const isSaved = savedLinks.includes(a.link);
 
