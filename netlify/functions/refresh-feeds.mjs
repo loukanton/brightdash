@@ -39,7 +39,7 @@ function extractTag(xml, tag) {
 function parseItems(xml, feedName, lang, tag) {
   const items = [];
   const blocks = xml.match(/<item[\s>][\s\S]*?<\/item>/gi) || [];
-  for (const block of blocks.slice(0, 8)) {
+  for (const block of blocks.slice(0, 15)) {
     const title = extractTag(block, 'title');
     const link  = extractTag(block, 'link') || (block.match(/<link>([^<]+)/)||[])[1] || '';
     const desc  = extractTag(block, 'description').replace(/<[^>]+>/g,'').slice(0,300);
@@ -125,7 +125,7 @@ export default async (req, context) => {
 
     // Sorteren en trimmen
     items.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
-    items = items.slice(0, 160);
+    items = items.slice(0, 200);
 
     // Cache laden
     let cached = {};
@@ -172,5 +172,5 @@ export default async (req, context) => {
 };
 
 export const config = {
-  schedule: '0 6,10,14,18 * * *'
+  schedule: '0 * * * *'
 };
