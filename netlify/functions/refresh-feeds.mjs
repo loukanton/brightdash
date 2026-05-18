@@ -53,7 +53,7 @@ function parseItems(xml, feedName, lang, tag) {
 async function fetchFeed(feed) {
   try {
     const res = await fetch(feed.url, {
-      signal: AbortSignal.timeout(8000),
+      signal: AbortSignal.timeout(5000),
       headers: { 'User-Agent': 'BrightDash/1.0 RSS Reader' }
     });
     if (!res.ok) {
@@ -96,7 +96,8 @@ Wees bondig. Geen inleiding. Geen herhaling van de titel.`;
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': process.env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01'
+        'anthropic-version': '2023-06-01',
+        'anthropic-timeout': '8000'
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
@@ -146,7 +147,7 @@ export default async (req, context) => {
     for (const item of items) {
       if (cached[item.link]) {
         item.insight = cached[item.link];
-      } else if (generated < 40) {
+      } else if (generated < 20) {
         item.insight = await generateInsight(item.title, item.description, customPrompt);
         generated++;
       }
