@@ -31,7 +31,7 @@
   /* Masthead */
   .masthead { background: var(--white); border-bottom: 2px solid var(--ink); padding: 0 20px; position: sticky; top: 0; z-index: 300; }
   .masthead-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 12px; }
-  .masthead-brand { display: flex; align-items: baseline; gap: 10px; }
+  .masthead-brand { display: flex; align-items: baseline; gap: 10px; flex: 1; }
   .logo { font-family: 'Lora', serif; font-size: 24px; letter-spacing: -0.3px; }
   .logo-bright { font-weight: 700; color: var(--ink); }
   .logo-dash { font-style: italic; color: var(--gold); }
@@ -41,11 +41,15 @@
   .icon-btn { background: none; border: 1px solid var(--rule); border-radius: 5px; color: var(--muted); font-size: 15px; width: 34px; height: 34px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0; }
   .icon-btn:hover { border-color: var(--gold); color: var(--gold); }
 
+  @media (max-width: 600px) {
+    #themeToggle, #refreshBtn { color: #B8922A; border-color: #DFC870; }
+  }
+
   .simple-masthead-btn {
     background: none;
     border: 1px solid var(--rule);
     border-radius: 5px;
-    color: var(--muted);
+    color: var(--ink);
     font-family: 'Instrument Sans', sans-serif;
     font-size: 12px;
     font-weight: 700;
@@ -66,6 +70,17 @@
     border-color: var(--gold);
     color: var(--white);
     box-shadow: 0 2px 8px rgba(184,146,42,0.3);
+  }
+
+  @media (max-width: 600px) {
+    .simple-masthead-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-color: #B8922A !important;
+      color: var(--ink) !important;
+    }
   }
 
   /* Page */
@@ -251,12 +266,12 @@
   .mobile-fab {
     display: none;
     position: fixed;
-    bottom: 90px;
+    bottom: 24px;
     right: 20px;
     z-index: 350;
   }
 
-  @media (max-width: 600px) { .mobile-fab { display: block; } }
+  @media (max-width: 600px) { .mobile-fab { display: block; bottom: 24px; right: 20px; } }
 
   .mobile-fab-btn {
     width: 52px; height: 52px;
@@ -333,7 +348,7 @@
   .back-to-top { position: fixed; bottom: 32px; right: 24px; width: 40px; height: 40px; border-radius: 50%; background: var(--ink); color: var(--white); border: none; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 12px rgba(0,0,0,0.2); opacity: 0; transform: translateY(10px); transition: all 0.2s; z-index: 100; pointer-events: none; }
   .back-to-top.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
   .back-to-top:hover { background: var(--gold); }
-  @media (max-width: 600px) { .back-to-top { bottom: 150px; right: 16px; } }
+  @media (max-width: 600px) { .back-to-top { bottom: 90px; right: 20px; width: 32px; height: 32px; font-size: 13px; } }
   .state-box-title { font-family: 'Lora', serif; font-size: 20px; color: var(--ink-3); margin-bottom: 8px; }
 
   /* Footer */
@@ -431,7 +446,9 @@
   <div class="feed-wrapper">
     <div class="feed-toolbar">
       <span class="feed-title" id="feedTitle">Alles</span>
-      <span class="feed-count" id="feedCount"></span>
+      <div style="flex:1"></div>
+      <span id="feedUpdated" style="font-size:11px;color:var(--muted)"></span>
+      <span class="feed-count" id="feedCount" style="font-size:11px;color:var(--muted);margin-left:4px"></span>
 
     </div>
 
