@@ -371,7 +371,7 @@ async function loadFeed() {
   try {
     const res = await fetch('/api/articles');
     const data = await res.json();
-    allArticles = (data.items || []).sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+    allArticles = (data.articles || data.items || []).sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
     if (data.updatedAt) {
       const t = new Date(data.updatedAt).toLocaleTimeString('nl-NL', { hour:'2-digit', minute:'2-digit' });
       document.getElementById('updatedLabel').textContent = 'Bijgewerkt ' + t;
