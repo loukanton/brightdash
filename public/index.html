@@ -41,6 +41,33 @@
   .icon-btn { background: none; border: 1px solid var(--rule); border-radius: 5px; color: var(--muted); font-size: 15px; width: 34px; height: 34px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0; }
   .icon-btn:hover { border-color: var(--gold); color: var(--gold); }
 
+  .simple-masthead-btn {
+    background: none;
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    color: var(--muted);
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 0 12px;
+    height: 34px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    letter-spacing: 0.2px;
+  }
+
+  @media (min-width: 601px) { .simple-masthead-btn { display: none; } }
+
+  .simple-masthead-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+  .simple-masthead-btn.on {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--white);
+    box-shadow: 0 2px 8px rgba(184,146,42,0.3);
+  }
+
   /* Page */
   .page { display: flex; position: relative; }
 
@@ -144,7 +171,7 @@
   .panel-toggle-btn:hover { border-color: var(--gold); color: var(--gold); }
 
   .panel-toggle-btn.active {
-    background: var(--ink); border-color: var(--ink); color: var(--white);
+    background: var(--gold); border-color: var(--gold); color: var(--white);
   }
 
   body.dark .panel-toggle-btn.active { background: var(--gold); border-color: var(--gold); color: #111; }
@@ -221,18 +248,39 @@
   .analyse-btn.done { background: var(--gold); border-color: var(--gold); color: var(--white); }
 
   /* Load more */
-  .load-more { text-align: center; padding: 32px 0; }
+  .load-more { text-align: center; padding: 32px 0; display: none !important; }
   .load-more-btn { background: none; border: 1.5px solid var(--ink); color: var(--ink); font-family: 'Instrument Sans', sans-serif; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 11px 30px; cursor: pointer; transition: all 0.15s; border-radius: 4px; }
   .load-more-btn:hover { background: var(--ink); color: var(--white); }
 
+  /* Mobile FAB */
+  .mobile-fab {
+    display: none;
+    position: fixed;
+    bottom: 70px;
+    right: 20px;
+    z-index: 350;
+  }
+
+  @media (max-width: 600px) { .mobile-fab { display: block; } }
+
+  .mobile-fab-btn {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: var(--ink);
+    border: none;
+    color: var(--white);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    transition: all 0.2s;
+  }
+
+  body.dark .mobile-fab-btn { background: var(--gold); color: #111; }
+  .mobile-fab-btn:hover { transform: scale(1.08); }
+
   /* Mobile bottom bar */
-  .mobile-bar { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--white); border-top: 1px solid var(--rule); padding: 8px 16px 24px; z-index: 300; box-shadow: 0 -4px 20px rgba(0,0,0,0.08); }
   .mobile-updated { font-size: 10px; color: var(--muted); text-align: center; margin-bottom: 6px; }
-  body.dark .mobile-bar { background: #1A1814; }
-  @media (max-width: 600px) { .mobile-bar { display: block; } .feed-wrapper { padding-bottom: 100px; } }
-  .mobile-bar-row { display: flex; gap: 8px; margin-bottom: 10px; }
-  .mobile-simple-btn { flex: 1; padding: 11px; border-radius: 8px; border: 1.5px solid var(--rule); background: var(--bg-2); cursor: pointer; font-family: 'Instrument Sans', sans-serif; font-size: 14px; font-weight: 700; color: var(--ink-3); transition: all 0.2s; text-align: center; }
-  .mobile-simple-btn.on { background: var(--gold); border-color: var(--gold); color: var(--white); }
+@media (max-width: 600px) { .feed-wrapper { padding-bottom: 80px; } }
   .mobile-filter-btn { width: 46px; height: 46px; border-radius: 8px; border: 1px solid var(--rule); background: var(--bg-2); color: var(--muted); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; flex-shrink: 0; }
   .mobile-filter-btn .h-line { width: 16px; height: 1.5px; background: currentColor; border-radius: 2px; }
   .mobile-pills { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
@@ -254,14 +302,24 @@
   .sheet-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 10px; display: block; }
   .sheet-sort-row { display: flex; gap: 8px; margin-bottom: 4px; }
   .sheet-btn { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--rule); background: var(--bg-2); color: var(--ink-3); font-family: 'Instrument Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; text-align: center; }
-  .sheet-btn.active { background: var(--ink); border-color: var(--ink); color: var(--white); }
+  .sheet-btn.active { background: var(--gold); border-color: var(--gold); color: var(--white); }
   body.dark .sheet-btn.active { background: var(--gold); border-color: var(--gold); color: #111; }
   .sheet-theme-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
   .sheet-theme-btn { padding: 10px 4px; border-radius: 8px; border: 1px solid var(--rule); background: var(--bg-2); color: var(--ink-3); font-family: 'Instrument Sans', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.15s; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .sheet-theme-btn.active { background: var(--gold-pale); border-color: var(--gold-border); color: var(--ink); }
-  body.dark .sheet-theme-btn.active { background: #2A2010; border-color: #6A5010; }
+  .sheet-theme-btn.active { background: var(--gold); border-color: var(--gold); color: var(--white); }
+  body.dark .sheet-theme-btn.active { background: var(--gold); border-color: var(--gold); color: #111; }
   .sheet-footer { padding: 16px 20px 8px; border-top: 1px solid var(--rule); margin-top: 16px; }
-  .sheet-apply { width: 100%; padding: 13px; border-radius: 8px; background: var(--ink); border: none; color: var(--white); font-family: 'Instrument Sans', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; }
+  .sheet-apply {
+    width: 100%; padding: 13px; border-radius: 8px;
+    background: var(--rule); border: none; color: var(--muted);
+    font-family: 'Instrument Sans', sans-serif; font-size: 15px; font-weight: 700;
+    cursor: default; transition: all 0.2s;
+  }
+  .sheet-apply.active {
+    background: var(--ink); color: var(--white); cursor: pointer;
+  }
+  .sheet-apply.active:hover { background: var(--gold); }
+  body.dark .sheet-apply.active { background: var(--gold); color: #111; }
   body.dark .sheet-apply { background: var(--gold); color: #111; }
 
   /* Skeleton */
@@ -304,6 +362,7 @@
     </div>
     <div class="masthead-right">
       <span id="updatedLabel" style="font-size:11px;color:var(--muted)"></span>
+      <button class="simple-masthead-btn" id="simpleMastheadBtn" onclick="toggleAnalyse()">✦ Simple</button>
       <button class="icon-btn" onclick="toggleTheme()" id="themeToggle">☀</button>
       <button class="icon-btn" onclick="refreshFeed()" id="refreshBtn">↻</button>
     </div>
@@ -415,27 +474,19 @@
   </div>
 </div>
 
-<!-- Mobile bottom bar -->
-<div class="mobile-bar">
-  <div class="mobile-updated" id="mobileUpdatedLabel"></div>
-  <div class="mobile-bar-row">
-    <button class="mobile-simple-btn" id="mobileSimpleBtn" onclick="toggleAnalyse()">✦ Make it all simple</button>
-    <button class="mobile-filter-btn" onclick="toggleSheet()">
-      <div class="h-line"></div>
-      <div class="h-line"></div>
-      <div class="h-line"></div>
-    </button>
-  </div>
-  <div class="mobile-pills">
-    <button class="mobile-pill active" onclick="mobilePill('alles', this)">Alles</button>
-    <button class="mobile-pill" onclick="mobilePill('AI', this)">AI</button>
-    <button class="mobile-pill" onclick="mobilePill('Tech', this)">Tech</button>
-    <button class="mobile-pill" onclick="mobilePill('Overheid', this)">Overheid</button>
-    <button class="mobile-pill" onclick="mobilePill('Media', this)">Media</button>
-    <button class="mobile-pill" onclick="mobilePill('Organisatie', this)">Organisatie</button>
-    <button class="mobile-pill" onclick="mobilePill('WoW', this)">WoW</button>
-    <button class="mobile-pill" onclick="mobilePill('HR', this)">HR</button>
-  </div>
+</div>
+
+</div>
+
+<!-- Mobile FAB -->
+<div class="mobile-fab">
+  <button class="mobile-fab-btn" onclick="toggleSheet()" title="Filter">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="3" y1="6" x2="19" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <line x1="6" y1="11" x2="16" y2="11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <line x1="9" y1="16" x2="13" y2="16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </button>
 </div>
 
 <div class="mobile-overlay" id="mobileOverlay" onclick="toggleSheet()"></div>
@@ -451,15 +502,15 @@
   <div class="sheet-section">
     <span class="sheet-label">Sortering</span>
     <div class="sheet-sort-row">
-      <button class="sheet-btn active" onclick="setSort('nieuwste', this)">Nieuwste</button>
-      <button class="sheet-btn" onclick="setSort('populair', this)">Populair</button>
+      <button class="sheet-btn active" onclick="setSort('nieuwste', this); markSheetChanged()">Nieuwste</button>
+      <button class="sheet-btn" onclick="setSort('populair', this); markSheetChanged()">Populair</button>
     </div>
   </div>
   <div class="sheet-section">
     <span class="sheet-label">Weergave</span>
     <div class="sheet-sort-row">
-      <button class="sheet-btn active" onclick="setView('lijst', this)">Lijst</button>
-      <button class="sheet-btn" onclick="setView('grid', this)">Grid</button>
+      <button class="sheet-btn active" onclick="setView('lijst', this); markSheetChanged()">Lijst</button>
+      <button class="sheet-btn" onclick="setView('grid', this); markSheetChanged()">Grid</button>
     </div>
   </div>
   <div class="sheet-section">
@@ -476,7 +527,7 @@
     </div>
   </div>
   <div class="sheet-footer">
-    <button class="sheet-apply" onclick="toggleSheet()">Toepassen</button>
+    <button class="sheet-apply" id="sheetApplyBtn" onclick="if(sheetChanged) toggleSheet()">Niets gewijzigd</button>
   </div>
 </div>
 
@@ -528,11 +579,10 @@ function toggleAnalyse() {
   }
   const tooltip = document.getElementById('simpleTooltip');
   if (tooltip) tooltip.textContent = analyseOn ? '✦ Made simple — klik om analyses te verbergen' : '✦ Make it all simple — klik om analyses te tonen';
-  const mobileBtn = document.getElementById('mobileSimpleBtn');
-  if (mobileBtn) {
-    mobileBtn.textContent = analyseOn ? '✦ Made simple' : '✦ Make it all simple';
-    mobileBtn.classList.toggle('on', analyseOn);
-  }
+  ['simpleMastheadBtn'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.textContent = analyseOn ? '✦ Made simple' : '✦ Simple'; el.classList.toggle('on', analyseOn); }
+  });
   if (!analyseOn) {
     renderArticles();
   } else {
@@ -684,9 +734,24 @@ function renderArticle(a, i) {
   const rawDesc = a.description ? a.description.replace(/<[^>]+>/g,'') : '';
   let desc = '';
   if (rawDesc) {
-    const cut = rawDesc.slice(0, maxDesc);
-    const lastPunct = Math.max(cut.lastIndexOf('. '), cut.lastIndexOf(', '), cut.lastIndexOf('! '), cut.lastIndexOf('? '));
-    desc = (lastPunct > maxDesc * 0.6 ? cut.slice(0, lastPunct + 1) : cut) + (rawDesc.length > maxDesc ? '...' : '');
+    if (rawDesc.length <= maxDesc) {
+      desc = rawDesc;
+    } else {
+      const cut = rawDesc.slice(0, maxDesc);
+      // Zoek het laatste zinseinde (punt + spatie of einde)
+      const lastDot = cut.lastIndexOf('. ');
+      const lastExcl = cut.lastIndexOf('! ');
+      const lastQuestion = cut.lastIndexOf('? ');
+      const lastSentence = Math.max(lastDot, lastExcl, lastQuestion);
+      if (lastSentence > maxDesc * 0.5) {
+        // Kap af na de punt inclusief de punt
+        desc = cut.slice(0, lastSentence + 1);
+      } else {
+        // Geen goede afkapplek — kap af op laatste woord
+        const lastSpace = cut.lastIndexOf(' ');
+        desc = cut.slice(0, lastSpace > 0 ? lastSpace : maxDesc) + '…';
+      }
+    }
   }
   const id = safeId(a.link || i);
   const isSaved = savedLinks.includes(a.link);
@@ -801,6 +866,21 @@ async function refreshFeed() {
   btn.textContent = '↻'; btn.disabled = false;
 }
 
+// Bijhouden van sheet staat voor Toepassen knop
+let sheetChanged = false;
+
+function updateApplyBtn() {
+  const btn = document.getElementById('sheetApplyBtn');
+  if (!btn) return;
+  if (sheetChanged) {
+    btn.classList.add('active');
+    btn.textContent = 'Toepassen';
+  } else {
+    btn.classList.remove('active');
+    btn.textContent = 'Niets gewijzigd';
+  }
+}
+
 function toggleSheet() {
   const sheet = document.getElementById('mobileSheet');
   const overlay = document.getElementById('mobileOverlay');
@@ -808,6 +888,7 @@ function toggleSheet() {
   sheet.classList.toggle('open', !isOpen);
   overlay.classList.toggle('open', !isOpen);
   document.body.style.overflow = isOpen ? '' : 'hidden';
+  if (!isOpen) { sheetChanged = false; updateApplyBtn(); }
 }
 
 function mobilePill(filter, el) {
@@ -822,7 +903,12 @@ function mobilePill(filter, el) {
   } else {
     selectedThemes.clear(); selectedThemes.add(filter);
   }
-  updateFeedTitle(); displayedCount = PAGE_SIZE; applyFilter();
+  markSheetChanged(); updateFeedTitle(); displayedCount = PAGE_SIZE; applyFilter();
+}
+
+function markSheetChanged() {
+  sheetChanged = true;
+  updateApplyBtn();
 }
 
 function mobileToggleTheme(filter, el) {
@@ -859,10 +945,24 @@ function updateProgress() {
   }
 }
 
-// Terug naar boven
+// Scroll events: terug naar boven + infinite scroll
+let loadingMore = false;
 window.addEventListener('scroll', () => {
+  // Terug naar boven
   const btn = document.getElementById('backToTop');
   if (btn) btn.classList.toggle('visible', window.scrollY > 400);
+
+  // Infinite scroll — laad meer als je bijna onderaan bent
+  if (loadingMore) return;
+  const scrollBottom = window.scrollY + window.innerHeight;
+  const pageHeight = document.documentElement.scrollHeight;
+  if (scrollBottom >= pageHeight - 300 && filteredArticles.length > displayedCount) {
+    loadingMore = true;
+    displayedCount += PAGE_SIZE;
+    renderArticles();
+    // Kleine vertraging om dubbel laden te voorkomen
+    setTimeout(() => { loadingMore = false; }, 500);
+  }
 });
 
 function safeId(str) { try { return btoa(String(str)).replace(/[^a-z0-9]/gi,''); } catch { return 'id'+Math.random().toString(36).slice(2); } }
