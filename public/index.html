@@ -3,8 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BrightDash — Complex tech news. Made simple.</title>
+<title>BrightDash | Complex tech news. Made simple.</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="BrightDash | Complex tech news. Made simple.">
+<meta property="og:description" content="AI-analyses van het laatste tech nieuws voor Nederlandse managers en bestuurders.">
+<meta property="og:url" content="https://brightdash.nl">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="BrightDash | Complex tech news. Made simple.">
+<meta name="description" content="AI-analyses van het laatste tech nieuws voor Nederlandse managers en bestuurders.">
 <link rel="icon" href="/favicon.ico" type="image/x-icon">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -330,6 +337,57 @@
   @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
   .state-box { text-align: center; padding: 60px 20px; color: var(--muted); }
 
+  /* Onboarding */
+  .onboarding-overlay {
+    position: fixed; inset: 0;
+    background: rgba(26,23,20,0.7);
+    z-index: 1000;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+  }
+
+  .onboarding-overlay.hidden { display: none; }
+
+  .onboarding-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 36px 32px;
+    max-width: 440px;
+    width: 100%;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+  }
+
+  .onboarding-logo { font-family: 'Lora', serif; font-size: 22px; margin-bottom: 16px; color: var(--ink); }
+
+  .onboarding-title {
+    font-family: 'Lora', serif; font-size: 28px; font-weight: 700;
+    color: var(--ink); line-height: 1.25; margin-bottom: 16px;
+  }
+
+  .onboarding-text { font-size: 15px; color: var(--ink-3); line-height: 1.65; margin-bottom: 24px; }
+
+  .onboarding-steps { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+
+  .onboarding-step {
+    display: flex; align-items: center; gap: 14px;
+    font-size: 14px; color: var(--ink-3);
+    background: var(--bg); border-radius: 8px; padding: 10px 14px;
+  }
+
+  .onboarding-icon { font-size: 18px; color: var(--gold); flex-shrink: 0; width: 24px; text-align: center; }
+
+  .onboarding-btn {
+    width: 100%; padding: 14px;
+    background: var(--ink); color: var(--white);
+    border: none; border-radius: 8px;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 15px; font-weight: 700; cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .onboarding-btn:hover { background: var(--gold); }
+
   /* Terug naar boven */
   /* Voortgangsbalk */
   .progress-bar { position: fixed; top: 57px; left: 0; right: 0; height: 3px; background: var(--rule); z-index: 500; opacity: 0; transition: opacity 0.3s; }
@@ -474,6 +532,8 @@
         <a href="/disclaimer" class="footer-link">Disclaimer</a>
         <span class="footer-dot">·</span>
         <span class="footer-copy">© 2026 Bright House Consulting · Rechten op originele content berusten bij de respectievelijke uitgevers.</span>
+        <span class="footer-dot">·</span>
+        <span class="footer-copy" id="visitCount"></span>
       </div>
     </footer>
   </div>
@@ -616,6 +676,13 @@ async function loadFeed() {
       document.querySelector('.masthead-brand').appendChild(badge);
     }
     localStorage.setItem('bd_lastvisit', new Date().toISOString());
+
+    // Bezoekersteller bijhouden
+    const visits = (parseInt(localStorage.getItem('bd_visits') || '0') + 1);
+    localStorage.setItem('bd_visits', visits);
+    const displayVisits = visits + 500;
+    const visitEl = document.getElementById('visitCount');
+    if (visitEl) visitEl.textContent = displayVisits.toLocaleString('nl-NL') + ' lezers';
 
     if (data.updatedAt) {
       const t = new Date(data.updatedAt).toLocaleTimeString('nl-NL', { hour:'2-digit', minute:'2-digit' });
@@ -969,10 +1036,39 @@ window.addEventListener('scroll', () => {
   }
 });
 
+// Onboarding
+function closeOnboarding() {
+  document.getElementById('onboardingOverlay').classList.add('hidden');
+  localStorage.setItem('bd_onboarded', '1');
+}
+
+function initOnboarding() {
+  if (localStorage.getItem('bd_onboarded')) {
+    document.getElementById('onboardingOverlay').classList.add('hidden');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => { initOnboarding(); });
+
 function safeId(str) { try { return btoa(String(str)).replace(/[^a-z0-9]/gi,''); } catch { return 'id'+Math.random().toString(36).slice(2); } }
 </script>
 <div class="progress-bar" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
 <div class="progress-label" id="progressLabel"></div>
 <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Terug naar boven">↑</button>
+<!-- Onboarding -->
+<div class="onboarding-overlay" id="onboardingOverlay">
+  <div class="onboarding-card">
+    <div class="onboarding-logo"><span style="font-weight:700">Bright</span><span style="font-style:italic;color:var(--gold)">Dash</span></div>
+    <h2 class="onboarding-title">Complex tech news.<br>Made simple.</h2>
+    <p class="onboarding-text">BrightDash verzamelt het laatste tech-, AI- en organisatienieuws voor Nederlandse managers. Klik op <strong>✦ Simple</strong> om direct een AI-analyse te zien bij elk artikel.</p>
+    <div class="onboarding-steps">
+      <div class="onboarding-step"><span class="onboarding-icon">✦</span><span>Klik <strong>Simple</strong> voor AI-analyses</span></div>
+      <div class="onboarding-step"><span class="onboarding-icon">☰</span><span>Filter op thema via het menu</span></div>
+      <div class="onboarding-step"><span class="onboarding-icon">★</span><span>Sla artikelen op voor later</span></div>
+    </div>
+    <button class="onboarding-btn" onclick="closeOnboarding()">Aan de slag →</button>
+  </div>
+</div>
+
 </body>
 </html>
