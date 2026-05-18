@@ -122,8 +122,26 @@
   .panel-theme-item.selected .theme-dot { background: var(--gold); }
   .panel-divider { border: none; border-top: 1px solid var(--rule); margin: 10px 16px; }
 
+  .panel-toggle-row { display: flex; gap: 6px; padding: 4px 16px 8px; }
+
+  .panel-toggle-btn {
+    flex: 1; padding: 8px 6px; border-radius: 6px;
+    border: 1px solid var(--rule); background: var(--bg-2);
+    color: var(--ink-3); font-family: 'Instrument Sans', sans-serif;
+    font-size: 12px; font-weight: 600; cursor: pointer;
+    transition: all 0.15s; text-align: center;
+  }
+
+  .panel-toggle-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+  .panel-toggle-btn.active {
+    background: var(--ink); border-color: var(--ink); color: var(--white);
+  }
+
+  body.dark .panel-toggle-btn.active { background: var(--gold); border-color: var(--gold); color: #111; }
+
   /* Feed */
-  .feed-wrapper { flex: 1; min-width: 0; padding: 28px 40px; max-width: 900px; }
+  .feed-wrapper { flex: 1; min-width: 0; padding: 28px 40px; max-width: 1100px; margin: 0 auto; }
   @media (max-width: 860px) { .feed-wrapper { padding: 20px 16px 100px; } }
 
   .feed-toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); flex-wrap: wrap; }
@@ -139,7 +157,26 @@
   .article:first-child { padding-top: 0; }
   .article:last-child { border-bottom: none; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; } }
-  #articleFeed.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+  #articleFeed.grid {
+    columns: 3 300px;
+    column-gap: 20px;
+  }
+
+  #articleFeed.grid .article {
+    break-inside: avoid;
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: var(--white);
+    display: inline-block;
+    width: 100%;
+  }
+
+  #articleFeed.grid .article:last-child { border-bottom: 1px solid var(--rule); margin-bottom: 0; }
+
+  @media (max-width: 900px) { #articleFeed.grid { columns: 2 280px; } }
+  @media (max-width: 600px) { #articleFeed.grid { columns: 1; } }
   #articleFeed.grid .article { padding: 20px; border: 1px solid var(--rule); border-radius: 8px; background: var(--white); }
   #articleFeed.grid .article:last-child { border-bottom: 1px solid var(--rule); }
   .article-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
@@ -268,8 +305,27 @@
 
   <!-- Slide panel — direct na rail, NIET erin -->
   <div class="slide-panel" id="slidePanel">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px 8px;border-bottom:1px solid var(--rule);margin-bottom:8px;">
+      <span style="font-family:'Lora',serif;font-size:15px;font-weight:700;color:var(--ink)">Filter</span>
+      <button onclick="togglePanel()" style="background:none;border:none;cursor:pointer;font-size:16px;color:var(--muted);padding:4px;line-height:1;" title="Sluiten">✕</button>
+    </div>
+    <div class="panel-section">
+      <span class="panel-label">Sortering</span>
+      <div class="panel-toggle-row">
+        <button class="panel-toggle-btn active" id="psort-nieuwste" onclick="setPanelSort('nieuwste', this)">Nieuwste</button>
+        <button class="panel-toggle-btn" id="psort-populair" onclick="setPanelSort('populair', this)">Populair</button>
+      </div>
+    </div>
     <div class="panel-section">
       <span class="panel-label">Weergave</span>
+      <div class="panel-toggle-row">
+        <button class="panel-toggle-btn active" id="pview-lijst" onclick="setPanelView('lijst', this)">Lijst</button>
+        <button class="panel-toggle-btn" id="pview-grid" onclick="setPanelView('grid', this)">Grid</button>
+      </div>
+    </div>
+    <div class="panel-divider"></div>
+    <div class="panel-section">
+      <span class="panel-label">Filter</span>
       <button class="panel-item active" onclick="setScope('alles', this)"><span>Alles</span><span class="panel-count" id="count-alles">—</span></button>
       <button class="panel-item" onclick="setScope('nl', this)"><span>Nederlands</span><span class="panel-count" id="count-nl">—</span></button>
       <button class="panel-item" onclick="setScope('en', this)"><span>Internationaal</span><span class="panel-count" id="count-en">—</span></button>
@@ -293,15 +349,7 @@
     <div class="feed-toolbar">
       <span class="feed-title" id="feedTitle">Alles</span>
       <span class="feed-count" id="feedCount"></span>
-      <div style="flex:1"></div>
-      <div class="toolbar-group">
-        <button class="toolbar-btn active" onclick="setSort('nieuwste', this)">Nieuwste</button>
-        <button class="toolbar-btn" onclick="setSort('populair', this)">Populair</button>
-      </div>
-      <div class="toolbar-group">
-        <button class="toolbar-btn active" onclick="setView('lijst', this)">Lijst</button>
-        <button class="toolbar-btn" onclick="setView('grid', this)">Grid</button>
-      </div>
+
     </div>
 
     <div id="articleFeed">
@@ -492,6 +540,22 @@ function updateCounts() {
   document.getElementById('count-en').textContent = en;
   document.getElementById('count-opgeslagen').textContent = savedLinks.length;
   cats.forEach(c => { const el = document.getElementById('count-' + c); if (el) el.textContent = counts[c] || 0; });
+}
+
+function setPanelSort(sort, el) {
+  el.closest('.panel-toggle-row').querySelectorAll('.panel-toggle-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  activeSort = sort;
+  displayedCount = PAGE_SIZE;
+  applyFilter();
+}
+
+function setPanelView(view, el) {
+  el.closest('.panel-toggle-row').querySelectorAll('.panel-toggle-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  activeView = view;
+  document.getElementById('articleFeed').classList.toggle('grid', view === 'grid');
+  renderArticles();
 }
 
 function setScope(scope, el) {
