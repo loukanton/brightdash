@@ -823,6 +823,65 @@
 
   .state-box { text-align: center; padding: 60px 20px; color: var(--muted); }
   .state-box-title { font-family: 'Lora', serif; font-size: 20px; color: var(--ink-3); margin-bottom: 8px; }
+
+  /* ── Footer ── */
+  .site-footer {
+    background: var(--white);
+    border-top: 1px solid var(--rule);
+    margin-top: 40px;
+    padding: 24px 20px;
+  }
+
+  body.dark .site-footer { background: var(--white); }
+
+  .footer-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .footer-logo {
+    font-family: 'Lora', serif;
+    font-size: 15px;
+    color: var(--ink);
+  }
+
+  .footer-tagline {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .footer-links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+  }
+
+  .footer-link {
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .footer-link:hover { text-decoration: underline; }
+
+  .footer-dot { color: var(--muted); }
+
+  .footer-copy {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+    max-width: 700px;
+  }
 </style>
 </head>
 <body>
@@ -1395,5 +1454,23 @@ function toonAnalyse(link, btn) {
 
 function safeId(str) { try { return btoa(String(str)).replace(/[^a-z0-9]/gi,''); } catch { return 'id'+Math.random().toString(36).slice(2); } }
 </script>
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-logo"><span style="font-weight:700">Bright</span><span style="font-style:italic;color:var(--gold)">Dash</span></span>
+      <span class="footer-tagline">a Bright House product</span>
+    </div>
+    <div class="footer-links">
+      <a href="/privacy" class="footer-link">Privacybeleid</a>
+      <span class="footer-dot">·</span>
+      <a href="/disclaimer" class="footer-link">Disclaimer</a>
+    </div>
+    <div class="footer-copy">
+      © 2026 Bright House Consulting · BrightDash aggregeert publiek beschikbare RSS-feeds. Alle rechten op originele content berusten bij de respectievelijke uitgevers.
+    </div>
+  </div>
+</footer>
+
 </body>
 </html>
