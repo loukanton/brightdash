@@ -102,6 +102,10 @@
     padding-top: 14px;
   }
 
+  @media (max-width: 860px) {
+    .masthead-right { display: none; }
+  }
+
   .updated-label {
     font-size: 11px;
     color: var(--muted);
@@ -302,6 +306,10 @@
     padding-bottom: 14px;
     border-bottom: 1px solid var(--rule);
     flex-wrap: wrap;
+  }
+
+  @media (max-width: 860px) {
+    .feed-toolbar .toolbar-group { display: none; }
   }
 
   .feed-title {
@@ -964,6 +972,22 @@
   </div>
 
   <div class="mobile-menu-section">
+    <div class="mobile-menu-label">Sortering</div>
+    <div class="mobile-sort-group">
+      <button class="mobile-sort-btn active" id="msort-nieuwste" onclick="mobileSetSort('nieuwste', this)">Nieuwste</button>
+      <button class="mobile-sort-btn" id="msort-populair" onclick="mobileSetSort('populair', this)">Populair</button>
+    </div>
+  </div>
+
+  <div class="mobile-menu-section">
+    <div class="mobile-menu-label">Weergave</div>
+    <div class="mobile-sort-group">
+      <button class="mobile-sort-btn active" id="mview-lijst" onclick="mobileSetView('lijst', this)">Lijst</button>
+      <button class="mobile-sort-btn" id="mview-grid" onclick="mobileSetView('grid', this)">Grid</button>
+    </div>
+  </div>
+
+  <div class="mobile-menu-section">
     <div class="mobile-menu-label">Thema</div>
     <div class="mobile-theme-grid">
       <button class="mobile-theme-btn" onclick="mobileToggleTheme('alles', this)" data-filter="alles">Alles</button>
@@ -1134,6 +1158,18 @@ function updateFeedTitle() {
 }
 
 // ── Mobile thema multi-select ──
+function mobileSetSort(sort, el) {
+  document.querySelectorAll('.mobile-sort-btn[id^="msort-"]').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  setSort(sort, document.querySelector(`.toolbar-btn[onclick*="${sort}"]`) || el);
+}
+
+function mobileSetView(view, el) {
+  document.querySelectorAll('.mobile-sort-btn[id^="mview-"]').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  setView(view, document.querySelector(`.toolbar-btn[onclick*="${view}"]`) || el);
+}
+
 function mobileToggleTheme(filter, el) {
   if (filter === 'alles') {
     // Alles: deselecteer alle thema's
