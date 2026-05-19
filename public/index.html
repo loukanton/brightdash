@@ -178,6 +178,27 @@
   .panel-theme-item.selected .theme-dot { background: var(--gold); }
   .panel-divider { border: none; border-top: 1px solid var(--rule); margin: 10px 16px; }
 
+  .panel-accordion-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 16px 6px; cursor: pointer; user-select: none;
+  }
+
+  .panel-accordion-header:hover .panel-label { color: var(--ink); }
+
+  .panel-accordion-arrow {
+    font-size: 10px; color: var(--muted); transition: transform 0.2s;
+  }
+
+  .panel-accordion-header.open .panel-accordion-arrow { transform: rotate(180deg); }
+
+  .panel-accordion-body {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.25s ease;
+  }
+
+  .panel-accordion-body.open { max-height: 400px; overflow-y: auto; }
+
   .panel-toggle-row { display: flex; gap: 6px; padding: 4px 16px 8px; }
 
   .panel-toggle-btn {
@@ -487,8 +508,11 @@
       <button class="panel-item" onclick="setScope('opgeslagen', this)"><span>Opgeslagen</span><span class="panel-count" id="count-opgeslagen">0</span></button>
     </div>
     <div class="panel-divider"></div>
-    <div class="panel-section">
-      <span class="panel-label">Thema</span>
+    <div class="panel-accordion-header open" onclick="toggleAccordion('themaAccordion', this)" id="themaHeader">
+      <span class="panel-label" style="margin:0">Thema</span>
+      <span class="panel-accordion-arrow">▼</span>
+    </div>
+    <div class="panel-accordion-body open" id="themaAccordion">
       <button class="panel-theme-item" onclick="toggleThemeFilter('AI', this)" id="theme-AI"><span class="theme-left"><span class="theme-dot"></span>AI</span><span class="panel-count" id="count-AI">—</span></button>
       <button class="panel-theme-item" onclick="toggleThemeFilter('Tech', this)" id="theme-Tech"><span class="theme-left"><span class="theme-dot"></span>Tech</span><span class="panel-count" id="count-Tech">—</span></button>
       <button class="panel-theme-item" onclick="toggleThemeFilter('Media', this)" id="theme-Media"><span class="theme-left"><span class="theme-dot"></span>Media &amp; Marketing</span><span class="panel-count" id="count-Media">—</span></button>
@@ -496,6 +520,29 @@
       <button class="panel-theme-item" onclick="toggleThemeFilter('Organisatie', this)" id="theme-Organisatie"><span class="theme-left"><span class="theme-dot"></span>Organisatie</span><span class="panel-count" id="count-Organisatie">—</span></button>
       <button class="panel-theme-item" onclick="toggleThemeFilter('WoW', this)" id="theme-WoW"><span class="theme-left"><span class="theme-dot"></span>Way of Working</span><span class="panel-count" id="count-WoW">—</span></button>
       <button class="panel-theme-item" onclick="toggleThemeFilter('HR', this)" id="theme-HR"><span class="theme-left"><span class="theme-dot"></span>HR &amp; Werk</span><span class="panel-count" id="count-HR">—</span></button>
+    </div>
+    <div class="panel-divider"></div>
+    <div class="panel-accordion-header" onclick="toggleAccordion('bronnenAccordion', this)" id="bronnenHeader">
+      <span class="panel-label" style="margin:0">Bronnen</span>
+      <span class="panel-accordion-arrow">▼</span>
+    </div>
+    <div class="panel-accordion-body" id="bronnenAccordion">
+      <div id="sourcesPanel"></div>
+    </div>
+    <div class="panel-divider"></div>
+    <div class="panel-divider"></div>
+    <div class="panel-accordion-header" onclick="toggleAccordion('overAccordion', this)">
+      <span class="panel-label" style="margin:0">Over BrightDash</span>
+      <span class="panel-accordion-arrow">▼</span>
+    </div>
+    <div class="panel-accordion-body" id="overAccordion">
+      <div style="padding:8px 16px 20px;">
+        <div style="font-family:'Lora',serif;font-size:12px;color:var(--muted);margin-bottom:6px;">a <strong style='color:var(--ink)'>Bright</strong><span style='color:var(--gold);font-style:italic'>House</span> product</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:10px;">BrightDash toont artikelen op basis van publiek beschikbare RSS-feeds. Alle rechten op originele content berusten bij de respectievelijke uitgevers.</div>
+        <a href="/privacy" style="font-size:11px;color:var(--gold);text-decoration:none;margin-right:12px;">Privacybeleid</a>
+        <a href="/disclaimer" style="font-size:11px;color:var(--gold);text-decoration:none;margin-right:12px;">Disclaimer</a>
+        <a href="mailto:media@brighthouse.consulting" style="font-size:11px;color:var(--gold);text-decoration:none;">Contact</a>
+      </div>
     </div>
   </div>
 
@@ -699,10 +746,41 @@ async function loadFeed() {
       if (mob) mob.textContent = 'Bijgewerkt om ' + t;
     }
     updateCounts();
+    buildSourcesPanel();
     applyFilter();
   } catch {
     document.getElementById('articleFeed').innerHTML = '<div class="state-box"><div class="state-box-title">Kon artikelen niet laden</div></div>';
   }
+}
+
+// Accordion toggle
+function toggleAccordion(id, header) {
+  const body = document.getElementById(id);
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  header.classList.toggle('open', !isOpen);
+}
+
+// Bronnen filter
+let selectedSources = new Set();
+
+function buildSourcesPanel() {
+  const sources = [...new Set(allArticles.map(a => a.source).filter(Boolean))].sort();
+  const panel = document.getElementById('sourcesPanel');
+  if (!panel) return;
+  panel.innerHTML = sources.map(s => `
+    <button class="panel-theme-item ${selectedSources.has(s) ? 'selected' : ''}"
+      onclick="toggleSourceFilter('${s.replace(/'/g, "\'")}', this)">
+      <span class="theme-left"><span class="theme-dot"></span>${s}</span>
+      <span class="panel-count">${allArticles.filter(a => a.source === s).length}</span>
+    </button>`).join('');
+}
+
+function toggleSourceFilter(source, el) {
+  if (selectedSources.has(source)) { selectedSources.delete(source); el.classList.remove('selected'); }
+  else { selectedSources.add(source); el.classList.add('selected'); }
+  displayedCount = PAGE_SIZE;
+  applyFilter();
 }
 
 function updateCounts() {
@@ -771,6 +849,7 @@ function applyFilter() {
   else if (activeScope === 'en') items = items.filter(a => (a.lang||'').toLowerCase() !== 'nl');
   else if (activeScope === 'opgeslagen') items = items.filter(a => savedLinks.includes(a.link));
   if (selectedThemes.size > 0) items = items.filter(a => [...selectedThemes].some(t => (a.tag||a.category||'').toLowerCase().includes(t.toLowerCase())));
+  if (selectedSources.size > 0) items = items.filter(a => selectedSources.has(a.source));
   filteredArticles = items;
   renderArticles();
 }
