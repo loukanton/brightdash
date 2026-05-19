@@ -6,12 +6,18 @@
 <title>BrightDash | Complex tech news. Made simple.</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta property="og:title" content="BrightDash | Complex tech news. Made simple.">
-<meta property="og:description" content="AI-analyses van het laatste tech nieuws voor Nederlandse managers en bestuurders.">
+<meta property="og:description" content="AI-analyses van het laatste tech nieuws voor Nederlandse organisaties en liefhebbers!">
 <meta property="og:url" content="https://brightdash.nl">
 <meta property="og:type" content="website">
+<meta property="og:image" content="https://brightdash.nl/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://brightdash.nl/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="BrightDash | Complex tech news. Made simple.">
-<meta name="description" content="AI-analyses van het laatste tech nieuws voor Nederlandse managers en bestuurders.">
+<meta name="twitter:description" content="AI-analyses van het laatste tech nieuws voor Nederlandse organisaties en liefhebbers!">
+<meta name="description" content="AI-analyses van het laatste tech nieuws voor Nederlandse organisaties en liefhebbers!">
 <link rel="manifest" href="/manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -952,7 +958,7 @@ function renderArticle(a, i) {
     ${analysisHtml}
     <div class="article-footer">
       ${a.link ? `<a class="read-link" href="${a.link}" target="_blank" rel="noopener">Lees artikel</a>` : ''}
-      ${!analyseOn ? `<button class="analyse-btn ${a.insight ? 'done' : ''}" id="abtn-${id}" data-link="${(a.link||'').replace(/"/g,'&quot;')}" onclick="${a.insight ? `toonAnalyse('${(a.link||'').replace(/'/g,"\\'")}', this)` : `analyseArtikel('${(a.link||'').replace(/'/g,"\\'")}', this)`}">${a.insight ? '✦ Made simple' : '✦ Make it simple'}</button>` : ''}
+      ${!analyseOn ? `<button class="analyse-btn" id="abtn-${id}" data-link="${(a.link||'').replace(/"/g,'&quot;')}" onclick="${a.insight ? `toonAnalyse('${(a.link||'').replace(/'/g,"\\'")}', this)` : `analyseArtikel('${(a.link||'').replace(/'/g,"\\'")}', this)`}">✦ Make it simple</button>` : ''}
     </div>
   </article>`;
 }
