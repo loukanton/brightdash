@@ -39,6 +39,7 @@ const IRRELEVANT_PATTERNS = [
   /dingo/i, /cat feeder/i, /pet food/i, /gardening tip/i,
   /travel tip/i, /vacation/i, /hotel review/i, /restaurant review/i,
   /lottery/i, /casino/i, /gambling/i,
+  /promo code/i, /coupon code/i, /% off/i, /discount/i, /deal alert/i, /best.*deal/i, /saving/i, /voucher/i, /offer/i,
   /movie review/i, /tv review/i, /album review/i,
 ];
 
@@ -57,6 +58,8 @@ function parseItems(xml, feedName, lang, tag) {
     const date  = extractTag(block, 'pubDate') || extractTag(block, 'published') || new Date().toISOString();
     if (!title || !link) continue;
     if (!isArticleRelevant(title, desc)) continue;
+    // Filter coupon/promo URLs direct
+    if (/coupon|promo.?code|discount|turbotax|voucher/i.test(link)) continue;
     items.push({ title, link, description: desc, pubDate: date, source: feedName, lang, tag });
   }
   return items;
