@@ -231,6 +231,8 @@
   #updatedLabel { display: none !important; }
   .feed-title { font-family: 'Lora', serif; font-size: 22px; font-weight: 700; color: var(--ink); flex: 1; min-width: 80px; }
   .feed-count { font-size: 12px; color: var(--muted); }
+  .trending-pill { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gold); border: 1px solid var(--gold-border); background: var(--gold-pale); cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; }
+  .trending-pill:hover { background: var(--gold); color: var(--white); }
   .toolbar-group { display: flex; background: var(--bg-2); border: 1px solid var(--rule); border-radius: 5px; padding: 2px; gap: 1px; }
   .toolbar-btn { padding: 5px 11px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; color: var(--muted); cursor: pointer; border: none; background: none; font-family: 'Instrument Sans', sans-serif; transition: all 0.12s; white-space: nowrap; }
   .toolbar-btn:hover { color: var(--ink); }
@@ -287,6 +289,8 @@
   .read-link:hover { background: var(--gold-pale); }
   .read-link::after { content: ' →'; }
   .analyse-btn { font-size: 13px; font-weight: 600; color: var(--ink-3); background: var(--bg-2); border: 1px solid var(--rule); padding: 7px 16px; border-radius: 5px; cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; }
+  .share-btn { font-size: 13px; font-weight: 600; color: var(--muted); background: none; border: 1px solid var(--rule); padding: 7px 16px; border-radius: 5px; cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; }
+  .share-btn:hover { border-color: var(--gold); color: var(--gold); }
   .analyse-btn:hover { border-color: var(--gold); color: var(--gold); }
   .analyse-btn.done { background: var(--gold); border-color: var(--gold); color: var(--white); }
 
@@ -578,6 +582,7 @@
 
   <!-- Feed -->
   <div class="feed-wrapper">
+    <div id="trendingBar" style="display:none;align-items:center;gap:6px;margin-bottom:12px;flex-wrap:wrap;"></div>
     <div class="feed-toolbar">
       <span class="feed-title" id="feedTitle">Alles</span>
       <div style="flex:1"></div>
@@ -690,7 +695,59 @@ let analyseOn = false;
 let panelOpen = false;
 let savedLinks = JSON.parse(localStorage.getItem('bd_saved') || '[]');
 
-document.addEventListener('DOMContentLoaded', () => { initTheme(); loadFeed(); });
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  restoreFilters();
+  loadFeed();
+});
+
+// ── Filter persistentie ──
+function restoreFilters() {
+  const saved = localStorage.getItem('bd_filters');
+  if (!saved) return;
+  try {
+    const f = JSON.parse(saved);
+    if (f.scope) {
+      activeScope = f.scope;
+      document.querySelectorAll('.panel-item').forEach(b => {
+        const onclick = b.getAttribute('onclick') || '';
+        if (onclick.includes("'" + f.scope + "'")) b.classList.add('active');
+        else b.classList.remove('active');
+      });
+    }
+    if (f.themes && Array.isArray(f.themes)) {
+      f.themes.forEach(t => {
+        selectedThemes.add(t);
+        const el = document.getElementById('theme-' + t);
+        if (el) el.classList.add('selected');
+      });
+    }
+    if (f.sort) {
+      activeSort = f.sort;
+      document.querySelectorAll('.panel-toggle-btn').forEach(b => {
+        if (b.id === 'psort-' + f.sort) b.classList.add('active');
+        else if (b.id && b.id.startsWith('psort-')) b.classList.remove('active');
+      });
+    }
+    if (f.view) {
+      activeView = f.view;
+      document.getElementById('articleFeed')?.classList.toggle('grid', f.view === 'grid');
+      document.querySelectorAll('.panel-toggle-btn').forEach(b => {
+        if (b.id === 'pview-' + f.view) b.classList.add('active');
+        else if (b.id && b.id.startsWith('pview-')) b.classList.remove('active');
+      });
+    }
+  } catch {}
+}
+
+function saveFilters() {
+  localStorage.setItem('bd_filters', JSON.stringify({
+    scope: activeScope,
+    themes: [...selectedThemes],
+    sort: activeSort,
+    view: activeView
+  }));
+}
 
 function toggleTheme() {
   const dark = document.body.classList.toggle('dark');
@@ -779,6 +836,7 @@ async function loadFeed() {
     }
     updateCounts();
     buildSourcesPanel();
+    renderTrending(allArticles);
     applyFilter();
   } catch {
     document.getElementById('articleFeed').innerHTML = '<div class="state-box"><div class="state-box-title">Kon artikelen niet laden</div></div>';
@@ -883,6 +941,7 @@ function applyFilter() {
   if (selectedThemes.size > 0) items = items.filter(a => [...selectedThemes].some(t => (a.tag||a.category||'').toLowerCase().includes(t.toLowerCase())));
   if (selectedSources.size > 0) items = items.filter(a => selectedSources.has(a.source));
   filteredArticles = items;
+  saveFilters();
   renderArticles();
 }
 
@@ -915,6 +974,52 @@ function appendArticles(from, to) {
   feed.appendChild(frag);
   document.getElementById('loadMoreContainer').style.display = filteredArticles.length > displayedCount ? 'block' : 'none';
   if (analyseOn) toAppend.filter(a => !a.insight && a.link).forEach(a => lazyLoadAnalysis(a));
+}
+
+// ── Trending ──
+function detectTrending(articles) {
+  const wordCount = {};
+  const stopwords = new Set(['de','het','een','van','in','op','aan','voor','met','is','dat','dit','zijn','er','te','en','of','maar','om','bij','uit','door','ook','nog','al','als','naar','zo','dan','wat','wie','hoe','meer','wel','niet','over','heeft','wordt','wordt','werd','kunnen','moet','kan','wil','gaat','wordt','heeft','zijn']);
+
+  articles.forEach(a => {
+    const words = (a.title || '').toLowerCase()
+      .replace(/[^a-z0-9\s]/g, '')
+      .split(/\s+/)
+      .filter(w => w.length > 4 && !stopwords.has(w));
+    words.forEach(w => {
+      if (!wordCount[w]) wordCount[w] = { count: 0, sources: new Set(), links: [] };
+      wordCount[w].count++;
+      wordCount[w].sources.add(a.source);
+      wordCount[w].links.push(a.link);
+    });
+  });
+
+  // Trending = woord in 3+ artikelen van 2+ bronnen
+  const trending = Object.entries(wordCount)
+    .filter(([w, d]) => d.count >= 3 && d.sources.size >= 2)
+    .sort((a, b) => b[1].count - a[1].count)
+    .slice(0, 5)
+    .map(([word, data]) => ({ word, count: data.count, sources: data.sources.size }));
+
+  return trending;
+}
+
+function renderTrending(articles) {
+  const trending = detectTrending(articles);
+  const el = document.getElementById('trendingBar');
+  if (!el || trending.length === 0) return;
+  el.innerHTML = '<span style="font-size:11px;color:var(--muted);font-weight:600;margin-right:8px;">TRENDING</span>' +
+    trending.map(t => `<button class="trending-pill" onclick="filterTrending('${t.word}')">${t.word} <span style="opacity:0.6;font-size:10px">${t.count}</span></button>`).join('');
+  el.style.display = 'flex';
+}
+
+function filterTrending(word) {
+  const kw = word.toLowerCase();
+  filteredArticles = allArticles.filter(a => (a.title||'').toLowerCase().includes(kw));
+  displayedCount = PAGE_SIZE;
+  document.getElementById('feedTitle').textContent = '🔥 ' + word;
+  document.getElementById('feedCount').textContent = filteredArticles.length + ' berichten';
+  renderArticles();
 }
 
 function renderArticles() {
@@ -981,6 +1086,7 @@ function renderArticle(a, i) {
     ${analysisHtml}
     <div class="article-footer">
       ${a.link ? `<a class="read-link" href="${a.link}" target="_blank" rel="noopener">Lees artikel</a>` : ''}
+      <button class="share-btn" onclick="deelArtikel('${sanitize(a.title||'')}', '${sanitize(a.link||'')}', '${sanitize(a.source||'')}')" title="Deel dit artikel">↗ Deel</button>
       ${!analyseOn ? `<button class="analyse-btn" id="abtn-${id}" data-link="${(a.link||'').replace(/"/g,'&quot;')}" onclick="${a.insight ? `toonAnalyse('${(a.link||'').replace(/'/g,"\\'")}', this)` : `analyseArtikel('${(a.link||'').replace(/'/g,"\\'")}', this)`}">✦ Make it simple</button>` : ''}
     </div>
   </article>`;
@@ -1191,6 +1297,31 @@ document.addEventListener('DOMContentLoaded', () => { initOnboarding(); });
 function sanitize(str) {
   if (!str) return '';
   return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+// ── Delen ──
+function deelArtikel(title, link, source) {
+  const text = `${title} — via BrightDash (${source})
+${link}
+
+BrightDash: Complex tech news. Made simple. → https://brightdash.nl`;
+  if (navigator.share) {
+    navigator.share({ title: title, text: `${title} via BrightDash`, url: link }).catch(() => {});
+  } else {
+    // Fallback: kopieer naar klembord
+    const el = document.createElement('textarea');
+    el.value = text;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    // Toon korte bevestiging
+    const toast = document.createElement('div');
+    toast.textContent = 'Link gekopieerd!';
+    toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:9999;animation:fadeIn 0.2s ease';
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 2000);
+  }
 }
 
 function safeId(str) { try { return btoa(String(str)).replace(/[^a-z0-9]/gi,''); } catch { return 'id'+Math.random().toString(36).slice(2); } }
