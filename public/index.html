@@ -739,7 +739,7 @@ async function loadFeed() {
     const visitEl = document.getElementById('visitCount');
     if (visitEl) visitEl.textContent = displayVisits.toLocaleString('nl-NL') + ' lezers';
     const menuVisitEl = document.getElementById('menuVisitCount');
-    if (menuVisitEl) menuVisitEl.textContent = '👥 ' + displayVisits.toLocaleString('nl-NL') + ' lezers';
+    if (menuVisitEl) menuVisitEl.innerHTML = '<span style="color:var(--gold);font-weight:600">👥 ' + displayVisits.toLocaleString('nl-NL') + ' lezers</span>';
 
     if (data.updatedAt) {
       const t = new Date(data.updatedAt).toLocaleTimeString('nl-NL', { hour:'2-digit', minute:'2-digit' });
