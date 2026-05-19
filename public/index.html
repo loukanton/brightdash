@@ -941,8 +941,8 @@ function renderArticle(a, i) {
       ${tag ? `<span class="article-category-badge">${tag}</span>` : ''}
       <button class="save-btn ${isSaved?'saved':''}" onclick="toggleSave('${(a.link||'').replace(/'/g,"\\'")}',this)">${isSaved?'★':'☆'}</button>
     </div>
-    <a class="article-title" href="${a.link||'#'}" target="_blank" rel="noopener">${a.title||''}</a>
-    ${desc ? `<p class="article-description">${desc}</p>` : ''}
+    <a class="article-title" href="${sanitize(a.link)||'#'}" target="_blank" rel="noopener">${sanitize(a.title)||''}</a>
+    ${desc ? `<p class="article-description">${sanitize(desc)}</p>` : ''}
     ${analysisHtml}
     <div class="article-footer">
       ${a.link ? `<a class="read-link" href="${a.link}" target="_blank" rel="noopener">Lees artikel</a>` : ''}
@@ -1152,6 +1152,11 @@ function initOnboarding() {
 }
 
 document.addEventListener('DOMContentLoaded', () => { initOnboarding(); });
+
+function sanitize(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
 
 function safeId(str) { try { return btoa(String(str)).replace(/[^a-z0-9]/gi,''); } catch { return 'id'+Math.random().toString(36).slice(2); } }
 </script>
