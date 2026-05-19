@@ -28,6 +28,25 @@ function extractTag(xml, tag) {
   return m ? (m[1] || m[2] || '').trim() : '';
 }
 
+// Irrelevante artikelen filteren
+const IRRELEVANT_PATTERNS = [
+  /promo\s*code/i, /coupon/i, /discount code/i, /% off/i, /deal of the/i,
+  /best deals/i, /shopping guide/i, /gift guide/i, /black friday/i,
+  /cyber monday/i, /prime day/i, /sale alert/i, /voucher/i,
+  /recept[e]?/i, /kook/i, /recipe/i, /cooking/i,
+  /horoscope/i, /celebrity/i, /fashion week/i, /red carpet/i,
+  /sports score/i, /match result/i, /goal.*minute/i,
+  /dingo/i, /cat feeder/i, /pet food/i, /gardening tip/i,
+  /travel tip/i, /vacation/i, /hotel review/i, /restaurant review/i,
+  /lottery/i, /casino/i, /gambling/i,
+  /movie review/i, /tv review/i, /album review/i,
+];
+
+function isArticleRelevant(title, description) {
+  const text = (title + ' ' + (description || '')).toLowerCase();
+  return !IRRELEVANT_PATTERNS.some(pattern => pattern.test(text));
+}
+
 function parseItems(xml, feedName, lang, tag) {
   const items = [];
   const blocks = xml.match(/<item[\s>][\s\S]*?<\/item>/gi) || [];
@@ -37,6 +56,7 @@ function parseItems(xml, feedName, lang, tag) {
     const desc  = extractTag(block, 'description').replace(/<[^>]+>/g,'').slice(0, 600);
     const date  = extractTag(block, 'pubDate') || extractTag(block, 'published') || new Date().toISOString();
     if (!title || !link) continue;
+    if (!isArticleRelevant(title, desc)) continue;
     items.push({ title, link, description: desc, pubDate: date, source: feedName, lang, tag });
   }
   return items;

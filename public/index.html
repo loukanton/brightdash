@@ -579,14 +579,14 @@
   <div class="sheet-section">
     <span class="sheet-label">Thema</span>
     <div class="sheet-theme-grid">
-      <button class="sheet-theme-btn" onclick=\"mobileToggleTheme('alles', this); markSheetChanged()\" data-filter="alles">Alles</button>
-      <button class="sheet-theme-btn" onclick=\"mobileToggleTheme('AI', this); markSheetChanged()\" data-filter="AI">AI</button>
-      <button class="sheet-theme-btn" onclick=\"mobileToggleTheme('Tech', this); markSheetChanged()\" data-filter="Tech">Tech</button>
-      <button class="sheet-theme-btn" onclick=\"mobileToggleTheme('Overheid', this); markSheetChanged()\" data-filter="Overheid">Overheid</button>
-      <button class="sheet-theme-btn" onclick=\"mobileToggleTheme('Media', this); markSheetChanged()\" data-filter="Media">Media</button>
-      <button class="sheet-theme-btn" onclick=\"mobileToggleTheme('Organisatie', this); markSheetChanged()\" data-filter="Organisatie">Org.</button>
-      <button class="sheet-theme-btn" onclick=\"mobileToggleTheme('WoW', this); markSheetChanged()\" data-filter="WoW">WoW</button>
-      <button class="sheet-theme-btn" onclick=\"mobileToggleTheme('HR', this); markSheetChanged()\" data-filter="HR">HR</button>
+      <button class="sheet-theme-btn" onclick="mobileToggleTheme('alles', this); markSheetChanged()" data-filter="alles">Alles</button>
+      <button class="sheet-theme-btn" onclick="mobileToggleTheme('AI', this); markSheetChanged()" data-filter="AI">AI</button>
+      <button class="sheet-theme-btn" onclick="mobileToggleTheme('Tech', this); markSheetChanged()" data-filter="Tech">Tech</button>
+      <button class="sheet-theme-btn" onclick="mobileToggleTheme('Overheid', this); markSheetChanged()" data-filter="Overheid">Overheid</button>
+      <button class="sheet-theme-btn" onclick="mobileToggleTheme('Media', this); markSheetChanged()" data-filter="Media">Media</button>
+      <button class="sheet-theme-btn" onclick="mobileToggleTheme('Organisatie', this); markSheetChanged()" data-filter="Organisatie">Org.</button>
+      <button class="sheet-theme-btn" onclick="mobileToggleTheme('WoW', this); markSheetChanged()" data-filter="WoW">WoW</button>
+      <button class="sheet-theme-btn" onclick="mobileToggleTheme('HR', this); markSheetChanged()" data-filter="HR">HR</button>
     </div>
   </div>
   <div class="sheet-footer">
@@ -781,6 +781,22 @@ function setView(view, el) {
   el.closest('.toolbar-group, .sheet-sort-row').querySelectorAll('.toolbar-btn, .sheet-btn').forEach(b => b.classList.remove('active'));
   el.classList.add('active');
   document.getElementById('articleFeed').classList.toggle('grid', view === 'grid');
+}
+
+function appendArticles(from, to) {
+  const toAppend = filteredArticles.slice(from, to);
+  if (toAppend.length === 0) return;
+  const feed = document.getElementById('articleFeed');
+  const frag = document.createDocumentFragment();
+  toAppend.forEach((a, i) => {
+    const div = document.createElement('div');
+    div.innerHTML = renderArticle(a, from + i);
+    const article = div.firstElementChild;
+    frag.appendChild(article);
+  });
+  feed.appendChild(frag);
+  document.getElementById('loadMoreContainer').style.display = filteredArticles.length > displayedCount ? 'block' : 'none';
+  if (analyseOn) toAppend.filter(a => !a.insight && a.link).forEach(a => lazyLoadAnalysis(a));
 }
 
 function renderArticles() {
@@ -980,6 +996,7 @@ function mobilePill(filter, el) {
 function markSheetChanged() {
   sheetChanged = true;
   updateApplyBtn();
+  console.log('Sheet changed, apply btn should be active');
 }
 
 function mobileToggleTheme(filter, el) {
@@ -1029,9 +1046,9 @@ window.addEventListener('scroll', () => {
   const pageHeight = document.documentElement.scrollHeight;
   if (scrollBottom >= pageHeight - 300 && filteredArticles.length > displayedCount) {
     loadingMore = true;
+    const prevCount = displayedCount;
     displayedCount += PAGE_SIZE;
-    renderArticles();
-    // Kleine vertraging om dubbel laden te voorkomen
+    appendArticles(prevCount, displayedCount);
     setTimeout(() => { loadingMore = false; }, 500);
   }
 });
@@ -1060,7 +1077,7 @@ function safeId(str) { try { return btoa(String(str)).replace(/[^a-z0-9]/gi,'');
   <div class="onboarding-card">
     <div class="onboarding-logo"><span style="font-weight:700">Bright</span><span style="font-style:italic;color:var(--gold)">Dash</span></div>
     <h2 class="onboarding-title">Complex tech news.<br>Made simple.</h2>
-    <p class="onboarding-text">BrightDash verzamelt het laatste tech-, AI- en organisatienieuws voor Nederlandse managers. Klik op <strong>✦ Simple</strong> om direct een AI-analyse te zien bij elk artikel.</p>
+    <p class="onboarding-text">BrightDash verzamelt het laatste nieuws over AI en tech wat relevant is voor het Nederlandse bedrijfsleven. Klik op <strong>✦ Simple</strong> om direct een AI-analyse te zien bij elk artikel, snel en to the point.</p>
     <div class="onboarding-steps">
       <div class="onboarding-step"><span class="onboarding-icon">✦</span><span>Klik <strong>Simple</strong> voor AI-analyses</span></div>
       <div class="onboarding-step"><span class="onboarding-icon">☰</span><span>Filter op thema via het menu</span></div>
