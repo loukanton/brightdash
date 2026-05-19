@@ -538,7 +538,8 @@
     <div class="panel-accordion-body" id="overAccordion">
       <div style="padding:8px 16px 20px;">
         <div style="font-family:'Lora',serif;font-size:12px;color:var(--muted);margin-bottom:6px;">a <strong style='color:var(--ink)'>Bright</strong><span style='color:var(--gold);font-style:italic'>House</span> product</div>
-        <div style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:10px;">BrightDash toont artikelen op basis van publiek beschikbare RSS-feeds. Alle rechten op originele content berusten bij de respectievelijke uitgevers.</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:6px;">BrightDash toont artikelen op basis van publiek beschikbare RSS-feeds. Alle rechten op originele content berusten bij de respectievelijke uitgevers.</div>
+        <div id="menuVisitCount" style="font-size:11px;color:var(--muted);margin-bottom:10px;"></div>
         <a href="/privacy" style="font-size:11px;color:var(--gold);text-decoration:none;margin-right:12px;">Privacybeleid</a>
         <a href="/disclaimer" style="font-size:11px;color:var(--gold);text-decoration:none;margin-right:12px;">Disclaimer</a>
         <a href="mailto:media@brighthouse.consulting" style="font-size:11px;color:var(--gold);text-decoration:none;">Contact</a>
@@ -725,7 +726,7 @@ async function loadFeed() {
     const newCount = lastVisit ? allArticles.filter(a => new Date(a.pubDate) > new Date(lastVisit)).length : 0;
     if (newCount > 0) {
       const badge = document.createElement('span');
-      badge.style.cssText = 'background:var(--gold);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;margin-left:8px;';
+      badge.style.cssText = 'background:var(--gold);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;margin-left:8px;vertical-align:middle;display:inline-flex;align-items:center;line-height:1;';
       badge.textContent = newCount + ' nieuw';
       document.querySelector('.masthead-brand').appendChild(badge);
     }
@@ -737,6 +738,8 @@ async function loadFeed() {
     const displayVisits = visits + 500;
     const visitEl = document.getElementById('visitCount');
     if (visitEl) visitEl.textContent = displayVisits.toLocaleString('nl-NL') + ' lezers';
+    const menuVisitEl = document.getElementById('menuVisitCount');
+    if (menuVisitEl) menuVisitEl.textContent = '👥 ' + displayVisits.toLocaleString('nl-NL') + ' lezers';
 
     if (data.updatedAt) {
       const t = new Date(data.updatedAt).toLocaleTimeString('nl-NL', { hour:'2-digit', minute:'2-digit' });
@@ -903,6 +906,8 @@ function renderArticles() {
 function renderArticle(a, i) {
   const maxDesc = activeView === 'grid' ? 120 : 320;
   const date = a.pubDate ? new Date(a.pubDate).toLocaleString('nl-NL', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }) : '';
+  const lastVisit = localStorage.getItem('bd_lastvisit');
+  const isNew = lastVisit && a.pubDate && new Date(a.pubDate) > new Date(lastVisit);
   const tag = a.tag || a.category || '';
   const rawDesc = a.description ? a.description.replace(/<[^>]+>/g,'') : '';
   let desc = '';
@@ -938,6 +943,7 @@ function renderArticle(a, i) {
       <span class="article-source">${a.source||''}</span>
       <div class="article-dot"></div>
       <span class="article-date">${date}</span>
+      ${isNew ? '<span style="background:var(--gold);color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;margin-left:4px;vertical-align:middle;">NIEUW</span>' : ''}
       ${tag ? `<span class="article-category-badge">${tag}</span>` : ''}
       <button class="save-btn ${isSaved?'saved':''}" onclick="toggleSave('${(a.link||'').replace(/'/g,"\\'")}',this)">${isSaved?'★':'☆'}</button>
     </div>
