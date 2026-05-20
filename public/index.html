@@ -1070,7 +1070,14 @@ function renderArticle(a, i) {
   const lastVisit = localStorage.getItem('bd_lastvisit');
   const isNew = lastVisit && a.pubDate && new Date(a.pubDate) > new Date(lastVisit);
   const tag = a.tag || a.category || '';
-  const rawDesc = a.description ? a.description.replace(/<[^>]+>/g,'') : '';
+  // Strip HTML maar haal eerst afbeelding erop uit als geen image beschikbaar
+  const rawHtml = a.description || '';
+  if (!a.image) {
+    const imgMatch = rawHtml.match(/<img[^>]+src=["']([^"']+)["']/i) ||
+                     rawHtml.match(/&lt;img[^&]+src=["']([^"']+)["']/i);
+    if (imgMatch) a.image = imgMatch[1];
+  }
+  const rawDesc = rawHtml.replace(/<[^>]+>/g,'').replace(/&lt;[^&]+&gt;/g,'').replace(/&amp;/g,'&').replace(/&nbsp;/g,' ').trim();
   let desc = '';
   if (rawDesc) {
     if (rawDesc.length <= maxDesc) {
