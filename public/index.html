@@ -233,6 +233,7 @@
   .feed-count { font-size: 12px; color: var(--muted); }
   .trending-pill { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gold); border: 1px solid var(--gold-border); background: var(--gold-pale); cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; }
   .trending-pill:hover { background: var(--gold); color: var(--white); }
+  .trending-pill.active { background: var(--gold); color: var(--white); }
   .toolbar-group { display: flex; background: var(--bg-2); border: 1px solid var(--rule); border-radius: 5px; padding: 2px; gap: 1px; }
   .toolbar-btn { padding: 5px 11px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; color: var(--muted); cursor: pointer; border: none; background: none; font-family: 'Instrument Sans', sans-serif; transition: all 0.12s; white-space: nowrap; }
   .toolbar-btn:hover { color: var(--ink); }
@@ -289,9 +290,10 @@
   .read-link:hover { background: var(--gold-pale); }
   .read-link::after { content: ' →'; }
   .analyse-btn { font-size: 13px; font-weight: 600; color: var(--ink-3); background: var(--bg-2); border: 1px solid var(--rule); padding: 7px 16px; border-radius: 5px; cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; }
-  .share-btn { font-size: 13px; font-weight: 600; color: var(--gold); background: none; border: 1px solid var(--gold-border); padding: 7px 16px; border-radius: 5px; cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; margin-left: auto; }
+  .share-btn { font-size: 13px; font-weight: 600; color: var(--gold); background: none; border: 1px solid var(--gold-border); padding: 7px 14px; border-radius: 5px; cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; margin-left: auto; display: inline-flex; align-items: center; gap: 4px; line-height: 1; }
   .share-btn:hover { background: var(--gold-pale); }
-  @media (max-width: 600px) { .share-btn .share-label { display: none; } }
+  .share-icon { font-size: 14px; line-height: 1; display: inline-block; }
+  @media (max-width: 600px) { .share-btn .share-label { display: none; } .share-btn { padding: 7px 12px; } }
   .analyse-btn:hover { border-color: var(--gold); color: var(--gold); }
   .analyse-btn.done { background: var(--gold); border-color: var(--gold); color: var(--white); }
 
@@ -1010,17 +1012,25 @@ function renderTrending(articles) {
   const el = document.getElementById('trendingBar');
   if (!el || trending.length === 0) return;
   el.innerHTML = '<span style="font-size:11px;color:var(--muted);font-weight:600;margin-right:8px;">TRENDING</span>' +
-    trending.map(t => `<button class="trending-pill" onclick="filterTrending('${t.word}')">${t.word} <span style="opacity:0.6;font-size:10px">${t.count}</span></button>`).join('');
+    trending.map(t => `<button class="trending-pill" onclick="filterTrending('${t.word}', this)">${t.word} <span style="opacity:0.6;font-size:10px">${t.count}</span></button>`).join('') + '<button class="trending-pill" onclick="resetTrending()" style="border-color:var(--muted);color:var(--muted);background:none">✕ Alles</button>';
   el.style.display = 'flex';
 }
 
-function filterTrending(word) {
+function filterTrending(word, el) {
   const kw = word.toLowerCase();
   filteredArticles = allArticles.filter(a => (a.title||'').toLowerCase().includes(kw));
   displayedCount = PAGE_SIZE;
   document.getElementById('feedTitle').textContent = '🔥 ' + word;
-  document.getElementById('feedCount').textContent = filteredArticles.length + ' berichten';
+  document.querySelectorAll('.trending-pill').forEach(b => b.classList.remove('active'));
+  if (el) el.classList.add('active');
   renderArticles();
+}
+
+function resetTrending() {
+  displayedCount = PAGE_SIZE;
+  document.querySelectorAll('.trending-pill').forEach(b => b.classList.remove('active'));
+  applyFilter();
+  updateFeedTitle();
 }
 
 function renderArticles() {
@@ -1088,7 +1098,7 @@ function renderArticle(a, i) {
     <div class="article-footer">
       ${a.link ? `<a class="read-link" href="${a.link}" target="_blank" rel="noopener">Lees artikel</a>` : ''}
       ${!analyseOn ? `<button class="analyse-btn" id="abtn-${id}" data-link="${(a.link||'').replace(/"/g,'&quot;')}" onclick="${a.insight ? `toonAnalyse('${(a.link||'').replace(/'/g,"\\'")}', this)` : `analyseArtikel('${(a.link||'').replace(/'/g,"\\'")}', this)`}">✦ Make it simple</button>` : ''}
-      <button class="share-btn" onclick="deelArtikel('${sanitize(a.title||'')}', '${sanitize(a.link||'')}', '${sanitize(a.source||'')}')" title="Deel dit artikel">↗<span class="share-label"> Deel</span></button>
+      <button class="share-btn" onclick="deelArtikel('${sanitize(a.title||'')}', '${sanitize(a.link||'')}', '${sanitize(a.source||'')}')" title="Deel dit artikel"><span class="share-icon">↗</span><span class="share-label"> Deel</span></button>
     </div>
   </article>`;
 }
