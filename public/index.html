@@ -301,8 +301,9 @@
   .read-link::after { content: ' →'; }
   .analyse-btn { font-size: 13px; font-weight: 600; color: var(--ink-3); background: var(--bg-2); border: 1px solid var(--rule); padding: 7px 16px; border-radius: 5px; cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; }
   .analyse-btn:hover { border-color: var(--gold); color: var(--gold); }
-  .deel-btn { font-size: 13px; font-weight: 600; color: var(--gold); background: none; border: 1px solid var(--gold-border); padding: 7px 14px; border-radius: 5px; cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; margin-left: auto; }
+  .deel-btn { font-size: 13px; font-weight: 600; color: var(--gold); background: none; border: 1px solid var(--gold-border); padding: 7px 14px; border-radius: 5px; cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; margin-left: auto; display: inline-flex; align-items: center; gap: 5px; }
   .deel-btn:hover { background: var(--gold-pale); }
+  @media (max-width: 600px) { .deel-label { display: none; } .deel-btn { padding: 7px 10px; } }
   .analyse-btn.done { background: var(--gold); border-color: var(--gold); color: var(--white); }
 
   /* Load more */
@@ -1123,7 +1124,7 @@ function renderArticle(a, i) {
     <div class="article-footer">
       ${a.link ? `<a class="read-link" href="${a.link}" target="_blank" rel="noopener">Lees artikel</a>` : ''}
       ${!analyseOn ? `<button class="analyse-btn ${a.insight ? 'done' : ''}" id="abtn-${id}" data-link="${(a.link||'').replace(/"/g,'&quot;')}" onclick="${a.insight ? `toonAnalyse('${(a.link||'').replace(/'/g,"\\'")}', this)` : `analyseArtikel('${(a.link||'').replace(/'/g,"\\'")}', this)`}">✦ Make it simple</button>` : ''}
-      ${a.insight ? `<button class="deel-btn" onclick="deelArtikelTekst('${sanitize(a.link||'')}', '${sanitize(a.title||'')}', '${sanitize(a.source||'')}')">↗ Deel</button>` : ''}
+      ${a.insight ? `<button class="deel-btn" onclick="deelArtikelTekst('${sanitize(a.link||'')}', '${sanitize(a.title||'')}', '${sanitize(a.source||'')}')" title="Deel"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 11.5L11.5 1.5M11.5 1.5H4.5M11.5 1.5V8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="deel-label"> Deel</span></button>` : ''}
     </div>
   </article>`;
 }
