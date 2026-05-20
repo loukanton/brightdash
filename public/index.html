@@ -25,6 +25,7 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#1A1714">
 <link rel="icon" href="/favicon.ico" type="image/x-icon">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -300,11 +301,13 @@
   .read-link:hover { background: var(--gold-pale); transform: translateX(2px); }
   .read-link::after { content: ' →'; }
   .analyse-btn { font-size: 13px; font-weight: 600; color: var(--ink-3); background: var(--bg-2); border: 1px solid var(--rule); padding: 7px 16px; border-radius: 5px; cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; }
-  .share-btn { font-size: 13px; font-weight: 600; color: var(--gold); background: none; border: 1px solid var(--gold-border); padding: 7px 14px; border-radius: 5px; cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; display: inline-flex; align-items: center; gap: 4px; line-height: 1; }
+  .share-btn { font-size: 13px; font-weight: 600; color: var(--gold); background: none; border: 1px solid var(--gold-border); padding: 7px 14px; border-radius: 5px; cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; display: inline-flex; align-items: center; gap: 4px; line-height: 1; flex-shrink: 0; }
   .share-btn:hover { background: var(--gold-pale); }
   .share-icon { font-size: 14px; line-height: 1; display: inline-block; }
   @media (max-width: 600px) { .share-btn .share-label { display: none; } .share-btn { padding: 7px 12px; } }
   .analyse-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .share-card-btn { font-size: 13px; font-weight: 600; color: var(--gold); background: none; border: 1px solid var(--gold-border); padding: 7px 14px; border-radius: 5px; cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; margin-left: auto; }
+  .share-card-btn:hover { background: var(--gold-pale); }
   .analyse-btn.done { background: var(--gold); border-color: var(--gold); color: var(--white); }
 
   /* Load more */
@@ -1123,11 +1126,9 @@ function renderArticle(a, i) {
     ${desc ? `<p class="article-description">${sanitize(desc)}</p>` : ''}
     ${analysisHtml}
     <div class="article-footer">
-      <div style="display:flex;gap:6px;align-items:center;flex-shrink:0">
       ${a.link ? `<a class="read-link" href="${a.link}" target="_blank" rel="noopener">Lees artikel</a>` : ''}
-      ${!analyseOn ? `<button class="analyse-btn" id="abtn-${id}" data-link="${(a.link||'').replace(/"/g,'&quot;')}" onclick="${a.insight ? `toonAnalyse('${(a.link||'').replace(/'/g,"\\'")}', this)` : `analyseArtikel('${(a.link||'').replace(/'/g,"\\'")}', this)`}">✦ Make it simple</button>` : ''}
-      </div>
-      <button class="share-btn" onclick="deelArtikel('${sanitize(a.title||'')}', '${sanitize(a.link||'')}', '${sanitize(a.source||'')}')" title="Deel dit artikel"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 11.5L11.5 1.5M11.5 1.5H4.5M11.5 1.5V8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="share-label"> Deel</span></button>
+      ${!analyseOn ? `<button class="analyse-btn ${a.insight ? 'done' : ''}" id="abtn-${id}" data-link="${(a.link||'').replace(/"/g,'&quot;')}" onclick="${a.insight ? `toonAnalyse('${(a.link||'').replace(/'/g,"\\'")}', this)` : `analyseArtikel('${(a.link||'').replace(/'/g,"\\'")}', this)`}">✦ Make it simple</button>` : ''}
+      ${a.insight ? `<button class="share-card-btn" onclick="deelAnalyseCard('${sanitize(a.link||'')}', '${sanitize(a.title||'')}', '${sanitize(a.source||'')}', '${sanitize(a.pubDate||'')}')" title="Deel als afbeelding">↗ Deel</button>` : ''}
     </div>
   </article>`;
 }
@@ -1379,6 +1380,67 @@ BrightDash: Complex tech news. Made simple. → https://brightdash.nl`;
   }
 }
 
+// ── Deel analyse als afbeelding ──
+async function deelAnalyseCard(link, title, source, pubDate) {
+  const article = allArticles.find(a => a.link === link);
+  if (!article || !article.insight) return;
+
+  // Vul de hidden card in
+  document.getElementById('scSource').textContent = source;
+  document.getElementById('scTitle').textContent = decodeHtml(title);
+
+  const kern = article.insight.match(/Kern:\s*(.+?)(?=
+Betekenis:|$)/s)?.[1]?.trim();
+  const betekenis = article.insight.match(/Betekenis:\s*(.+?)(?=
+Actie:|$)/s)?.[1]?.trim();
+  const actie = article.insight.match(/Actie:\s*(.+?)$/s)?.[1]?.trim();
+
+  document.getElementById('scAnalysis').innerHTML = `
+    ${kern ? `<div style="background:#EBF2FA;color:#1A4A7A;border:1px solid #C5DDEF;border-radius:6px;padding:10px 14px;font-size:13px;line-height:1.6;"><strong style="font-size:10px;text-transform:uppercase;letter-spacing:1px;opacity:0.6;display:block;margin-bottom:4px;">Kern</strong>${kern}</div>` : ''}
+    ${betekenis ? `<div style="background:#EBF5EE;color:#1A4A2A;border:1px solid #C0DFC8;border-radius:6px;padding:10px 14px;font-size:13px;line-height:1.6;"><strong style="font-size:10px;text-transform:uppercase;letter-spacing:1px;opacity:0.6;display:block;margin-bottom:4px;">Betekenis</strong>${betekenis}</div>` : ''}
+    ${actie ? `<div style="background:#FDF3E3;color:#6A3A00;border:1px solid #EAD4A0;border-radius:6px;padding:10px 14px;font-size:13px;line-height:1.6;"><strong style="font-size:10px;text-transform:uppercase;letter-spacing:1px;opacity:0.6;display:block;margin-bottom:4px;">Actie</strong>${actie}</div>` : ''}
+  `;
+
+  const card = document.getElementById('shareCardTemplate');
+  card.style.left = '-9999px';
+  card.style.display = 'block';
+
+  try {
+    const canvas = await html2canvas(card, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#FAF8F4',
+      width: 600,
+      logging: false
+    });
+
+    card.style.left = '-9999px';
+
+    // Probeer native share met afbeelding
+    canvas.toBlob(async (blob) => {
+      const file = new File([blob], 'brightdash-analyse.png', { type: 'image/png' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: decodeHtml(title) });
+      } else {
+        // Fallback: download de afbeelding
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'brightdash-analyse.png';
+        a.click();
+        URL.revokeObjectURL(url);
+        // Toast
+        const toast = document.createElement('div');
+        toast.textContent = 'Afbeelding opgeslagen!';
+        toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:9999;';
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2500);
+      }
+    }, 'image/png');
+  } catch(e) {
+    console.error('Screenshot fout:', e);
+  }
+}
+
 function safeId(str) { try { return btoa(String(str)).replace(/[^a-z0-9]/gi,''); } catch { return 'id'+Math.random().toString(36).slice(2); } }
 </script>
 <div class="progress-bar" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
@@ -1397,6 +1459,18 @@ function safeId(str) { try { return btoa(String(str)).replace(/[^a-z0-9]/gi,'');
     </div>
     <button class="onboarding-btn" onclick="closeOnboarding()">Aan de slag →</button>
   </div>
+</div>
+
+<!-- Hidden share card voor screenshot -->
+<div id="shareCardTemplate" style="position:fixed;left:-9999px;top:0;width:600px;background:#FAF8F4;padding:32px;font-family:'Instrument Sans',sans-serif;border-radius:12px;border:1px solid #E8E2D8;">
+  <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:20px;">
+    <div style="font-family:'Lora',serif;font-size:22px;font-weight:700;color:#1A1714;">Bright<span style="font-style:italic;color:#B8922A;">Dash</span></div>
+    <div style="font-size:11px;color:#8A8178;">Complex tech news. Made simple.</div>
+  </div>
+  <div id="scSource" style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:#8A8178;margin-bottom:8px;"></div>
+  <div id="scTitle" style="font-family:'Lora',serif;font-size:22px;font-weight:700;line-height:1.35;color:#1A1714;margin-bottom:20px;"></div>
+  <div id="scAnalysis" style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;"></div>
+  <div style="font-size:11px;color:#8A8178;border-top:1px solid #E8E2D8;padding-top:12px;">brightdash.nl</div>
 </div>
 
 </body>
