@@ -1119,12 +1119,12 @@ function renderArticle(a, i) {
       ${tag ? `<span class="article-category-badge">${tag}</span>` : ''}
       <button class="save-btn ${isSaved?'saved':''}" onclick="toggleSave('${(a.link||'').replace(/'/g,"\\'")}',this)">${isSaved?'★':'☆'}</button>
     </div>
-    <a class="article-title" href="${sanitize(a.link)||'#'}" target="_blank" rel="noopener">${sanitize(a.title)||''}</a>
+    <a class="article-title" href="${sanitize(a.link)||'#'}" target="_blank" rel="noopener">${sanitize(decodeHtml(a.title))||''}</a>
     ${desc ? `<p class="article-description">${sanitize(desc)}</p>` : ''}
     ${analysisHtml}
     <div class="article-footer">
-      ${a.link ? `<a class="read-link" href="${a.link}" target="_blank" rel="noopener">Lees artikel</a>` : ''}
-      ${!analyseOn ? `<button class="analyse-btn" id="abtn-${id}" data-link="${(a.link||'').replace(/"/g,'&quot;')}" onclick="${a.insight ? `toonAnalyse('${(a.link||'').replace(/'/g,"\\'")}', this)` : `analyseArtikel('${(a.link||'').replace(/'/g,"\\'")}', this)`}">✦ Make it simple</button>` : ''}
+      ${a.link ? `<a class="read-link" href="${a.link}" target="_blank" rel="noopener"><span class="btn-label">Lees artikel</span><span class="btn-icon-only">→</span></a>` : ''}
+      ${!analyseOn ? `<button class="analyse-btn" id="abtn-${id}" data-link="${(a.link||'').replace(/"/g,'&quot;')}" onclick="${a.insight ? `toonAnalyse('${(a.link||'').replace(/'/g,"\\'")}', this)` : `analyseArtikel('${(a.link||'').replace(/'/g,"\\'")}', this)`}"><span class="btn-label">✦ Make it simple</span><span class="btn-icon-only">✦</span></button>` : ''}
       <button class="share-btn" onclick="deelArtikel('${sanitize(a.title||'')}', '${sanitize(a.link||'')}', '${sanitize(a.source||'')}')" title="Deel dit artikel"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 11.5L11.5 1.5M11.5 1.5H4.5M11.5 1.5V8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="share-label"> Deel</span></button>
     </div>
   </article>`;
@@ -1334,6 +1334,18 @@ function initOnboarding() {
 }
 
 document.addEventListener('DOMContentLoaded', () => { initOnboarding(); });
+
+function decodeHtml(str) {
+  if (!str) return '';
+  return str
+    .replace(/&#8216;/g, '‘').replace(/&#8217;/g, '’')
+    .replace(/&#8220;/g, '“').replace(/&#8221;/g, '”')
+    .replace(/&#8211;/g, '–').replace(/&#8212;/g, '—')
+    .replace(/&#038;/g, '&').replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"').replace(/&#39;/g, "'")
+    .replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(n));
+}
 
 function sanitize(str) {
   if (!str) return '';
