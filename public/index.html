@@ -276,7 +276,7 @@
   .article-title:hover { color: var(--gold); }
   .article:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); transform: translateY(-1px); }
   @media (max-width: 600px) { .article:hover { transform: none; } }
-  .article-description { font-size: 15px; color: var(--ink-3); line-height: 1.75; margin-bottom: 18px; }
+  .article-description { font-size: 15px; color: var(--ink-3); line-height: 1.75; margin-bottom: 14px; }
 
   /* Analysis */
   @keyframes chipFadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
@@ -1122,9 +1122,11 @@ function renderArticle(a, i) {
     ${desc ? `<p class="article-description">${sanitize(desc)}</p>` : ''}
     ${analysisHtml}
     <div class="article-footer">
-      ${a.link ? `<a class="read-link" href="${a.link}" target="_blank" rel="noopener">Lees artikel</a>` : ''}
-      ${!analyseOn ? `<button class="analyse-btn ${a.insight ? 'done' : ''}" id="abtn-${id}" data-link="${(a.link||'').replace(/"/g,'&quot;')}" onclick="${a.insight ? `toonAnalyse('${(a.link||'').replace(/'/g,"\\'")}', this)` : `analyseArtikel('${(a.link||'').replace(/'/g,"\\'")}', this)`}">✦ Make it simple</button>` : ''}
-      ${a.insight ? `<button class="deel-btn" onclick="deelArtikelTekst('${sanitize(a.link||'')}', '${sanitize(a.title||'')}', '${sanitize(a.source||'')}')" title="Deel"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 11.5L11.5 1.5M11.5 1.5H4.5M11.5 1.5V8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="deel-label"> Deel</span></button>` : ''}
+      <div class="footer-left">
+        ${a.link ? `<a class="read-link" href="${a.link}" target="_blank" rel="noopener">Lees artikel</a>` : ''}
+        ${!analyseOn ? `<button class="analyse-btn ${a.insight ? 'done' : ''}" id="abtn-${id}" data-link="${(a.link||'').replace(/"/g,'&quot;')}" onclick="${a.insight ? `toonAnalyse('${(a.link||'').replace(/'/g,"\\'")}', this)` : `analyseArtikel('${(a.link||'').replace(/'/g,"\\'")}', this)`}">✦ Make it simple</button>` : ''}
+      </div>
+      <button class="deel-btn" id="deel-${id}" onclick="deelArtikelTekst('${sanitize(a.link||'')}', '${sanitize(a.title||'')}', '${sanitize(a.source||'')}')" title="Deel" style="${a.insight ? '' : 'visibility:hidden'}"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 11.5L11.5 1.5M11.5 1.5H4.5M11.5 1.5V8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="deel-label"> Deel</span></button>
     </div>
   </article>`;
 }
