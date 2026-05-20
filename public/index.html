@@ -1070,14 +1070,18 @@ function renderArticle(a, i) {
   const lastVisit = localStorage.getItem('bd_lastvisit');
   const isNew = lastVisit && a.pubDate && new Date(a.pubDate) > new Date(lastVisit);
   const tag = a.tag || a.category || '';
-  // Strip HTML maar haal eerst afbeelding erop uit als geen image beschikbaar
+  // Strip HTML inclusief encoded HTML tags
   const rawHtml = a.description || '';
   if (!a.image) {
-    const imgMatch = rawHtml.match(/<img[^>]+src=["']([^"']+)["']/i) ||
-                     rawHtml.match(/&lt;img[^&]+src=["']([^"']+)["']/i);
+    const imgMatch = rawHtml.match(/<img[^>]+src=["']([^"']+)["']/i);
     if (imgMatch) a.image = imgMatch[1];
   }
-  const rawDesc = rawHtml.replace(/<[^>]+>/g,'').replace(/&lt;[^&]+&gt;/g,'').replace(/&amp;/g,'&').replace(/&nbsp;/g,' ').trim();
+  // Verwijder normale én encoded HTML tags, decode entities
+  const rawDesc = rawHtml
+    .replace(/&lt;[^&]*&gt;/g, '')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&amp;/g, '&').replace(/&nbsp;/g, ' ').replace(/&quot;/g, '"').replace(/&#39;/g, "'")
+    .replace(/\s+/g, ' ').trim();
   let desc = '';
   if (rawDesc) {
     if (rawDesc.length <= maxDesc) {
