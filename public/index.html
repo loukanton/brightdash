@@ -1114,7 +1114,7 @@ function renderArticle(a, i) {
     <div class="article-footer">
       ${a.link ? `<a class="read-link" href="${a.link}" target="_blank" rel="noopener">Lees artikel</a>` : ''}
       ${!analyseOn ? `<button class="analyse-btn" id="abtn-${id}" data-link="${(a.link||'').replace(/"/g,'&quot;')}" onclick="${a.insight ? `toonAnalyse('${(a.link||'').replace(/'/g,"\\'")}', this)` : `analyseArtikel('${(a.link||'').replace(/'/g,"\\'")}', this)`}">✦ Make it simple</button>` : ''}
-      <button class="share-btn" onclick="deelArtikel('${sanitize(a.title||'')}', '${sanitize(a.link||'')}', '${sanitize(a.source||'')}')" title="Deel dit artikel"><span class="share-icon">↗</span><span class="share-label"> Deel</span></button>
+      <button class="share-btn" onclick="deelArtikel('${sanitize(a.title||'')}', '${sanitize(a.link||'')}', '${sanitize(a.source||'')}')" title="Deel dit artikel"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 11.5L11.5 1.5M11.5 1.5H4.5M11.5 1.5V8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="share-label"> Deel</span></button>
     </div>
   </article>`;
 }
