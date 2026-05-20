@@ -1017,13 +1017,18 @@ function renderTrending(articles) {
 }
 
 function filterTrending(word, el) {
-  const kw = word.toLowerCase();
-  filteredArticles = allArticles.filter(a => (a.title||'').toLowerCase().includes(kw));
-  displayedCount = PAGE_SIZE;
-  document.getElementById('feedTitle').textContent = '🔥 ' + word;
+  const isActive = el && el.classList.contains('active');
   document.querySelectorAll('.trending-pill').forEach(b => b.classList.remove('active'));
-  if (el) el.classList.add('active');
-  renderArticles();
+  if (isActive) {
+    resetTrending();
+  } else {
+    const kw = word.toLowerCase();
+    filteredArticles = allArticles.filter(a => (a.title||'').toLowerCase().includes(kw));
+    displayedCount = PAGE_SIZE;
+    document.getElementById('feedTitle').textContent = '🔥 ' + word;
+    if (el) el.classList.add('active');
+    renderArticles();
+  }
 }
 
 function resetTrending() {
