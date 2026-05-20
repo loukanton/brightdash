@@ -227,7 +227,7 @@
   .feed-wrapper { flex: 1; min-width: 0; padding: 28px 40px; max-width: 1100px; margin: 0 auto; }
   @media (max-width: 860px) { .feed-wrapper { padding: 20px 16px 100px; } }
 
-  .feed-toolbar { display: flex; align-items: center; gap: 6px; margin-bottom: 24px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); flex-wrap: nowrap; position: sticky; top: 57px; background: var(--bg); z-index: 100; padding-top: 14px; transition: transform 0.25s ease, opacity 0.25s ease; }
+  .feed-toolbar { display: flex; align-items: center; gap: 6px; margin-bottom: 24px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); flex-wrap: nowrap; position: sticky; top: 61px; background: var(--bg); z-index: 98; padding-top: 12px; transition: transform 0.25s ease, opacity 0.25s ease; }
   .feed-toolbar.hidden { transform: translateY(-110%); opacity: 0; pointer-events: none; }
   #updatedLabel { display: none !important; }
   .feed-title { font-family: 'Lora', serif; font-size: 22px; font-weight: 700; color: var(--ink); flex: 0 0 auto; }
@@ -590,7 +590,7 @@
 
   <!-- Feed -->
   <div class="feed-wrapper">
-    <div id="trendingBar" style="display:none;align-items:center;gap:6px;margin-bottom:0;flex-wrap:wrap;position:sticky;top:57px;background:var(--bg);z-index:101;padding:10px 0 8px;transition:transform 0.25s ease, opacity 0.25s ease;"></div>
+    <div id="trendingBar" style="display:none;align-items:center;gap:6px;flex-wrap:wrap;position:sticky;top:61px;background:var(--bg);z-index:99;padding:10px 0 8px;margin-bottom:0;transition:transform 0.25s ease,opacity 0.25s ease;"></div>
     <div class="feed-toolbar">
       <span class="feed-title" id="feedTitle">Alles</span>
       <button class="feed-simple-btn" id="feedSimpleBtn" onclick="toggleAnalyse()">✦ Make it simple</button>
