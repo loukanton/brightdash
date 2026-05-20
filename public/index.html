@@ -301,6 +301,8 @@
   .read-link::after { content: ' →'; }
   .analyse-btn { font-size: 13px; font-weight: 600; color: var(--ink-3); background: var(--bg-2); border: 1px solid var(--rule); padding: 7px 16px; border-radius: 5px; cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; }
   .analyse-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .deel-btn { font-size: 13px; font-weight: 600; color: var(--gold); background: none; border: 1px solid var(--gold-border); padding: 7px 14px; border-radius: 5px; cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; margin-left: auto; }
+  .deel-btn:hover { background: var(--gold-pale); }
   .analyse-btn.done { background: var(--gold); border-color: var(--gold); color: var(--white); }
 
   /* Load more */
@@ -1121,6 +1123,7 @@ function renderArticle(a, i) {
     <div class="article-footer">
       ${a.link ? `<a class="read-link" href="${a.link}" target="_blank" rel="noopener">Lees artikel</a>` : ''}
       ${!analyseOn ? `<button class="analyse-btn ${a.insight ? 'done' : ''}" id="abtn-${id}" data-link="${(a.link||'').replace(/"/g,'&quot;')}" onclick="${a.insight ? `toonAnalyse('${(a.link||'').replace(/'/g,"\\'")}', this)` : `analyseArtikel('${(a.link||'').replace(/'/g,"\\'")}', this)`}">✦ Make it simple</button>` : ''}
+      ${a.insight ? `<button class="deel-btn" onclick="deelArtikelTekst('${sanitize(a.link||'')}', '${sanitize(a.title||'')}', '${sanitize(a.source||'')}')">↗ Deel</button>` : ''}
     </div>
   </article>`;
 }
@@ -1345,6 +1348,40 @@ function decodeHtml(str) {
 function sanitize(str) {
   if (!str) return '';
   return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function deelArtikelTekst(link, title, source) {
+  const article = allArticles.find(a => a.link === link);
+  const kern = article?.insight?.match(/Kern:\s*(.+?)(?=
+Betekenis:|$)/s)?.[1]?.trim() || '';
+  const betekenis = article?.insight?.match(/Betekenis:\s*(.+?)(?=
+Actie:|$)/s)?.[1]?.trim() || '';
+  const actie = article?.insight?.match(/Actie:\s*(.+?)$/s)?.[1]?.trim() || '';
+
+  const tekst = [
+    decodeHtml(title),
+    kern ? `
+Kern: ${kern}` : '',
+    betekenis ? `Betekenis: ${betekenis}` : '',
+    actie ? `Actie: ${actie}` : '',
+    `
+Bron: ${source} | Via BrightDash → ${link}`,
+    `
+Zelf lezen op brightdash.nl`
+  ].filter(Boolean).join('
+');
+
+  if (navigator.share) {
+    navigator.share({ title: decodeHtml(title), text: tekst, url: link }).catch(() => {});
+  } else {
+    navigator.clipboard?.writeText(tekst).then(() => {
+      const toast = document.createElement('div');
+      toast.textContent = 'Gekopieerd naar klembord!';
+      toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:9999;';
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 2500);
+    });
+  }
 }
 
 function safeId(str) { try { return btoa(String(str)).replace(/[^a-z0-9]/gi,''); } catch { return 'id'+Math.random().toString(36).slice(2); } }
