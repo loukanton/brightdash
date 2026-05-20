@@ -65,7 +65,12 @@ function parseItems(xml, feedName, lang, tag) {
     if (!isArticleRelevant(title, desc)) continue;
     // Filter coupon/promo URLs direct
     if (/coupon|promo.?code|discount|turbotax|voucher/i.test(link)) continue;
-    items.push({ title, link, description: desc, pubDate: date, source: feedName, lang, tag });
+    // Afbeelding ophalen
+    const imgMatch = block.match(/<enclosure[^>]+url=["']([^"']+)["'][^>]+type=["']image/i) ||
+                     block.match(/url=["']([^"']+\.(?:jpg|jpeg|png|webp))["']/i) ||
+                     block.match(/<media:content[^>]+url=["']([^"']+)["']/i);
+    const image = imgMatch ? imgMatch[1] : '';
+    items.push({ title, link, description: desc, pubDate: date, source: feedName, lang, tag, image });
   }
   return items;
 }
