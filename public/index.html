@@ -1331,8 +1331,8 @@ function closeOnboarding() {
 }
 
 function initOnboarding() {
-  if (localStorage.getItem('bd_onboarded')) {
-    document.getElementById('onboardingOverlay').classList.add('hidden');
+  if (!localStorage.getItem('bd_onboarded')) {
+    document.getElementById('onboardingOverlay').classList.remove('hidden');
   }
 }
 
@@ -1447,7 +1447,7 @@ function safeId(str) { try { return btoa(String(str)).replace(/[^a-z0-9]/gi,'');
 <div class="progress-label" id="progressLabel"></div>
 <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Terug naar boven">↑</button>
 <!-- Onboarding -->
-<div class="onboarding-overlay" id="onboardingOverlay">
+<div class="onboarding-overlay hidden" id="onboardingOverlay">
   <div class="onboarding-card">
     <div class="onboarding-logo"><span style="font-weight:700">Bright</span><span style="font-style:italic;color:var(--gold)">Dash</span></div>
     <h2 class="onboarding-title">Complex tech news.<br>Made simple.</h2>
