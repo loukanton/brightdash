@@ -300,7 +300,7 @@
   .read-link:hover { background: var(--gold-pale); transform: translateX(2px); }
   .read-link::after { content: ' →'; }
   .analyse-btn { font-size: 13px; font-weight: 600; color: var(--ink-3); background: var(--bg-2); border: 1px solid var(--rule); padding: 7px 16px; border-radius: 5px; cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; }
-  .share-btn { font-size: 13px; font-weight: 600; color: var(--gold); background: none; border: 1px solid var(--gold-border); padding: 7px 14px; border-radius: 5px; cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; margin-left: auto; display: inline-flex; align-items: center; gap: 4px; line-height: 1; }
+  .share-btn { font-size: 13px; font-weight: 600; color: var(--gold); background: none; border: 1px solid var(--gold-border); padding: 7px 14px; border-radius: 5px; cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; display: inline-flex; align-items: center; gap: 4px; line-height: 1; }
   .share-btn:hover { background: var(--gold-pale); }
   .share-icon { font-size: 14px; line-height: 1; display: inline-block; }
   @media (max-width: 600px) { .share-btn .share-label { display: none; } .share-btn { padding: 7px 12px; } }
@@ -1123,8 +1123,10 @@ function renderArticle(a, i) {
     ${desc ? `<p class="article-description">${sanitize(desc)}</p>` : ''}
     ${analysisHtml}
     <div class="article-footer">
+      <div style="display:flex;gap:6px;align-items:center;flex-shrink:0">
       ${a.link ? `<a class="read-link" href="${a.link}" target="_blank" rel="noopener">Lees artikel</a>` : ''}
       ${!analyseOn ? `<button class="analyse-btn" id="abtn-${id}" data-link="${(a.link||'').replace(/"/g,'&quot;')}" onclick="${a.insight ? `toonAnalyse('${(a.link||'').replace(/'/g,"\\'")}', this)` : `analyseArtikel('${(a.link||'').replace(/'/g,"\\'")}', this)`}">✦ Make it simple</button>` : ''}
+      </div>
       <button class="share-btn" onclick="deelArtikel('${sanitize(a.title||'')}', '${sanitize(a.link||'')}', '${sanitize(a.source||'')}')" title="Deel dit artikel"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 11.5L11.5 1.5M11.5 1.5H4.5M11.5 1.5V8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="share-label"> Deel</span></button>
     </div>
   </article>`;
