@@ -296,10 +296,10 @@
   .spinner { width: 13px; height: 13px; border: 2px solid var(--rule); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; flex-shrink: 0; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .article-footer { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding-top: 4px; }
-  .read-link { font-size: 13px; font-weight: 600; color: var(--gold); text-decoration: none; border: 1px solid var(--gold-border); padding: 7px 16px; border-radius: 5px; display: inline-block; transition: all 0.15s; }
+  .read-link { font-size: 13px; font-weight: 600; color: var(--gold); text-decoration: none; border: 1px solid var(--gold-border); padding: 0 14px; height: 36px; border-radius: 5px; display: inline-flex; align-items: center; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; box-sizing: border-box; }
   .read-link:hover { background: var(--gold-pale); transform: translateX(2px); }
   .read-link::after { content: ' →'; }
-  .analyse-btn { font-size: 13px; font-weight: 600; color: var(--ink-3); background: var(--bg-2); border: 1px solid var(--rule); padding: 7px 16px; border-radius: 5px; cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; }
+  .analyse-btn { font-size: 13px; font-weight: 600; color: var(--ink-3); background: var(--bg-2); border: 1px solid var(--rule); padding: 0 14px; height: 36px; border-radius: 5px; cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; display: inline-flex; align-items: center; box-sizing: border-box; }
   .analyse-btn:hover { border-color: var(--gold); color: var(--gold); }
   .deel-btn { font-size: 13px; font-weight: 600; color: var(--gold); background: none; border: 1px solid var(--gold-border); padding: 0 14px; height: 36px; border-radius: 5px; cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; display: inline-flex; align-items: center; gap: 5px; box-sizing: border-box; margin-left: auto; }
   .deel-btn:hover { background: var(--gold-pale); }
