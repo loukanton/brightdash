@@ -492,7 +492,7 @@
     </div>
     <div class="masthead-right">
       <span id="updatedLabel" style="font-size:11px;color:var(--muted)"></span>
-      <button class="simple-masthead-btn" id="simpleMastheadBtn" onclick="toggleAnalyse()">✦ Simple</button>
+      <button class="simple-masthead-btn" id="simpleMastheadBtn" onclick="toggleAnalyse()">✦ Make it all simple</button>
       <button class="icon-btn" onclick="toggleTheme()" id="themeToggle">☀</button>
       <button class="icon-btn" onclick="refreshFeed()" id="refreshBtn">↻</button>
     </div>
@@ -822,8 +822,8 @@ async function loadFeed() {
     const newCount = lastVisit ? allArticles.filter(a => new Date(a.pubDate) > new Date(lastVisit)).length : 0;
     if (newCount > 0) {
       const badge = document.createElement('span');
-      badge.style.cssText = 'background:var(--gold);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;margin-left:8px;vertical-align:middle;display:inline-flex;align-items:center;line-height:1;';
-      badge.textContent = newCount + ' nieuw';
+      badge.style.cssText = 'background:var(--gold);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;margin-left:8px;display:inline-flex;align-items:center;justify-content:center;line-height:1;white-space:nowrap;vertical-align:middle;';
+      badge.innerHTML = newCount + ' <span style="font-size:9px;opacity:0.85">nieuw</span>';
       document.querySelector('.masthead-brand').appendChild(badge);
     }
     localStorage.setItem('bd_lastvisit', new Date().toISOString());
