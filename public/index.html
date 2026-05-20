@@ -1351,37 +1351,38 @@ function sanitize(str) {
 }
 
 function deelArtikelTekst(link, title, source) {
-  const article = allArticles.find(a => a.link === link);
-  const kern = article?.insight?.match(/Kern:\s*(.+?)(?=
-Betekenis:|$)/s)?.[1]?.trim() || '';
-  const betekenis = article?.insight?.match(/Betekenis:\s*(.+?)(?=
-Actie:|$)/s)?.[1]?.trim() || '';
-  const actie = article?.insight?.match(/Actie:\s*(.+?)$/s)?.[1]?.trim() || '';
-
-  const tekst = [
-    decodeHtml(title),
-    kern ? `
-Kern: ${kern}` : '',
-    betekenis ? `Betekenis: ${betekenis}` : '',
-    actie ? `Actie: ${actie}` : '',
-    `
-Bron: ${source} | Via BrightDash → ${link}`,
-    `
-Zelf lezen op brightdash.nl`
-  ].filter(Boolean).join('
-');
-
-  if (navigator.share) {
-    navigator.share({ title: decodeHtml(title), text: tekst, url: link }).catch(() => {});
-  } else {
-    navigator.clipboard?.writeText(tekst).then(() => {
-      const toast = document.createElement('div');
-      toast.textContent = 'Gekopieerd naar klembord!';
-      toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:9999;';
-      document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 2500);
+  try {
+    const article = allArticles.find(a => a.link === link);
+    const insight = (article && article.insight) ? article.insight : '';
+    let kern = '', betekenis = '', actie = '', current = '';
+    insight.split('\n').forEach(function(line) {
+      if (line.indexOf('Kern:') === 0) { current = 'k'; kern = line.slice(5).trim(); }
+      else if (line.indexOf('Betekenis:') === 0) { current = 'b'; betekenis = line.slice(10).trim(); }
+      else if (line.indexOf('Actie:') === 0) { current = 'a'; actie = line.slice(6).trim(); }
+      else if (line.trim()) {
+        if (current === 'k') kern += ' ' + line.trim();
+        else if (current === 'b') betekenis += ' ' + line.trim();
+        else if (current === 'a') actie += ' ' + line.trim();
+      }
     });
-  }
+    var delen = [decodeHtml(title)];
+    if (kern) delen.push('Kern: ' + kern);
+    if (betekenis) delen.push('Betekenis: ' + betekenis);
+    if (actie) delen.push('Actie: ' + actie);
+    delen.push('Via BrightDash: ' + link);
+    var tekst = delen.join('\n\n');
+    if (navigator.share) {
+      navigator.share({ title: decodeHtml(title), text: tekst, url: link }).catch(function(){});
+    } else {
+      navigator.clipboard.writeText(tekst).then(function() {
+        var toast = document.createElement('div');
+        toast.textContent = 'Gekopieerd!';
+        toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:9999;';
+        document.body.appendChild(toast);
+        setTimeout(function(){ toast.remove(); }, 2000);
+      });
+    }
+  } catch(e) { console.error('Deel fout:', e); }
 }
 
 function safeId(str) { try { return btoa(String(str)).replace(/[^a-z0-9]/gi,''); } catch { return 'id'+Math.random().toString(36).slice(2); } }
