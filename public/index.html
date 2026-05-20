@@ -227,7 +227,8 @@
   .feed-wrapper { flex: 1; min-width: 0; padding: 28px 40px; max-width: 1100px; margin: 0 auto; }
   @media (max-width: 860px) { .feed-wrapper { padding: 20px 16px 100px; } }
 
-  .feed-toolbar { display: flex; align-items: center; gap: 6px; margin-bottom: 24px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); flex-wrap: nowrap; }
+  .feed-toolbar { display: flex; align-items: center; gap: 6px; margin-bottom: 24px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); flex-wrap: nowrap; position: sticky; top: 57px; background: var(--bg); z-index: 100; padding-top: 14px; transition: transform 0.25s ease, opacity 0.25s ease; }
+  .feed-toolbar.hidden { transform: translateY(-110%); opacity: 0; pointer-events: none; }
   #updatedLabel { display: none !important; }
   .feed-title { font-family: 'Lora', serif; font-size: 22px; font-weight: 700; color: var(--ink); flex: 0 0 auto; }
   .feed-count { font-size: 12px; color: var(--muted); }
@@ -589,7 +590,7 @@
 
   <!-- Feed -->
   <div class="feed-wrapper">
-    <div id="trendingBar" style="display:none;align-items:center;gap:6px;margin-bottom:12px;flex-wrap:wrap;"></div>
+    <div id="trendingBar" style="display:none;align-items:center;gap:6px;margin-bottom:0;flex-wrap:wrap;position:sticky;top:57px;background:var(--bg);z-index:101;padding:10px 0 8px;transition:transform 0.25s ease, opacity 0.25s ease;"></div>
     <div class="feed-toolbar">
       <span class="feed-title" id="feedTitle">Alles</span>
       <button class="feed-simple-btn" id="feedSimpleBtn" onclick="toggleAnalyse()">✦ Make it simple</button>
@@ -1017,7 +1018,7 @@ function renderTrending(articles) {
   const el = document.getElementById('trendingBar');
   if (!el || trending.length === 0) return;
   el.innerHTML = '<span style="font-size:11px;color:var(--muted);font-weight:600;margin-right:8px;">TRENDING</span>' +
-    trending.map(t => `<button class="trending-pill" onclick="filterTrending('${t.word}', this)">${t.word} <span style="opacity:0.6;font-size:10px">${t.count}</span></button>`).join('') + '<button class="trending-pill" onclick="resetTrending()" style="border-color:var(--muted);color:var(--muted);background:none">✕ Alles</button>';
+    trending.map(t => `<button class="trending-pill" onclick="filterTrending('${t.word}', this)">${t.word} <span style="opacity:0.6;font-size:10px">${t.count}</span></button>`).join('');
   el.style.display = 'flex';
 }
 
@@ -1281,9 +1282,23 @@ function updateProgress() {
   }
 }
 
-// Scroll events: terug naar boven + infinite scroll
+// Scroll events: terug naar boven + infinite scroll + hide toolbar
 let loadingMore = false;
+let lastScrollY = 0;
 window.addEventListener('scroll', () => {
+  const currentY = window.scrollY;
+  const toolbar = document.querySelector('.feed-toolbar');
+  const trendingBar = document.getElementById('trendingBar');
+  if (currentY > lastScrollY && currentY > 120) {
+    // Scrollen naar beneden — verberg
+    if (toolbar) toolbar.classList.add('hidden');
+    if (trendingBar && trendingBar.style.display !== 'none') trendingBar.style.transform = 'translateY(-110%)';
+  } else {
+    // Scrollen naar boven — toon
+    if (toolbar) toolbar.classList.remove('hidden');
+    if (trendingBar) trendingBar.style.transform = '';
+  }
+  lastScrollY = currentY;
   // Terug naar boven
   const btn = document.getElementById('backToTop');
   if (btn) btn.classList.toggle('visible', window.scrollY > 400);
