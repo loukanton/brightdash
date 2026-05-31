@@ -8,7 +8,8 @@ Schrijfregels (strikt volgen):
 - Actie: 1 korte actiezin. Begin met een concreet werkwoord dat past bij dit artikel (bijv. Evalueer / Bespreek / Test / Stel bij / Anticipeer op / Vraag je leverancier / Zet op de agenda / Vergelijk). Gebruik NOOIT "Zorg dat" of "Onderzoek of". De actie moet logisch volgen uit dit specifieke artikel — niet generiek zijn.
 - Geen herhaling tussen de drie secties.
 - Geen inleiding, geen afsluiting, geen extra tekst buiten de drie secties.
-- Als het artikel weinig inhoud heeft: schrijf korter, vul niet op met algemeenheden.`;
+- Als het artikel weinig inhoud heeft: schrijf korter, vul niet op met algemeenheden.
+- Schrijf in helder Nederlands. Korte zinnen, actieve werkwoorden. Geen managementjargon, geen wollige formuleringen ("in het kader van", "ten aanzien van", "met het oog op"). Wel inhoudelijk en concreet — de lezer is een beslisser, geen leek.`;
 
 // Per-categorie prompts
 const CATEGORY_PROMPTS = {
