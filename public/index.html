@@ -237,7 +237,20 @@
 
   #articleFeed.grid .article:last-child { border-bottom: 1px solid var(--rule); margin-bottom: 0; }
 
-  @media (max-width: 600px) { #articleFeed.grid { grid-template-columns: 1fr; } }
+  @media (max-width: 600px) {
+    #articleFeed.grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    #articleFeed.grid .article { padding: 12px; }
+    #articleFeed.grid .article-title { font-size: 14px; line-height: 1.3; margin-bottom: 8px; }
+    #articleFeed.grid .article-description { font-size: 12px; line-height: 1.55; margin-bottom: 10px; -webkit-line-clamp: 3; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
+    #articleFeed.grid .article-meta { margin-bottom: 8px; gap: 5px; }
+    #articleFeed.grid .article-source { font-size: 9px; }
+    #articleFeed.grid .article-date { font-size: 9px; }
+    #articleFeed.grid .article-category-badge { display: none; }
+    #articleFeed.grid .article-footer { gap: 6px; }
+    #articleFeed.grid .read-link { font-size: 11px; padding: 0 10px; height: 30px; }
+    #articleFeed.grid .analyse-btn { font-size: 11px; padding: 0 10px; height: 30px; }
+    #articleFeed.grid .deel-btn { display: none; }
+  }
   #articleFeed.grid .article { padding: 20px; border: 1px solid var(--rule); border-radius: 8px; background: var(--white); }
   #articleFeed.grid .article:last-child { border-bottom: 1px solid var(--rule); }
   .article-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
@@ -436,6 +449,83 @@
   @media (max-width: 600px) { .back-to-top { bottom: 120px; right: 20px; width: 32px; height: 32px; font-size: 13px; } }
   .state-box-title { font-family: 'Lora', serif; font-size: 20px; color: var(--ink-3); margin-bottom: 8px; }
 
+  /* Swipe card modus */
+  .swipe-viewport {
+    display: none;
+    position: fixed;
+    inset: 57px 0 0 0;
+    z-index: 180;
+    background: var(--bg);
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .swipe-viewport.active { display: flex; }
+
+  .swipe-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 20px 8px;
+    background: var(--white);
+    border-bottom: 1px solid var(--rule);
+    flex-shrink: 0;
+  }
+  .swipe-counter { font-size: 12px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .swipe-close { background: none; border: none; font-size: 18px; color: var(--muted); cursor: pointer; padding: 4px 6px; line-height: 1; }
+  .swipe-close:hover { color: var(--ink); }
+
+  .swipe-track {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    touch-action: pan-y;
+  }
+
+  .swipe-card {
+    position: absolute;
+    inset: 12px 16px 80px;
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 24px 20px 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.28s;
+    will-change: transform;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+  }
+  .swipe-card.leaving-left  { transform: translateX(-110%) rotate(-4deg); opacity: 0; }
+  .swipe-card.leaving-right { transform: translateX(110%)  rotate(4deg);  opacity: 0; }
+  .swipe-card.entering { transform: translateX(0); opacity: 1; }
+
+  .swipe-card .article-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .swipe-card .article-title { font-family: 'Lora', serif; font-size: 22px; font-weight: 700; line-height: 1.3; color: var(--ink); text-decoration: none; display: block; }
+  .swipe-card .article-title:hover { color: var(--gold); }
+  .swipe-card .article-description { font-size: 15px; color: var(--ink-3); line-height: 1.75; }
+  .swipe-card .analysis-block { margin-bottom: 0; }
+
+  .swipe-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 16px 20px;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  .swipe-nav-btn {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--white); border: 1.5px solid var(--rule);
+    color: var(--ink-3); font-size: 20px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s; flex-shrink: 0;
+  }
+  .swipe-nav-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .swipe-nav-btn:disabled { opacity: 0.3; cursor: default; }
+  .swipe-actions { display: flex; gap: 8px; flex: 1; justify-content: center; }
+  .swipe-read-link { font-size: 13px; font-weight: 600; color: var(--gold); text-decoration: none; border: 1px solid var(--gold-border); padding: 0 16px; height: 40px; border-radius: 6px; display: inline-flex; align-items: center; transition: all 0.15s; white-space: nowrap; }
+  .swipe-read-link:hover { background: var(--gold-pale); }
+  .swipe-simple-btn { font-size: 13px; font-weight: 600; color: var(--ink-3); background: var(--bg-2); border: 1px solid var(--rule); padding: 0 16px; height: 40px; border-radius: 6px; cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; }
+  .swipe-simple-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .swipe-simple-btn.done { background: var(--gold); border-color: var(--gold); color: var(--white); }
+
   /* Footer */
   .site-footer { border-top: 1px solid var(--rule); margin-top: 32px; padding: 10px 0; }
   .footer-inner { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 12px; }
@@ -630,11 +720,28 @@
   </div>
 </footer>
 
+<!-- Swipe card viewport (mobiel) -->
+<div class="swipe-viewport" id="swipeViewport">
+  <div class="swipe-header">
+    <span class="swipe-counter" id="swipeCounter">1 / —</span>
+    <span style="font-family:'Lora',serif;font-size:14px;font-weight:700;color:var(--ink)">Kaarten</span>
+    <button class="swipe-close" onclick="exitSwipeMode()" title="Terug naar feed">✕</button>
+  </div>
+  <div class="swipe-track" id="swipeTrack">
+    <div class="swipe-card" id="swipeCard"></div>
+  </div>
+  <div class="swipe-footer">
+    <button class="swipe-nav-btn" id="swipePrev" onclick="swipeNav(-1)" title="Vorige">←</button>
+    <div class="swipe-actions" id="swipeActions"></div>
+    <button class="swipe-nav-btn" id="swipeNext" onclick="swipeNav(1)" title="Volgende">→</button>
+  </div>
+</div>
+
 <!-- Mobile FAB — ✦ Simple pill -->
 <div class="mobile-fab">
-  <button class="mobile-fab-btn" id="mobileFabBtn" onclick="toggleAnalyse()" title="Make it simple">
+  <button class="mobile-fab-btn" id="mobileFabBtn" onclick="toggleAnalyse()" title="Make all simple">
     <span class="fab-star">✦</span>
-    <span class="fab-label">Make it simple</span>
+    <span class="fab-label">Make all simple</span>
   </button>
 </div>
 
@@ -656,8 +763,9 @@
   <div class="sheet-section">
     <span class="sheet-label">Weergave</span>
     <div class="sheet-sort-row">
-      <button class="sheet-btn active" onclick="setView('lijst', this); markSheetChanged()">Lijst</button>
-      <button class="sheet-btn" onclick="setView('grid', this); markSheetChanged()">Grid</button>
+      <button class="sheet-btn active" id="sview-lijst" onclick="setView('lijst', this); markSheetChanged()">Lijst</button>
+      <button class="sheet-btn" id="sview-grid" onclick="setView('grid', this); markSheetChanged()">Grid</button>
+      <button class="sheet-btn" id="sview-kaarten" onclick="setView('kaarten', this); markSheetChanged()">Kaarten</button>
     </div>
   </div>
   <div class="sheet-section">
@@ -689,6 +797,146 @@ let activeView = 'lijst';
 let analyseOn = false;
 let panelOpen = false;
 let savedLinks = JSON.parse(localStorage.getItem('bd_saved') || '[]');
+
+// ── Swipe card modus ──
+let swipeIndex = 0;
+let swipeArticles = [];
+let swipeTouchStartX = 0;
+let swipeTouchStartY = 0;
+let swipeDragging = false;
+
+function enterSwipeMode() {
+  swipeArticles = filteredArticles.slice();
+  swipeIndex = 0;
+  document.getElementById('swipeViewport').classList.add('active');
+  document.querySelector('.mobile-fab')?.style.setProperty('display','none');
+  renderSwipeCard();
+  initSwipeTouch();
+}
+
+function exitSwipeMode() {
+  document.getElementById('swipeViewport').classList.remove('active');
+  document.querySelector('.mobile-fab')?.style.removeProperty('display');
+  if (activeView === 'kaarten') {
+    activeView = 'lijst';
+    document.getElementById('articleFeed').classList.remove('grid');
+    document.querySelectorAll('#sview-lijst').forEach(b => b.classList.add('active'));
+    document.querySelectorAll('#sview-kaarten').forEach(b => b.classList.remove('active'));
+  }
+}
+
+function renderSwipeCard(direction) {
+  const card = document.getElementById('swipeCard');
+  const a = swipeArticles[swipeIndex];
+  if (!a) return;
+
+  // Teller
+  document.getElementById('swipeCounter').textContent = (swipeIndex + 1) + ' / ' + swipeArticles.length;
+
+  // Nav buttons
+  document.getElementById('swipePrev').disabled = swipeIndex === 0;
+  document.getElementById('swipeNext').disabled = swipeIndex === swipeArticles.length - 1;
+
+  // Animatie
+  if (direction) {
+    card.classList.add(direction === 1 ? 'leaving-left' : 'leaving-right');
+    setTimeout(() => buildSwipeCard(card, a, direction), 300);
+  } else {
+    buildSwipeCard(card, a, null);
+  }
+}
+
+function buildSwipeCard(card, a, direction) {
+  card.classList.remove('leaving-left', 'leaving-right', 'entering');
+  const date = a.pubDate ? new Date(a.pubDate).toLocaleString('nl-NL', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }) : '';
+  const tag = a.tag || a.category || '';
+  const rawDesc = (a.description || '').replace(/&lt;[^&]*&gt;/g,'').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&').replace(/&nbsp;/g,' ').replace(/\s+/g,' ').trim();
+  const id = safeId(a.link || swipeIndex);
+
+  let analysisHtml = '';
+  if (a.insight) analysisHtml = renderAnalysisBlock(a.insight, id);
+
+  card.innerHTML = `
+    <div class="article-meta">
+      <span class="article-source">${a.source||''}</span>
+      <div class="article-dot"></div>
+      <span class="article-date">${date}</span>
+      ${tag ? `<span class="article-category-badge">${tag}</span>` : ''}
+    </div>
+    <a class="article-title" href="${sanitize(a.link)||'#'}" target="_blank" rel="noopener">${sanitize(decodeHtml(a.title))||''}</a>
+    ${rawDesc ? `<p class="article-description">${sanitize(rawDesc.slice(0,400))}${rawDesc.length>400?'…':''}</p>` : ''}
+    ${analysisHtml}
+    ${!a.insight ? `<div id="swipe-analysis-${id}"></div>` : ''}
+  `;
+
+  // Footer acties
+  const actionsEl = document.getElementById('swipeActions');
+  const hasDone = !!a.insight;
+  actionsEl.innerHTML = `
+    ${a.link ? `<a class="swipe-read-link" href="${a.link}" target="_blank" rel="noopener">Lees artikel →</a>` : ''}
+    <button class="swipe-simple-btn ${hasDone?'done':''}" id="swipe-btn-${id}" onclick="swipeAnalyse('${(a.link||'').replace(/'/g,"\\'")}')">
+      ${hasDone ? '✦ Made simple' : '✦ Make it simple'}
+    </button>
+  `;
+
+  // Animate in
+  if (direction) {
+    card.style.transform = direction === 1 ? 'translateX(60%)' : 'translateX(-60%)';
+    card.style.opacity = '0';
+    requestAnimationFrame(() => {
+      card.style.transition = 'transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.25s';
+      card.style.transform = 'translateX(0)';
+      card.style.opacity = '1';
+    });
+  } else {
+    card.style.transform = '';
+    card.style.opacity = '';
+    card.style.transition = '';
+  }
+}
+
+async function swipeAnalyse(link) {
+  const article = allArticles.find(a => a.link === link);
+  if (!article) return;
+  const id = safeId(link);
+  const btn = document.getElementById('swipe-btn-' + id);
+  if (btn) { btn.textContent = '...'; btn.disabled = true; }
+  try {
+    const res = await fetch('/api/analyse', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ title:article.title, description:article.description, link:article.link, source:article.source, category:article.tag||article.category }) });
+    const data = await res.json();
+    if (data.insight) {
+      article.insight = data.insight;
+      const placeholder = document.getElementById('swipe-analysis-' + id);
+      if (placeholder) placeholder.outerHTML = renderAnalysisBlock(data.insight, id);
+      if (btn) { btn.textContent = '✦ Made simple'; btn.classList.add('done'); btn.disabled = false; }
+    }
+  } catch { if (btn) { btn.textContent = '✦ Make it simple'; btn.disabled = false; } }
+}
+
+function swipeNav(dir) {
+  const next = swipeIndex + dir;
+  if (next < 0 || next >= swipeArticles.length) return;
+  swipeIndex = next;
+  renderSwipeCard(dir);
+}
+
+function initSwipeTouch() {
+  const track = document.getElementById('swipeTrack');
+  track.addEventListener('touchstart', e => {
+    swipeTouchStartX = e.touches[0].clientX;
+    swipeTouchStartY = e.touches[0].clientY;
+    swipeDragging = true;
+  }, { passive: true });
+  track.addEventListener('touchend', e => {
+    if (!swipeDragging) return;
+    swipeDragging = false;
+    const dx = e.changedTouches[0].clientX - swipeTouchStartX;
+    const dy = e.changedTouches[0].clientY - swipeTouchStartY;
+    if (Math.abs(dx) > Math.abs(dy) * 1.5 && Math.abs(dx) > 40) {
+      swipeNav(dx < 0 ? 1 : -1);
+    }
+  }, { passive: true });
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
@@ -782,9 +1030,10 @@ function toggleAnalyse() {
   if (feedSimpleEl) { feedSimpleEl.textContent = analyseOn ? '✦ Made simple' : '✦ Make it simple'; feedSimpleEl.classList.toggle('on', analyseOn); }
   const fabBtn = document.getElementById('mobileFabBtn');
   if (fabBtn) {
-    fabBtn.querySelector('.fab-label').textContent = analyseOn ? 'Made simple ✓' : 'Make it simple';
+    fabBtn.querySelector('.fab-label').textContent = 'Make all simple';
     fabBtn.classList.toggle('on', analyseOn);
   }
+  updateFabVisibility();
   if (!analyseOn) {
     renderArticles();
   } else {
@@ -798,6 +1047,15 @@ function toggleAnalyse() {
       if (noInsight > 0) showProgress(noInsight);
     }
   }
+}
+
+function updateFabVisibility() {
+  const fab = document.getElementById('mobileFabBtn');
+  if (!fab) return;
+  const visible = filteredArticles.slice(0, displayedCount);
+  const allDone = visible.length > 0 && visible.every(a => a.insight);
+  const fabWrap = fab.closest('.mobile-fab');
+  if (fabWrap) fabWrap.style.display = (analyseOn && allDone) ? 'none' : '';
 }
 
 async function loadFeed() {
@@ -955,7 +1213,12 @@ function setView(view, el) {
   activeView = view;
   el.closest('.toolbar-group, .sheet-sort-row').querySelectorAll('.toolbar-btn, .sheet-btn').forEach(b => b.classList.remove('active'));
   el.classList.add('active');
-  document.getElementById('articleFeed').classList.toggle('grid', view === 'grid');
+  if (view === 'kaarten') {
+    enterSwipeMode();
+  } else {
+    exitSwipeMode();
+    document.getElementById('articleFeed').classList.toggle('grid', view === 'grid');
+  }
 }
 
 function appendArticles(from, to) {
@@ -1046,6 +1309,7 @@ function renderArticles() {
   if (activeView === 'grid') feed.classList.add('grid');
   document.getElementById('loadMoreContainer').style.display = filteredArticles.length > displayedCount ? 'block' : 'none';
   if (analyseOn) toShow.filter(a => !a.insight && a.link).forEach(a => lazyLoadAnalysis(a));
+  updateFabVisibility();
 }
 
 function renderArticle(a, i) {
@@ -1147,6 +1411,7 @@ async function lazyLoadAnalysis(article) {
   } finally {
     progressDone++;
     updateProgress();
+    updateFabVisibility();
   }
 }
 
