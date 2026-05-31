@@ -75,51 +75,6 @@
   /* Rail */
   .rail { width: 56px; background: var(--white); border-right: 1px solid var(--rule); display: flex; flex-direction: column; align-items: center; padding: 16px 0; gap: 6px; flex-shrink: 0; position: sticky; top: 57px; height: calc(100vh - 57px); z-index: 200; }
   @media (max-width: 600px) { .rail { display: none; } }
-
-  /* Rail simple knop */
-  .rail-simple { width: 40px; height: 40px; border-radius: 10px; background: var(--white); border: 1.5px solid var(--rule); color: var(--ink-3); font-size: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; margin-bottom: 6px; }
-  .rail-simple:hover { border-color: var(--gold); color: var(--gold); }
-
-  /* Tooltip */
-  .rail-tooltip-wrap { position: relative; }
-
-  .rail-tooltip-wrap .tooltip {
-    position: absolute;
-    left: 52px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: var(--ink);
-    color: var(--white);
-    font-family: 'Instrument Sans', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    padding: 7px 12px;
-    border-radius: 6px;
-    white-space: nowrap;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.15s, transform 0.15s;
-    transform: translateY(-50%) translateX(-4px);
-    z-index: 400;
-  }
-
-  .rail-tooltip-wrap .tooltip::before {
-    content: '';
-    position: absolute;
-    right: 100%;
-    top: 50%;
-    transform: translateY(-50%);
-    border: 5px solid transparent;
-    border-right-color: var(--ink);
-  }
-
-  .rail-tooltip-wrap:hover .tooltip {
-    opacity: 1;
-    transform: translateY(-50%) translateX(0);
-  }
-  .rail-simple.on { background: var(--gold); border-color: var(--gold); color: var(--white); box-shadow: 0 3px 12px rgba(184,146,42,0.35); }
-  @keyframes simplePulse { 0% { box-shadow: 0 0 0 0 rgba(184,146,42,0.5); transform: scale(1); } 40% { box-shadow: 0 0 0 12px rgba(184,146,42,0); transform: scale(1.1); } 100% { box-shadow: 0 0 0 0 rgba(184,146,42,0); transform: scale(1); } }
-  .rail-simple.activating { animation: simplePulse 0.5s ease-out forwards; }
   .rail-divider { width: 28px; border-top: 1px solid var(--rule); }
 
   /* Hamburger */
@@ -206,10 +161,6 @@
   #updatedLabel { display: none !important; }
   .feed-title { font-family: 'Lora', serif; font-size: 22px; font-weight: 700; color: var(--ink); flex: 0 0 auto; }
   .feed-count { font-size: 12px; color: var(--muted); }
-  .feed-simple-btn { background: none; border: 1px solid var(--rule); border-radius: 6px; color: var(--ink-3); font-family: 'Lora', serif; font-size: 22px; font-weight: 700; padding: 0 14px; cursor: pointer; transition: all 0.2s; white-space: nowrap; line-height: 1.4; margin-left: 0; }
-  .feed-simple-btn:hover { border-color: var(--gold); color: var(--gold); }
-  .feed-simple-btn.on { background: var(--gold); border-color: var(--gold); color: var(--white); }
-  @media (max-width: 600px) { .feed-simple-btn { display: none; } }
   .trending-pill { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gold); border: 1px solid var(--gold-border); background: var(--gold-pale); cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; }
   .trending-pill:hover { background: var(--gold); color: var(--white); }
   .trending-pill.active { background: var(--gold); color: var(--white); }
@@ -248,7 +199,7 @@
     #articleFeed.grid .article-category-badge { display: none; }
     #articleFeed.grid .article-footer { gap: 6px; }
     #articleFeed.grid .read-link { font-size: 11px; padding: 0 10px; height: 30px; }
-    #articleFeed.grid .analyse-btn { font-size: 11px; padding: 0 10px; height: 30px; }
+    #articleFeed.grid
     #articleFeed.grid .deel-btn { display: none; }
   }
   #articleFeed.grid .article { padding: 20px; border: 1px solid var(--rule); border-radius: 8px; background: var(--white); }
@@ -287,53 +238,16 @@
   .read-link { font-size: 13px; font-weight: 600; color: var(--gold); text-decoration: none; border: 1px solid var(--gold-border); padding: 0 14px; height: 36px; border-radius: 5px; display: inline-flex; align-items: center; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; box-sizing: border-box; }
   .read-link:hover { background: var(--gold-pale); transform: translateX(2px); }
   .read-link::after { content: ' →'; }
-  .analyse-btn { font-size: 13px; font-weight: 600; color: var(--ink-3); background: var(--bg-2); border: 1px solid var(--rule); padding: 0 14px; height: 36px; border-radius: 5px; cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; display: inline-flex; align-items: center; box-sizing: border-box; }
-  .analyse-btn:hover { border-color: var(--gold); color: var(--gold); }
+
   .deel-btn { font-size: 13px; font-weight: 600; color: var(--gold); background: none; border: 1px solid var(--gold-border); padding: 0 14px; height: 36px; border-radius: 5px; cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; display: inline-flex; align-items: center; gap: 5px; box-sizing: border-box; margin-left: auto; }
   .deel-btn:hover { background: var(--gold-pale); }
   @media (max-width: 600px) { .deel-label { display: none; } .deel-btn { padding: 7px 10px; } }
-  .analyse-btn.done { background: var(--gold); border-color: var(--gold); color: var(--white); }
 
   /* Load more */
   .load-more { text-align: center; padding: 32px 0; display: none !important; }
   .load-more-btn { background: none; border: 1.5px solid var(--ink); color: var(--ink); font-family: 'Instrument Sans', sans-serif; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 11px 30px; cursor: pointer; transition: all 0.15s; border-radius: 4px; }
   .load-more-btn:hover { background: var(--ink); color: var(--white); }
 
-  /* Mobile FAB — Simple pill */
-  .mobile-fab {
-    display: none;
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 350;
-  }
-
-  @media (max-width: 600px) { .mobile-fab { display: block; } }
-
-  .mobile-fab-btn {
-    height: 48px;
-    padding: 0 24px;
-    border-radius: 999px;
-    background: var(--ink);
-    border: none;
-    color: var(--white);
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.28);
-    transition: all 0.2s;
-    font-family: 'Instrument Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.2px;
-    white-space: nowrap;
-  }
-
-  .mobile-fab-btn .fab-star { font-size: 16px; transition: transform 0.2s; }
-  .mobile-fab-btn:active { transform: scale(0.97); }
-  .mobile-fab-btn.on { background: var(--gold); box-shadow: 0 4px 20px rgba(184,146,42,0.4); }
-  body.dark .mobile-fab-btn { background: var(--gold); color: #111; }
-  body.dark .mobile-fab-btn.on { background: var(--white); color: var(--ink); }
 
   /* Mobile bottom bar */
   .mobile-updated { font-size: 10px; color: var(--muted); text-align: center; margin-bottom: 6px; }
@@ -453,78 +367,93 @@
   .swipe-viewport {
     display: none;
     position: fixed;
-    inset: 57px 0 0 0;
-    z-index: 180;
+    inset: 0;
+    z-index: 600;
     background: var(--bg);
-    flex-direction: column;
     overflow: hidden;
   }
-  .swipe-viewport.active { display: flex; }
+  .swipe-viewport.active { display: block; }
 
-  .swipe-header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 12px 20px 8px;
-    background: var(--white);
-    border-bottom: 1px solid var(--rule);
-    flex-shrink: 0;
-  }
-  .swipe-counter { font-size: 12px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
-  .swipe-close { background: none; border: none; font-size: 18px; color: var(--muted); cursor: pointer; padding: 4px 6px; line-height: 1; }
-  .swipe-close:hover { color: var(--ink); }
-
+  /* Kaart vult volledig scherm */
   .swipe-track {
-    flex: 1;
+    position: absolute;
+    inset: 0;
     overflow: hidden;
-    position: relative;
     touch-action: pan-y;
   }
 
   .swipe-card {
     position: absolute;
-    inset: 12px 16px 80px;
+    inset: 0;
     background: var(--white);
-    border: 1px solid var(--rule);
-    border-radius: 14px;
-    padding: 24px 20px 20px;
+    padding: 72px 24px 120px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 16px;
     transition: transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.28s;
     will-change: transform;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    -webkit-overflow-scrolling: touch;
   }
-  .swipe-card.leaving-left  { transform: translateX(-110%) rotate(-4deg); opacity: 0; }
-  .swipe-card.leaving-right { transform: translateX(110%)  rotate(4deg);  opacity: 0; }
-  .swipe-card.entering { transform: translateX(0); opacity: 1; }
+  .swipe-card.leaving-left  { transform: translateX(-110%) rotate(-3deg); opacity: 0; pointer-events: none; }
+  .swipe-card.leaving-right { transform: translateX(110%)  rotate(3deg);  opacity: 0; pointer-events: none; }
 
   .swipe-card .article-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-  .swipe-card .article-title { font-family: 'Lora', serif; font-size: 22px; font-weight: 700; line-height: 1.3; color: var(--ink); text-decoration: none; display: block; }
+  .swipe-card .article-title { font-family: 'Lora', serif; font-size: 24px; font-weight: 700; line-height: 1.3; color: var(--ink); text-decoration: none; display: block; }
   .swipe-card .article-title:hover { color: var(--gold); }
-  .swipe-card .article-description { font-size: 15px; color: var(--ink-3); line-height: 1.75; }
+  .swipe-card .article-description { font-size: 15px; color: var(--ink-3); line-height: 1.8; }
   .swipe-card .analysis-block { margin-bottom: 0; }
 
-  .swipe-footer {
+  /* Zwevende toppil: teller + sluit */
+  .swipe-topbar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    z-index: 10;
     display: flex; align-items: center; justify-content: space-between;
-    padding: 0 16px 20px;
-    gap: 12px;
-    flex-shrink: 0;
+    padding: 14px 20px 10px;
+    background: linear-gradient(to bottom, var(--white) 70%, transparent);
+    pointer-events: none;
   }
+  .swipe-topbar > * { pointer-events: all; }
+  .swipe-counter {
+    font-size: 11px; font-weight: 700; color: var(--muted);
+    background: var(--bg-2); border: 1px solid var(--rule);
+    padding: 4px 10px; border-radius: 20px;
+    font-variant-numeric: tabular-nums; letter-spacing: 0.3px;
+  }
+  .swipe-close {
+    background: var(--bg-2); border: 1px solid var(--rule);
+    border-radius: 20px; font-size: 13px; font-weight: 600;
+    color: var(--ink-3); cursor: pointer; padding: 4px 12px;
+    line-height: 1.6; transition: all 0.15s;
+  }
+  .swipe-close:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* Zwevende bodembar: nav + acties */
+  .swipe-bottombar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    z-index: 10;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 20px 32px;
+    gap: 10px;
+    background: linear-gradient(to top, var(--white) 65%, transparent);
+    pointer-events: none;
+  }
+  .swipe-bottombar > * { pointer-events: all; }
   .swipe-nav-btn {
-    width: 48px; height: 48px; border-radius: 50%;
+    width: 44px; height: 44px; border-radius: 50%;
     background: var(--white); border: 1.5px solid var(--rule);
-    color: var(--ink-3); font-size: 20px; cursor: pointer;
+    color: var(--ink-3); font-size: 18px; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
     transition: all 0.15s; flex-shrink: 0;
   }
   .swipe-nav-btn:hover { border-color: var(--gold); color: var(--gold); }
-  .swipe-nav-btn:disabled { opacity: 0.3; cursor: default; }
+  .swipe-nav-btn:disabled { opacity: 0.25; cursor: default; box-shadow: none; }
   .swipe-actions { display: flex; gap: 8px; flex: 1; justify-content: center; }
-  .swipe-read-link { font-size: 13px; font-weight: 600; color: var(--gold); text-decoration: none; border: 1px solid var(--gold-border); padding: 0 16px; height: 40px; border-radius: 6px; display: inline-flex; align-items: center; transition: all 0.15s; white-space: nowrap; }
+  .swipe-read-link { font-size: 13px; font-weight: 600; color: var(--gold); text-decoration: none; border: 1px solid var(--gold-border); padding: 0 16px; height: 40px; border-radius: 20px; display: inline-flex; align-items: center; transition: all 0.15s; white-space: nowrap; background: var(--white); box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
   .swipe-read-link:hover { background: var(--gold-pale); }
-  .swipe-simple-btn { font-size: 13px; font-weight: 600; color: var(--ink-3); background: var(--bg-2); border: 1px solid var(--rule); padding: 0 16px; height: 40px; border-radius: 6px; cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; }
-  .swipe-simple-btn:hover { border-color: var(--gold); color: var(--gold); }
-  .swipe-simple-btn.done { background: var(--gold); border-color: var(--gold); color: var(--white); }
 
   /* Footer */
   .site-footer { border-top: 1px solid var(--rule); margin-top: 32px; padding: 10px 0; }
@@ -581,11 +510,6 @@
 
   <!-- Rail -->
   <div class="rail">
-    <div class="rail-tooltip-wrap">
-      <button class="rail-simple" id="railSimple" onclick="toggleAnalyse()">✦</button>
-      <div class="tooltip" id="simpleTooltip">✦ Make it all simple — klik om analyses te tonen</div>
-    </div>
-    <div class="rail-divider"></div>
     <div class="rail-menu-wrap">
       <button class="rail-menu" id="railMenu" onclick="togglePanel()">
         <div class="h-line"></div>
@@ -672,11 +596,9 @@
     <div id="trendingBar" style="display:none;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:12px;"></div>
     <div class="feed-toolbar">
       <span class="feed-title" id="feedTitle">Alles</span>
-      <button class="feed-simple-btn" id="feedSimpleBtn" onclick="toggleAnalyse()">✦ Make it simple</button>
       <div style="flex:1"></div>
       <span id="feedUpdated" style="font-size:11px;color:var(--muted)"></span>
       <span class="feed-count" id="feedCount" style="font-size:11px;color:var(--muted);margin-left:4px"></span>
-
     </div>
 
     <div id="articleFeed">
@@ -722,27 +644,20 @@
 
 <!-- Swipe card viewport (mobiel) -->
 <div class="swipe-viewport" id="swipeViewport">
-  <div class="swipe-header">
-    <span class="swipe-counter" id="swipeCounter">1 / —</span>
-    <span style="font-family:'Lora',serif;font-size:14px;font-weight:700;color:var(--ink)">Kaarten</span>
-    <button class="swipe-close" onclick="exitSwipeMode()" title="Terug naar feed">✕</button>
-  </div>
   <div class="swipe-track" id="swipeTrack">
     <div class="swipe-card" id="swipeCard"></div>
   </div>
-  <div class="swipe-footer">
+  <!-- Zwevende toppil -->
+  <div class="swipe-topbar">
+    <span class="swipe-counter" id="swipeCounter">1 / —</span>
+    <button class="swipe-close" onclick="exitSwipeMode()">← Feed</button>
+  </div>
+  <!-- Zwevende bodembar -->
+  <div class="swipe-bottombar">
     <button class="swipe-nav-btn" id="swipePrev" onclick="swipeNav(-1)" title="Vorige">←</button>
     <div class="swipe-actions" id="swipeActions"></div>
     <button class="swipe-nav-btn" id="swipeNext" onclick="swipeNav(1)" title="Volgende">→</button>
   </div>
-</div>
-
-<!-- Mobile FAB — ✦ Simple pill -->
-<div class="mobile-fab">
-  <button class="mobile-fab-btn" id="mobileFabBtn" onclick="toggleAnalyse()" title="Make all simple">
-    <span class="fab-star">✦</span>
-    <span class="fab-label">Make all simple</span>
-  </button>
 </div>
 
 <div class="mobile-overlay" id="mobileOverlay" onclick="toggleSheet()"></div>
@@ -794,7 +709,6 @@ let activeScope = 'alles';
 let selectedThemes = new Set();
 let activeSort = 'nieuwste';
 let activeView = 'lijst';
-let analyseOn = false;
 let panelOpen = false;
 let savedLinks = JSON.parse(localStorage.getItem('bd_saved') || '[]');
 
@@ -809,14 +723,12 @@ function enterSwipeMode() {
   swipeArticles = filteredArticles.slice();
   swipeIndex = 0;
   document.getElementById('swipeViewport').classList.add('active');
-  document.querySelector('.mobile-fab')?.style.setProperty('display','none');
   renderSwipeCard();
   initSwipeTouch();
 }
 
 function exitSwipeMode() {
   document.getElementById('swipeViewport').classList.remove('active');
-  document.querySelector('.mobile-fab')?.style.removeProperty('display');
   if (activeView === 'kaarten') {
     activeView = 'lijst';
     document.getElementById('articleFeed').classList.remove('grid');
@@ -871,13 +783,7 @@ function buildSwipeCard(card, a, direction) {
 
   // Footer acties
   const actionsEl = document.getElementById('swipeActions');
-  const hasDone = !!a.insight;
-  actionsEl.innerHTML = `
-    ${a.link ? `<a class="swipe-read-link" href="${a.link}" target="_blank" rel="noopener">Lees artikel →</a>` : ''}
-    <button class="swipe-simple-btn ${hasDone?'done':''}" id="swipe-btn-${id}" onclick="swipeAnalyse('${(a.link||'').replace(/'/g,"\\'")}')">
-      ${hasDone ? '✦ Made simple' : '✦ Make it simple'}
-    </button>
-  `;
+  actionsEl.innerHTML = a.link ? `<a class="swipe-read-link" href="${a.link}" target="_blank" rel="noopener">Lees artikel →</a>` : '';
 
   // Animate in
   if (direction) {
@@ -895,23 +801,6 @@ function buildSwipeCard(card, a, direction) {
   }
 }
 
-async function swipeAnalyse(link) {
-  const article = allArticles.find(a => a.link === link);
-  if (!article) return;
-  const id = safeId(link);
-  const btn = document.getElementById('swipe-btn-' + id);
-  if (btn) { btn.textContent = '...'; btn.disabled = true; }
-  try {
-    const res = await fetch('/api/analyse', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ title:article.title, description:article.description, link:article.link, source:article.source, category:article.tag||article.category }) });
-    const data = await res.json();
-    if (data.insight) {
-      article.insight = data.insight;
-      const placeholder = document.getElementById('swipe-analysis-' + id);
-      if (placeholder) placeholder.outerHTML = renderAnalysisBlock(data.insight, id);
-      if (btn) { btn.textContent = '✦ Made simple'; btn.classList.add('done'); btn.disabled = false; }
-    }
-  } catch { if (btn) { btn.textContent = '✦ Make it simple'; btn.disabled = false; } }
-}
 
 function swipeNav(dir) {
   const next = swipeIndex + dir;
@@ -1012,51 +901,6 @@ function togglePanel() {
   document.getElementById('panelOverlay').classList.toggle('open', panelOpen);
 }
 
-function toggleAnalyse() {
-  analyseOn = !analyseOn;
-  const railBtn = document.getElementById('railSimple');
-  if (railBtn) {
-    railBtn.classList.toggle('on', analyseOn);
-    if (analyseOn) {
-      railBtn.classList.remove('activating');
-      void railBtn.offsetWidth;
-      railBtn.classList.add('activating');
-      setTimeout(() => railBtn.classList.remove('activating'), 600);
-    }
-  }
-  const tooltip = document.getElementById('simpleTooltip');
-  if (tooltip) tooltip.textContent = analyseOn ? '✦ Made simple — klik om analyses te verbergen' : '✦ Make it all simple — klik om analyses te tonen';
-  const feedSimpleEl = document.getElementById('feedSimpleBtn');
-  if (feedSimpleEl) { feedSimpleEl.textContent = analyseOn ? '✦ Made simple' : '✦ Make it simple'; feedSimpleEl.classList.toggle('on', analyseOn); }
-  const fabBtn = document.getElementById('mobileFabBtn');
-  if (fabBtn) {
-    fabBtn.querySelector('.fab-label').textContent = 'Make all simple';
-    fabBtn.classList.toggle('on', analyseOn);
-  }
-  updateFabVisibility();
-  if (!analyseOn) {
-    renderArticles();
-  } else {
-    const hidden = document.querySelectorAll('.analysis-block[style*="display: none"]');
-    if (hidden.length > 0) {
-      hidden.forEach(el => el.style.display = '');
-    } else {
-      renderArticles();
-      // Toon voortgang
-      const noInsight = filteredArticles.slice(0, displayedCount).filter(a => !a.insight).length;
-      if (noInsight > 0) showProgress(noInsight);
-    }
-  }
-}
-
-function updateFabVisibility() {
-  const fab = document.getElementById('mobileFabBtn');
-  if (!fab) return;
-  const visible = filteredArticles.slice(0, displayedCount);
-  const allDone = visible.length > 0 && visible.every(a => a.insight);
-  const fabWrap = fab.closest('.mobile-fab');
-  if (fabWrap) fabWrap.style.display = (analyseOn && allDone) ? 'none' : '';
-}
 
 async function loadFeed() {
   try {
@@ -1234,7 +1078,7 @@ function appendArticles(from, to) {
   });
   feed.appendChild(frag);
   document.getElementById('loadMoreContainer').style.display = filteredArticles.length > displayedCount ? 'block' : 'none';
-  if (analyseOn) toAppend.filter(a => !a.insight && a.link).forEach(a => lazyLoadAnalysis(a));
+  toAppend.filter(a => !a.insight && a.link).forEach(a => lazyLoadAnalysis(a));
 }
 
 // ── Trending ──
@@ -1308,8 +1152,7 @@ function renderArticles() {
   feed.innerHTML = toShow.map((a, i) => renderArticle(a, i)).join('');
   if (activeView === 'grid') feed.classList.add('grid');
   document.getElementById('loadMoreContainer').style.display = filteredArticles.length > displayedCount ? 'block' : 'none';
-  if (analyseOn) toShow.filter(a => !a.insight && a.link).forEach(a => lazyLoadAnalysis(a));
-  updateFabVisibility();
+  toShow.filter(a => !a.insight && a.link).forEach(a => lazyLoadAnalysis(a));
 }
 
 function renderArticle(a, i) {
@@ -1353,11 +1196,9 @@ function renderArticle(a, i) {
   }
   const id = safeId(a.link || i);
   const isSaved = savedLinks.includes(a.link);
-  let analysisHtml = '';
-  if (analyseOn) {
-    if (a.insight) analysisHtml = renderAnalysisBlock(a.insight, id);
-    else analysisHtml = `<div class="analysis-block" id="analysis-${id}"><div class="analysis-loading"><div class="spinner"></div><span>Analyse laden...</span></div></div>`;
-  }
+  const analysisHtml = a.insight
+    ? renderAnalysisBlock(a.insight, id)
+    : `<div class="analysis-block" id="analysis-${id}"><div class="analysis-loading"><div class="spinner"></div><span>Analyse laden...</span></div></div>`;
   return `<article class="article" style="animation-delay:${i*30}ms">
     <div class="article-meta">
       <span class="article-source">${a.source||''}</span>
@@ -1373,7 +1214,6 @@ function renderArticle(a, i) {
     <div class="article-footer">
       <div class="footer-left">
         ${a.link ? `<a class="read-link" href="${a.link}" target="_blank" rel="noopener">Lees artikel</a>` : ''}
-        ${!analyseOn ? `<button class="analyse-btn ${a.insight ? 'done' : ''}" id="abtn-${id}" data-link="${(a.link||'').replace(/"/g,'&quot;')}" onclick="${a.insight ? `toonAnalyse('${(a.link||'').replace(/'/g,"\\'")}', this)` : `analyseArtikel('${(a.link||'').replace(/'/g,"\\'")}', this)`}">✦ Make it simple</button>` : ''}
       </div>
       <button class="deel-btn" id="deel-${id}" onclick="deelArtikelTekst('${sanitize(a.link||'')}', '${sanitize(a.title||'')}', '${sanitize(a.source||'')}')" title="Deel" style="${a.insight ? '' : 'visibility:hidden'}"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 11.5L11.5 1.5M11.5 1.5H4.5M11.5 1.5V8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="deel-label"> Deel</span></button>
     </div>
@@ -1411,43 +1251,7 @@ async function lazyLoadAnalysis(article) {
   } finally {
     progressDone++;
     updateProgress();
-    updateFabVisibility();
   }
-}
-
-async function analyseArtikel(link) {
-  const article = allArticles.find(a => a.link === link);
-  if (!article) return;
-  const id = safeId(link);
-  const btn = document.getElementById('abtn-' + id);
-  if (btn) { btn.textContent = '...'; btn.disabled = true; }
-  try {
-    const res = await fetch('/api/analyse', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ title:article.title, description:article.description, link:article.link, source:article.source, category:article.tag||article.category }) });
-    const data = await res.json();
-    if (data.insight) {
-      article.insight = data.insight;
-      const footer = btn?.closest('.article-footer');
-      if (footer) {
-        const block = document.createElement('div');
-        block.innerHTML = renderAnalysisBlock(data.insight, id);
-        footer.parentNode.insertBefore(block.firstElementChild, footer);
-        btn.classList.add('done'); btn.textContent = '✦ Made simple'; btn.disabled = false;
-        btn.onclick = () => verbergAnalyse(link, btn);
-      }
-    }
-  } catch { if (btn) { btn.textContent = '✦ Make it simple'; btn.disabled = false; } }
-}
-
-function verbergAnalyse(link, btn) {
-  const block = document.getElementById('analysis-' + safeId(link));
-  if (block) { block.style.display = 'none'; btn.textContent = '✦ Make it simple'; btn.classList.remove('done'); btn.onclick = () => toonAnalyse(link, btn); }
-}
-
-function toonAnalyse(link, btn) {
-  if (!btn) btn = document.getElementById('abtn-' + safeId(link));
-  const block = document.getElementById('analysis-' + safeId(link));
-  if (block) { block.style.display = ''; btn.textContent = '✦ Made simple'; btn.classList.add('done'); btn.onclick = () => verbergAnalyse(link, btn); }
-  else analyseArtikel(link, btn);
 }
 
 function toggleSave(link, btn) {
@@ -1648,9 +1452,9 @@ function safeId(str) { try { return btoa(String(str)).replace(/[^a-z0-9]/gi,'');
   <div class="onboarding-card">
     <div class="onboarding-logo"><span style="font-weight:700">Bright</span><span style="font-style:italic;color:var(--gold)">Dash</span></div>
     <h2 class="onboarding-title">Complex tech news.<br>Made simple.</h2>
-    <p class="onboarding-text">BrightDash verzamelt het laatste nieuws over AI en tech wat relevant is voor het Nederlandse bedrijfsleven. Klik op <strong>✦ Simple</strong> om direct een AI-analyse te zien bij elk artikel, snel en to the point.</p>
+    <p class="onboarding-text">BrightDash verzamelt het laatste nieuws over AI en tech wat relevant is voor het Nederlandse bedrijfsleven. Bij elk artikel een AI-analyse: Kern, Betekenis en Actie — automatisch geladen.</p>
     <div class="onboarding-steps">
-      <div class="onboarding-step"><span class="onboarding-icon">✦</span><span>Klik <strong>Simple</strong> voor AI-analyses</span></div>
+      <div class="onboarding-step"><span class="onboarding-icon">✦</span><span>AI-analyse bij elk artikel</span></div>
       <div class="onboarding-step"><span class="onboarding-icon">☰</span><span>Filter op thema via het menu</span></div>
       <div class="onboarding-step"><span class="onboarding-icon">★</span><span>Sla artikelen op voor later</span></div>
     </div>
