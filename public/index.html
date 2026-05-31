@@ -880,7 +880,7 @@ function restoreFilters() {
         else if (b.id && b.id.startsWith('psort-')) b.classList.remove('active');
       });
     }
-    if (f.view) {
+    if (f.view && f.view !== 'kaarten') {
       activeView = f.view;
       document.getElementById('articleFeed')?.classList.toggle('grid', f.view === 'grid');
       document.querySelectorAll('.panel-toggle-btn').forEach(b => {
@@ -896,7 +896,7 @@ function saveFilters() {
     scope: activeScope,
     themes: [...selectedThemes],
     sort: activeSort,
-    view: activeView
+    view: activeView === 'kaarten' ? 'lijst' : activeView
   }));
 }
 
