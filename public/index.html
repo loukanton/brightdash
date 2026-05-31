@@ -161,6 +161,7 @@
   #updatedLabel { display: none !important; }
   .feed-title { font-family: 'Lora', serif; font-size: 22px; font-weight: 700; color: var(--ink); flex: 0 0 auto; }
   .feed-count { font-size: 12px; color: var(--muted); }
+  @media (max-width: 600px) { #sview-grid { display: none !important; } }
   .trending-pill { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gold); border: 1px solid var(--gold-border); background: var(--gold-pale); cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; }
   .trending-pill:hover { background: var(--gold); color: var(--white); }
   .trending-pill.active { background: var(--gold); color: var(--white); }
@@ -386,7 +387,7 @@
     position: absolute;
     inset: 0;
     background: var(--white);
-    padding: 72px 24px 120px;
+    padding: 72px 24px 160px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -679,7 +680,7 @@
     <span class="sheet-label">Weergave</span>
     <div class="sheet-sort-row">
       <button class="sheet-btn active" id="sview-lijst" onclick="setView('lijst', this); markSheetChanged()">Lijst</button>
-      <button class="sheet-btn" id="sview-grid" onclick="setView('grid', this); markSheetChanged()">Grid</button>
+      <button class="sheet-btn" id="sview-grid" onclick="setView('grid', this); markSheetChanged()" style="display:none">Grid</button>
       <button class="sheet-btn" id="sview-kaarten" onclick="setView('kaarten', this); markSheetChanged()">Kaarten</button>
     </div>
   </div>
@@ -811,16 +812,24 @@ function swipeNav(dir) {
 
 function initSwipeTouch() {
   const track = document.getElementById('swipeTrack');
+  let touchMoved = false;
   track.addEventListener('touchstart', e => {
     swipeTouchStartX = e.touches[0].clientX;
     swipeTouchStartY = e.touches[0].clientY;
     swipeDragging = true;
+    touchMoved = false;
   }, { passive: true });
+  track.addEventListener('touchmove', e => { touchMoved = true; }, { passive: true });
   track.addEventListener('touchend', e => {
     if (!swipeDragging) return;
     swipeDragging = false;
     const dx = e.changedTouches[0].clientX - swipeTouchStartX;
     const dy = e.changedTouches[0].clientY - swipeTouchStartY;
+    // Swipe omlaag (snel, > 80px) = sluiten
+    if (dy > 80 && Math.abs(dy) > Math.abs(dx) * 1.5) {
+      exitSwipeMode(); return;
+    }
+    // Horizontale swipe = volgende/vorige
     if (Math.abs(dx) > Math.abs(dy) * 1.5 && Math.abs(dx) > 40) {
       swipeNav(dx < 0 ? 1 : -1);
     }
@@ -1215,7 +1224,7 @@ function renderArticle(a, i) {
       <div class="footer-left">
         ${a.link ? `<a class="read-link" href="${a.link}" target="_blank" rel="noopener">Lees artikel</a>` : ''}
       </div>
-      <button class="deel-btn" id="deel-${id}" onclick="deelArtikelTekst('${sanitize(a.link||'')}', '${sanitize(a.title||'')}', '${sanitize(a.source||'')}')" title="Deel" style="${a.insight ? '' : 'visibility:hidden'}"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 11.5L11.5 1.5M11.5 1.5H4.5M11.5 1.5V8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="deel-label"> Deel</span></button>
+      <button class="deel-btn" id="deel-${id}" onclick="deelArtikelTekst('${sanitize(a.link||'')}', '${sanitize(a.title||'')}', '${sanitize(a.source||'')}')" title="Deel" style=""><svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 11.5L11.5 1.5M11.5 1.5H4.5M11.5 1.5V8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="deel-label"> Deel</span></button>
     </div>
   </article>`;
 }
@@ -1451,14 +1460,21 @@ function safeId(str) { try { return btoa(String(str)).replace(/[^a-z0-9]/gi,'');
 <div class="onboarding-overlay hidden" id="onboardingOverlay">
   <div class="onboarding-card">
     <div class="onboarding-logo"><span style="font-weight:700">Bright</span><span style="font-style:italic;color:var(--gold)">Dash</span></div>
-    <h2 class="onboarding-title">Complex tech news.<br>Made simple.</h2>
-    <p class="onboarding-text">BrightDash verzamelt het laatste nieuws over AI en tech wat relevant is voor het Nederlandse bedrijfsleven. Bij elk artikel een AI-analyse: Kern, Betekenis en Actie — automatisch geladen.</p>
-    <div class="onboarding-steps">
-      <div class="onboarding-step"><span class="onboarding-icon">✦</span><span>AI-analyse bij elk artikel</span></div>
-      <div class="onboarding-step"><span class="onboarding-icon">☰</span><span>Filter op thema via het menu</span></div>
-      <div class="onboarding-step"><span class="onboarding-icon">★</span><span>Sla artikelen op voor later</span></div>
+    <h2 class="onboarding-title">Het nieuws dat<br>ertoe doet.</h2>
+    <p class="onboarding-text">AI en tech nieuws voor Nederlandse managers en beslissers — met directe analyse. Wat speelt er, wat betekent het, en wat moet je ermee?</p>
+    <div style="background:var(--chip-kern-bg);border:1px solid var(--chip-kern-border);border-radius:8px;padding:14px 16px;margin-bottom:12px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--chip-kern-text);opacity:0.7;margin-bottom:4px;">Kern</div>
+      <div style="font-size:13px;color:var(--chip-kern-text);line-height:1.5;">Wat er speelt, in één zin.</div>
     </div>
-    <button class="onboarding-btn" onclick="closeOnboarding()">Aan de slag →</button>
+    <div style="background:var(--chip-bet-bg);border:1px solid var(--chip-bet-border);border-radius:8px;padding:14px 16px;margin-bottom:12px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--chip-bet-text);opacity:0.7;margin-bottom:4px;">Betekenis</div>
+      <div style="font-size:13px;color:var(--chip-bet-text);line-height:1.5;">Waarom het relevant is voor jouw organisatie.</div>
+    </div>
+    <div style="background:var(--chip-act-bg);border:1px solid var(--chip-act-border);border-radius:8px;padding:14px 16px;margin-bottom:24px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--chip-act-text);opacity:0.7;margin-bottom:4px;">Actie</div>
+      <div style="font-size:13px;color:var(--chip-act-text);line-height:1.5;">Concreet wat je morgen kunt doen.</div>
+    </div>
+    <button class="onboarding-btn" onclick="closeOnboarding()">Toon het nieuws →</button>
   </div>
 </div>
 
