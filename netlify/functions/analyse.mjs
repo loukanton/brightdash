@@ -4,12 +4,12 @@ import { getStore } from "@netlify/blobs";
 const SCHRIJFREGELS = `
 Schrijfregels (strikt volgen):
 - Kern: 1 feitelijke zin. Wat is er gebeurd of aangekondigd? Geen interpretatie.
-- Betekenis: 1-2 zinnen. Wat is de strategische impact voor Nederlandse organisaties? Wees specifiek — noem sectoren, rollen of scenario's waar dit relevant is. Begin NIET met "Dit betekent dat".
-- Actie: 1 korte actiezin. Begin met een concreet werkwoord dat past bij dit artikel (bijv. Evalueer / Bespreek / Test / Stel bij / Anticipeer op / Vraag je leverancier / Zet op de agenda / Vergelijk). Gebruik NOOIT "Zorg dat" of "Onderzoek of". De actie moet logisch volgen uit dit specifieke artikel — niet generiek zijn.
+- Betekenis: schrijf alleen wat direct uit het artikel volgt — geen extrapolaties of aannames die het artikel zelf niet maakt. Als er één relevante impact is: schrijf 1 zin. Als er meerdere zijn: schrijf 2-3 korte bullets (elk max 1 gedachte, geen bijzinnen). Begin NIET met "Dit betekent dat".
+- Actie: 1 korte actiezin. Begin met een concreet werkwoord passend bij dit artikel (bijv. Evalueer / Bespreek / Test / Stel bij / Anticipeer op / Vraag je leverancier / Zet op de agenda / Vergelijk). Gebruik NOOIT "Zorg dat" of "Onderzoek of". De actie moet logisch volgen uit dit specifieke artikel.
 - Geen herhaling tussen de drie secties.
 - Geen inleiding, geen afsluiting, geen extra tekst buiten de drie secties.
-- Als het artikel weinig inhoud heeft: schrijf korter, vul niet op met algemeenheden.
-- Schrijf in helder Nederlands. Korte zinnen, actieve werkwoorden. Geen managementjargon, geen wollige formuleringen ("in het kader van", "ten aanzien van", "met het oog op"). Wel inhoudelijk en concreet — de lezer is een beslisser, geen leek.`;
+- Als het artikel weinig inhoud heeft (aankondiging, evenement, fotoreportage zonder inhoud): schrijf alleen Kern en laat Betekenis en Actie weg. Vul nooit op met algemeenheden.
+- Schrijf in helder Nederlands. Korte zinnen, actieve werkwoorden. Geen managementjargon ("in het kader van", "ten aanzien van", "met het oog op"). De lezer is een beslisser, geen leek.`;
 
 // Per-categorie prompts
 const CATEGORY_PROMPTS = {
@@ -18,7 +18,7 @@ const CATEGORY_PROMPTS = {
 Analyseer onderstaand AI-nieuwsbericht. Geef exact dit format terug, elk onderdeel op een nieuwe regel:
 
 Kern: [Wat er technisch of zakelijk is gebeurd of aangekondigd — feitelijk, max 1 zin]
-Betekenis: [Wat dit concreet verandert voor organisaties die AI inzetten of willen inzetten — benoem specifieke implicaties voor gebruik, kosten, risico of concurrentiepositie]
+Betekenis: [Wat dit concreet verandert voor organisaties die AI inzetten of willen inzetten]
 Actie: [Één concrete vervolgstap die direct voortkomt uit dit nieuws]
 
 Titel: {{title}}
@@ -31,7 +31,7 @@ ${SCHRIJFREGELS}`,
 Analyseer onderstaand technologienieuws. Geef exact dit format terug:
 
 Kern: [Wat er technisch of in de markt is gebeurd — feitelijk, max 1 zin]
-Betekenis: [Welke organisaties of sectoren dit raakt en waarom het er nu toe doet — wees specifiek over de impact]
+Betekenis: [Welke organisaties of sectoren dit raakt en waarom het er nu toe doet]
 Actie: [Één concrete stap of beslissing die dit nieuws uitlokt]
 
 Titel: {{title}}
@@ -118,7 +118,7 @@ Bron: {{source}}
 ${SCHRIJFREGELS}`
 };
 
-// Relevantiecheck — is dit artikel relevant genoeg om te analyseren?
+// Relevantiecheck
 const IRRELEVANT_KEYWORDS = [
   'recipe', 'cooking', 'sports', 'celebrity', 'fashion', 'beauty',
   'horoscope', 'lottery', 'entertainment', 'movie review', 'tv show',
@@ -178,10 +178,8 @@ export default async (req) => {
 
     const store = getStore('brightdash');
 
-    // Controleer cache (tenzij forceRefresh of testMode)
     if (!testMode && !forceRefresh && link) {
       try {
-        // Check in articles blob
         const articles = await store.get('articles', { type: 'json' });
         if (articles && Array.isArray(articles)) {
           const cached = articles.find(a => a.link === link);
@@ -189,7 +187,6 @@ export default async (req) => {
             return new Response(JSON.stringify({ insight: cached.insight, fromCache: true }), { status: 200, headers });
           }
         }
-        // Check in analyses blob als fallback
         const analyses = await store.get('analyses', { type: 'json' });
         if (analyses && analyses[link]) {
           return new Response(JSON.stringify({ insight: analyses[link], fromCache: true }), { status: 200, headers });
@@ -197,13 +194,10 @@ export default async (req) => {
       } catch {}
     }
 
-    // Relevantiecheck
     if (!testMode && !isRelevant(title, description)) {
-      const notRelevant = 'Dit artikel is niet direct relevant voor Nederlandse managers en bestuurders in tech, energie of overheid.';
-      return new Response(JSON.stringify({ insight: null, notRelevant: true, message: notRelevant }), { status: 200, headers });
+      return new Response(JSON.stringify({ insight: null, notRelevant: true }), { status: 200, headers });
     }
 
-    // Laad custom prompt
     let savedCustomPrompt = customPrompt;
     if (!savedCustomPrompt) {
       try {
@@ -214,7 +208,6 @@ export default async (req) => {
 
     const prompt = getPromptForCategory(category, title, description, source, savedCustomPrompt);
 
-    // Roep Anthropic API aan
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -236,16 +229,13 @@ export default async (req) => {
       return new Response(JSON.stringify({ error: 'Geen analyse ontvangen' }), { status: 500, headers });
     }
 
-    // Sla op in BEIDE blobs voor synchronisatie
     if (!testMode && link) {
       try {
-        // 1. Update analyses blob
         let analyses = {};
         try { analyses = await store.get('analyses', { type: 'json' }) || {}; } catch {}
         analyses[link] = insight;
         await store.setJSON('analyses', analyses);
 
-        // 2. Update ook direct in articles blob
         try {
           const articles = await store.get('articles', { type: 'json' });
           if (articles && Array.isArray(articles)) {
