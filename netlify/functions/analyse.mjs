@@ -4,7 +4,7 @@ import { getStore } from "@netlify/blobs";
 const SCHRIJFREGELS = `
 Schrijfregels (strikt volgen):
 - Kern: 1 feitelijke zin. Wat is er gebeurd of aangekondigd? Geen interpretatie.
-- Betekenis: schrijf alleen wat direct uit het artikel volgt — geen extrapolaties of aannames die het artikel zelf niet maakt. Als er één relevante impact is: schrijf 1 zin. Als er meerdere zijn: schrijf 2-3 korte bullets (elk max 1 gedachte, geen bijzinnen). Begin NIET met "Dit betekent dat".
+- Betekenis: schrijf alleen wat direct uit het artikel volgt — geen extrapolaties of aannames die het artikel zelf niet maakt. Als er één relevante impact is: schrijf 1 zin. Als er meerdere zijn: schrijf 2-3 korte zinnen, elk op een nieuwe regel. Elke zin is één gedachte, geen bijzinnen. Geen streepjes of opsommingstekens. Begin NIET met "Dit betekent dat".
 - Actie: 1 korte actiezin. Begin met een concreet werkwoord passend bij dit artikel (bijv. Evalueer / Bespreek / Test / Stel bij / Anticipeer op / Vraag je leverancier / Zet op de agenda / Vergelijk). Gebruik NOOIT "Zorg dat" of "Onderzoek of". De actie moet logisch volgen uit dit specifieke artikel.
 - Geen herhaling tussen de drie secties.
 - Geen inleiding, geen afsluiting, geen extra tekst buiten de drie secties.
