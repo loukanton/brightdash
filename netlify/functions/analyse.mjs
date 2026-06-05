@@ -3,13 +3,13 @@ import { getStore } from "@netlify/blobs";
 // Gedeelde schrijfinstructies voor alle prompts
 const SCHRIJFREGELS = `
 Schrijfregels (strikt volgen):
-- Kern: 1 feitelijke zin. Wat is er gebeurd of aangekondigd? Geen interpretatie.
-- Betekenis: schrijf alleen wat direct uit het artikel volgt — geen extrapolaties of aannames die het artikel zelf niet maakt. Als er één relevante impact is: schrijf 1 zin. Als er meerdere zijn: schrijf 2-3 korte zinnen, elk op een nieuwe regel. Elke zin is één gedachte, geen bijzinnen. Geen streepjes of opsommingstekens. Begin NIET met "Dit betekent dat".
-- Actie: 1 korte actiezin. Begin met een concreet werkwoord passend bij dit artikel (bijv. Evalueer / Bespreek / Test / Stel bij / Anticipeer op / Vraag je leverancier / Zet op de agenda / Vergelijk). Gebruik NOOIT "Zorg dat" of "Onderzoek of". De actie moet logisch volgen uit dit specifieke artikel.
+- Kern: 1 feitelijke zin. Schrijf alsof je het aan een collega uitlegt bij de koffieautomaat — geen vaktaal, geen omhaal. Wat is er gebeurd?
+- Betekenis: schrijf alleen wat direct uit het artikel volgt — geen extrapolaties. Als er één relevante impact is: schrijf 1 zin. Als er meerdere zijn: schrijf 2-3 korte zinnen, elk op een nieuwe regel. Elke zin is één gedachte, geen bijzinnen. Geen streepjes of opsommingstekens. Begin NIET met "Dit betekent dat". Geef het gevoel van "dit is wat je hiervan moet snappen" — niet van "hier is een samenvatting".
+- Actie: 1 korte zin. Begin met een concreet werkwoord (bijv. Evalueer / Bespreek / Test / Stel bij / Anticipeer op / Vraag / Vergelijk). Gebruik NOOIT "Zorg dat" of "Onderzoek of". De actie moet voelen als een logische volgende stap, niet als een taak.
 - Geen herhaling tussen de drie secties.
 - Geen inleiding, geen afsluiting, geen extra tekst buiten de drie secties.
-- Als het artikel weinig inhoud heeft (aankondiging, evenement, fotoreportage zonder inhoud): schrijf alleen Kern en laat Betekenis en Actie weg. Vul nooit op met algemeenheden.
-- Schrijf in helder Nederlands. Korte zinnen, actieve werkwoorden. Geen managementjargon ("in het kader van", "ten aanzien van", "met het oog op"). De lezer is een beslisser, geen leek.`;
+- Als het artikel weinig inhoud heeft (aankondiging, evenement, fotoreportage): schrijf alleen Kern. Vul nooit op.
+- Schrijf in helder Nederlands. Korte zinnen, actieve werkwoorden. Vertaal technische termen naar gewone woorden — kopieer nooit jargon uit het artikel. Schrijf alsof je het uitlegt aan een drukke manager die geen tijd heeft om twee keer te lezen.`;
 
 // Per-categorie prompts
 const CATEGORY_PROMPTS = {
@@ -216,7 +216,7 @@ export default async (req) => {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
+        model: 'claude-sonnet-4-6',
         max_tokens: 600,
         messages: [{ role: 'user', content: prompt }]
       })
