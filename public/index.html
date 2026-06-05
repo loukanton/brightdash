@@ -695,6 +695,15 @@
     </div>
   </div>
   <div class="sheet-section">
+    <span class="sheet-label">Artikelen</span>
+    <div class="sheet-sort-row">
+      <button class="sheet-btn active" id="sscope-alles" onclick="setScope('alles', this); markSheetChanged()">Alles</button>
+      <button class="sheet-btn" id="sscope-nl" onclick="setScope('nl', this); markSheetChanged()">Nederlands</button>
+      <button class="sheet-btn" id="sscope-en" onclick="setScope('en', this); markSheetChanged()">Internationaal</button>
+      <button class="sheet-btn" id="sscope-opgeslagen" onclick="setScope('opgeslagen', this); markSheetChanged()">Opgeslagen</button>
+    </div>
+  </div>
+  <div class="sheet-section">
     <span class="sheet-label">Sortering</span>
     <div class="sheet-sort-row">
       <button class="sheet-btn active" onclick="setSort('nieuwste', this); markSheetChanged()">Nieuwste</button>
@@ -874,6 +883,10 @@ function restoreFilters() {
         if (onclick.includes("'" + f.scope + "'")) b.classList.add('active');
         else b.classList.remove('active');
       });
+      ['sscope-alles','sscope-nl','sscope-en','sscope-opgeslagen'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) btn.classList.toggle('active', id === 'sscope-' + f.scope);
+      });
     }
     if (f.themes && Array.isArray(f.themes)) {
       f.themes.forEach(t => {
@@ -1035,10 +1048,14 @@ function setPanelView(view, el) {
 
 function setScope(scope, el) {
   activeScope = scope;
-  // Reset thema's bij alles/nl/en/opgeslagen
   selectedThemes.clear();
   document.querySelectorAll('.panel-theme-item').forEach(b => b.classList.remove('selected'));
   document.querySelectorAll('.panel-item').forEach(b => b.classList.remove('active'));
+  // Sync mobile sheet scope buttons
+  ['sscope-alles','sscope-nl','sscope-en','sscope-opgeslagen'].forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) btn.classList.toggle('active', id === 'sscope-' + scope);
+  });
   el.classList.add('active');
   const labels = { alles:'Alles', nl:'Nederlands', en:'Internationaal', opgeslagen:'Opgeslagen' };
   document.getElementById('feedTitle').textContent = labels[scope] || scope;
