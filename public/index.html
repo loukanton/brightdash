@@ -1123,7 +1123,7 @@ function appendArticles(from, to) {
   });
   feed.appendChild(frag);
   document.getElementById('loadMoreContainer').style.display = filteredArticles.length > displayedCount ? 'block' : 'none';
-  toAppend.filter(a => !a.insight && a.link).forEach(a => lazyLoadAnalysis(a));
+  toAppend.filter(a => !a.insight && a.link).forEach(a => enqueueAnalysis(a));
 }
 
 // ── Trending ──
@@ -1197,7 +1197,7 @@ function renderArticles() {
   feed.innerHTML = toShow.map((a, i) => renderArticle(a, i)).join('');
   if (activeView === 'grid') feed.classList.add('grid');
   document.getElementById('loadMoreContainer').style.display = filteredArticles.length > displayedCount ? 'block' : 'none';
-  toShow.filter(a => !a.insight && a.link).forEach(a => lazyLoadAnalysis(a));
+  toShow.filter(a => !a.insight && a.link).forEach(a => enqueueAnalysis(a));
 }
 
 function renderArticle(a, i) {
@@ -1277,10 +1277,31 @@ function renderAnalysisBlock(insight, id) {
   </div>`;
 }
 
-async function lazyLoadAnalysis(article) {
+// Beperk gelijktijdige analyse-aanvragen — voorkomt rate-limits (429) en
+// function-timeouts (502/504) die "Analyse tijdelijk niet beschikbaar" geven.
+const ANALYSIS_CONCURRENCY = 3;
+let analysisActive = 0;
+const analysisQueue = [];
+function enqueueAnalysis(article) {
+  analysisQueue.push(article);
+  pumpAnalysisQueue();
+}
+function pumpAnalysisQueue() {
+  while (analysisActive < ANALYSIS_CONCURRENCY && analysisQueue.length) {
+    const article = analysisQueue.shift();
+    analysisActive++;
+    lazyLoadAnalysis(article).finally(() => {
+      analysisActive--;
+      pumpAnalysisQueue();
+    });
+  }
+}
+
+async function lazyLoadAnalysis(article, attempt = 0) {
   const id = safeId(article.link);
   try {
     const res = await fetch('/api/analyse', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ title:article.title, description:article.description, link:article.link, source:article.source, category:article.tag||article.category }) });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
     if (data.insight) {
       article.insight = data.insight;
@@ -1291,11 +1312,17 @@ async function lazyLoadAnalysis(article) {
       if (el) el.innerHTML = '<div style="font-size:12px;color:var(--muted);padding:8px 0">Analyse niet beschikbaar</div>';
     }
   } catch {
+    if (attempt < 2) {
+      await new Promise(r => setTimeout(r, 800 * Math.pow(2, attempt)));
+      return lazyLoadAnalysis(article, attempt + 1);
+    }
     const el = document.getElementById('analysis-' + id);
     if (el) el.innerHTML = '<div style="font-size:12px;color:var(--muted);padding:8px 0">Analyse tijdelijk niet beschikbaar</div>';
   } finally {
-    progressDone++;
-    updateProgress();
+    if (attempt === 0) {
+      progressDone++;
+      updateProgress();
+    }
   }
 }
 
