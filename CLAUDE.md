@@ -17,10 +17,14 @@ public/              statische site, met de hand geschreven HTML
   admin.html         beheerpagina: prompts testen, cache legen, feeds verversen
   privacy.html       privacybeleid — bijwerken als er een dienst bijkomt
   disclaimer.html
+netlify/lib/
+  feeds.mjs          de feedlijst en alle ophaal-, filter- en opslaglogica
 netlify/functions/   backend
-  refresh-feeds.mjs  cron (*/30), haalt alle feeds op, filtert, dedupliceert, max 200 items
+  refresh-feeds.mjs  cron (*/30), roept refreshFeeds() aan
+  refresh.mjs        POST /api/refresh en /api/refresh-feeds — dezelfde refresh, handmatig
   articles.js        GET /api/articles — serveert de opgeslagen artikelen
   analyse.mjs        POST /api/analyse — vraagt Claude om de duiding, cachet het resultaat
+  admin-prompt.mjs   GET/POST /api/admin-prompt — leest en schrijft de eigen prompt
   proxy.js           GET /api/proxy?url= — CORS-proxy voor losse feeds
   clear-cache.js     POST /api/clear-cache
 netlify.toml         build- en functieconfig
@@ -74,14 +78,15 @@ geïnstalleerd hebben.
 
 ## Bekende gaten
 
-Deze endpoints worden aangeroepen maar bestaan niet — nog niet gerepareerd, wel goed om te weten:
-
-- `admin.html` roept `/api/admin-prompt` aan, maar er is geen functie die de sleutel `prompt`
-  wegschrijft. De prompt-editor in de admin doet dus niets.
-- `admin.html` roept `/api/refresh-feeds` aan, maar `refresh-feeds.mjs` heeft alleen een
-  `schedule` en geen `path`. Handmatig verversen werkt niet.
-- `articles.js` triggert `/api/refresh` als de store leeg is. Dat pad bestaat evenmin; de fout
-  wordt stil weggeslikt.
+- **De admin is niet beveiligd.** `admin.html` staat gewoon publiek op `/admin.html` en de
+  endpoints erachter (`/api/clear-cache`, `/api/admin-prompt`, `/api/refresh-feeds`) vragen niet om
+  een sleutel. Iedereen die het pad kent kan de cache legen of de prompt herschrijven die alle
+  analyses stuurt. Nog niet opgelost.
+- **Een eigen prompt zet alle categorieprompts opzij.** Sla je in de admin iets op, dan gebruikt
+  `analyse.mjs` die ene prompt voor elke categorie. Leeg opslaan wist hem en zet de
+  categorieprompts terug.
+- **Refresh is synchroon.** 25 feeds parallel, elk met 5 seconden timeout, binnen de
+  functielimiet van Netlify. Komen er veel feeds bij, dan kan dat gaan knellen.
 
 ## Werkafspraken
 
