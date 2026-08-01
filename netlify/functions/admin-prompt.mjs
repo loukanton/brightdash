@@ -1,4 +1,5 @@
 import { getStore } from '@netlify/blobs';
+import { requireAdmin } from '../lib/auth.mjs';
 
 // Leest en schrijft de eigen prompt uit de admin.
 // Staat er een prompt in de store, dan gebruikt analyse.mjs die voor ELKE categorie
@@ -8,12 +9,15 @@ export default async (req) => {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type'
+    'Access-Control-Allow-Headers': 'Content-Type, x-admin-key'
   };
 
   if (req.method === 'OPTIONS') {
     return new Response(null, { status: 204, headers });
   }
+
+  const denied = requireAdmin(req);
+  if (denied) return denied;
 
   const store = getStore('brightdash');
 

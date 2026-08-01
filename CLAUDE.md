@@ -51,7 +51,19 @@ hart van het product — de toon is met zorg afgesteld. Pas ze niet aan zonder d
 
 **Model:** `claude-sonnet-4-6`, hardcoded in `analyse.mjs`, max 600 tokens.
 
-**Secret:** `ANTHROPIC_API_KEY`, staat in de Netlify-omgevingsvariabelen. Niet in de repo.
+**Secrets** staan in de Netlify-omgevingsvariabelen, nooit in de repo — die is publiek:
+
+- `ANTHROPIC_API_KEY` — voor de analyses
+- `ADMIN_PASSWORD` — het wachtwoord van de admin
+
+**Toegang tot de admin.** `admin.html` vraagt om het wachtwoord, bewaart het in sessionStorage en
+stuurt het als `x-admin-key` mee. De server controleert dat in `netlify/lib/auth.mjs` tegen
+`ADMIN_PASSWORD`, met een hashvergelijking van vaste lengte. Staat de variabele niet ingesteld, dan
+gaan de endpoints op slot (503) in plaats van open.
+
+Achter het wachtwoord: `/api/admin-check`, `/api/admin-prompt`, `/api/clear-cache`, `/api/refresh`
+en `/api/refresh-feeds`. Publiek blijven `/api/articles`, `/api/analyse` en `/api/proxy` — die heeft
+de site zelf nodig.
 
 **Frontend-state** zit in localStorage onder `bd_theme`, `bd_saved`, `bd_filters`, `bd_onboarded`,
 `bd_visits` en `bd_lastvisit`. Geen accounts, geen server-side gebruikersdata.
@@ -78,10 +90,12 @@ geïnstalleerd hebben.
 
 ## Bekende gaten
 
-- **De admin is niet beveiligd.** `admin.html` staat gewoon publiek op `/admin.html` en de
-  endpoints erachter (`/api/clear-cache`, `/api/admin-prompt`, `/api/refresh-feeds`) vragen niet om
-  een sleutel. Iedereen die het pad kent kan de cache legen of de prompt herschrijven die alle
-  analyses stuurt. Nog niet opgelost.
+- **`/api/analyse` is publiek en kost geld.** De site moet erbij kunnen, dus er zit geen slot op.
+  Wie het endpoint kent kan analyses laten genereren op jouw Anthropic-rekening. Er is geen
+  rate limiting.
+- **De admin-pagina zelf is opvraagbaar.** Het slot zit op de endpoints, niet op het HTML-bestand;
+  `/admin.html` levert nog steeds de lege schil met het inlogscherm. De data zit veilig, de
+  aanwezigheid van de pagina niet.
 - **Een eigen prompt zet alle categorieprompts opzij.** Sla je in de admin iets op, dan gebruikt
   `analyse.mjs` die ene prompt voor elke categorie. Leeg opslaan wist hem en zet de
   categorieprompts terug.

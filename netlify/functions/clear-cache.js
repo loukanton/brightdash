@@ -1,9 +1,13 @@
 import { getStore } from '@netlify/blobs';
+import { requireAdmin } from '../lib/auth.mjs';
 
 export default async (req, context) => {
   if (req.method !== 'POST') {
     return new Response('POST only', { status: 405 });
   }
+
+  const denied = requireAdmin(req);
+  if (denied) return denied;
 
   try {
     const store = getStore('brightdash');

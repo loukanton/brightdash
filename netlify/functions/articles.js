@@ -7,9 +7,13 @@ export default async (req, context) => {
     const meta = await store.get('meta', { type: 'json' });
 
     if (!articles || articles.length === 0) {
-      // Trigger a background refresh so next request has data
+      // Trigger a background refresh so next request has data.
+      // /api/refresh zit achter het adminwachtwoord, dus die gaat mee uit de omgeving.
       context.waitUntil(
-        fetch(new URL('/api/refresh', req.url).toString(), { method: 'POST' }).catch(()=>{})
+        fetch(new URL('/api/refresh', req.url).toString(), {
+          method: 'POST',
+          headers: { 'x-admin-key': process.env.ADMIN_PASSWORD || '' }
+        }).catch(()=>{})
       );
       return new Response(JSON.stringify({ articles: [], updatedAt: null, refreshing: true }), {
         headers: { 'Content-Type': 'application/json' }

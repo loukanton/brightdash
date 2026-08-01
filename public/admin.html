@@ -33,6 +33,57 @@
     min-height: 100vh;
   }
 
+  /* Inlogscherm */
+  .login-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--dark);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .login-overlay.hidden { display: none; }
+  .login-box {
+    background: var(--dark-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    width: 100%;
+    max-width: 360px;
+  }
+  .login-box h1 {
+    font-family: 'Lora', serif;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .login-box p {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+  .login-box input {
+    width: 100%;
+    background: var(--dark-3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+  }
+  .login-box input:focus { outline: none; border-color: var(--gold); }
+  .login-box button { width: 100%; }
+  .login-error {
+    color: var(--red);
+    font-size: 13px;
+    margin-top: 12px;
+    min-height: 18px;
+  }
+
   /* Header */
   .header {
     background: var(--dark-2);
@@ -623,6 +674,16 @@
 </head>
 <body>
 
+<div class="login-overlay" id="loginOverlay">
+  <form class="login-box" onsubmit="submitLogin(event)">
+    <h1>BrightDash Admin</h1>
+    <p>Voer het wachtwoord in om verder te gaan.</p>
+    <input type="password" id="loginPassword" placeholder="Wachtwoord" autocomplete="current-password" autofocus>
+    <button type="submit" class="btn btn-primary">Inloggen</button>
+    <div class="login-error" id="loginError"></div>
+  </form>
+</div>
+
 <div class="header">
   <div class="logo">
     <span>Bright</span><span>Dash</span>
@@ -777,10 +838,71 @@ let selectedTestArticles = new Set();
 let currentPrompt = '';
 
 // Init
-document.addEventListener('DOMContentLoaded', () => {
+// ---- Toegang ----
+// Het wachtwoord gaat als header mee naar de admin-endpoints. De server controleert
+// het tegen ADMIN_PASSWORD; hier staat niets hardcoded. sessionStorage, dus het is
+// weg zodra je het tabblad sluit.
+let adminKey = sessionStorage.getItem('bd_admin_key') || '';
+
+async function checkKey(key) {
+  try {
+    return await fetch('/api/admin-check', { method: 'POST', headers: { 'x-admin-key': key } });
+  } catch {
+    return null;
+  }
+}
+
+function lockAdmin(msg = '') {
+  adminKey = '';
+  sessionStorage.removeItem('bd_admin_key');
+  document.getElementById('loginOverlay').classList.remove('hidden');
+  document.getElementById('loginError').textContent = msg;
+}
+
+function unlockAdmin() {
+  document.getElementById('loginOverlay').classList.add('hidden');
   loadMeta();
   loadPrompt();
   loadArticles();
+}
+
+async function submitLogin(e) {
+  e.preventDefault();
+  const err = document.getElementById('loginError');
+  const pw = document.getElementById('loginPassword').value;
+  if (!pw) { err.textContent = 'Vul een wachtwoord in'; return; }
+
+  err.textContent = 'Controleren...';
+  const res = await checkKey(pw);
+
+  if (!res) { err.textContent = 'Server niet bereikbaar'; return; }
+  if (res.status === 503) { err.textContent = 'ADMIN_PASSWORD staat niet ingesteld in Netlify'; return; }
+  if (!res.ok) { err.textContent = 'Wachtwoord klopt niet'; return; }
+
+  adminKey = pw;
+  sessionStorage.setItem('bd_admin_key', pw);
+  document.getElementById('loginPassword').value = '';
+  err.textContent = '';
+  unlockAdmin();
+}
+
+// Zelfde fetch, maar met de sleutel erbij. Loopt hij op 401, dan terug naar het inlogscherm.
+async function adminFetch(url, opts = {}) {
+  const res = await fetch(url, {
+    ...opts,
+    headers: { ...(opts.headers || {}), 'x-admin-key': adminKey }
+  });
+  if (res.status === 401 || res.status === 503) {
+    lockAdmin(res.status === 503 ? 'ADMIN_PASSWORD staat niet ingesteld in Netlify' : 'Sessie verlopen, log opnieuw in');
+  }
+  return res;
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  if (!adminKey) { lockAdmin(); return; }
+  const res = await checkKey(adminKey);
+  if (res && res.ok) unlockAdmin();
+  else lockAdmin(res && res.status === 503 ? 'ADMIN_PASSWORD staat niet ingesteld in Netlify' : '');
 });
 
 // Tab switching
@@ -862,7 +984,7 @@ function incrementCallCounter(n = 1) {
 // Load prompt
 async function loadPrompt() {
   try {
-    const res = await fetch('/api/admin-prompt');
+    const res = await adminFetch('/api/admin-prompt');
     const data = await res.json();
     currentPrompt = data.prompt || getDefaultPrompt();
     document.getElementById('promptText').value = currentPrompt;
@@ -890,11 +1012,12 @@ Wees bondig. Geen inleiding. Geen herhaling van de titel.`;
 async function savePrompt() {
   const prompt = document.getElementById('promptText').value;
   try {
-    await fetch('/api/admin-prompt', {
+    const res = await adminFetch('/api/admin-prompt', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ prompt })
     });
+    if (!res.ok) { showToast('Opslaan mislukt', 'error'); return; }
     currentPrompt = prompt;
     const ind = document.getElementById('savedIndicator');
     ind.classList.remove('hidden');
@@ -1146,7 +1269,8 @@ function confirmClearCache() {
 
 async function clearCache() {
   try {
-    await fetch('/api/clear-cache', { method: 'POST' });
+    const res = await adminFetch('/api/clear-cache', { method: 'POST' });
+    if (!res.ok) { showToast('Leegmaken mislukt', 'error'); return; }
     showToast('Cache geleegd. Analyses worden opnieuw gegenereerd bij de volgende refresh.', 'success');
     loadMeta();
     loadArticles();
@@ -1158,11 +1282,13 @@ async function clearCache() {
 async function triggerRefresh() {
   showToast('Refresh gestart... dit kan 1-2 minuten duren');
   try {
-    await fetch('/api/refresh-feeds', { method: 'POST' });
-    showToast('Refresh klaar', 'success');
-    setTimeout(() => { loadMeta(); loadArticles(); }, 3000);
+    const res = await adminFetch('/api/refresh-feeds', { method: 'POST' });
+    const data = await res.json();
+    if (!res.ok || !data.ok) { showToast('Refresh mislukt', 'error'); return; }
+    showToast(`Refresh klaar — ${data.count} artikelen`, 'success');
+    setTimeout(() => { loadMeta(); loadArticles(); }, 1000);
   } catch {
-    showToast('Refresh gestart (no feedback endpoint)', '');
+    showToast('Refresh mislukt', 'error');
   }
 }
 </script>

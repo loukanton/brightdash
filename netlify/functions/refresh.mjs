@@ -1,4 +1,5 @@
 import { refreshFeeds } from '../lib/feeds.mjs';
+import { requireAdmin } from '../lib/auth.mjs';
 
 // HTTP-ingang voor dezelfde refresh als de cron in refresh-feeds.mjs.
 // Twee paden: /api/refresh voor de auto-trigger in articles.js,
@@ -9,6 +10,9 @@ export default async (req) => {
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ ok: false, error: 'POST only' }), { status: 405, headers });
   }
+
+  const denied = requireAdmin(req);
+  if (denied) return denied;
 
   try {
     const { count, withInsight } = await refreshFeeds();
