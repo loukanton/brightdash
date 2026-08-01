@@ -936,7 +936,7 @@ async function loadMeta() {
   try {
     const res = await fetch('/api/articles');
     const data = await res.json();
-    const items = data.items || [];
+    const items = data.articles || [];
     const analysed = items.filter(i => i.insight).length;
 
     document.getElementById('cachedCount').textContent = analysed;
@@ -1040,7 +1040,7 @@ async function loadArticles() {
   try {
     const res = await fetch('/api/articles');
     const data = await res.json();
-    allArticles = data.items || [];
+    allArticles = data.articles || [];
     renderArticles();
     renderTestSelector();
   } catch {

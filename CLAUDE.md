@@ -38,7 +38,7 @@ netlify.toml         build- en functieconfig
 | --- | --- |
 | `articles` | array van artikelen, inclusief `insight` als die er al is |
 | `meta` | `{ updatedAt, count }` |
-| `analyses` | map van `link` → analysetekst, overleeft een feed-refresh |
+| `analyses` | map van `link` → analysetekst, overleeft een feed-refresh en het legen van de cache |
 | `prompt` | eigen prompt uit de admin, overschrijft de categorieprompts |
 
 **Flow:** de cron schrijft elke 30 minuten verse artikelen weg en plakt bestaande analyses er weer
@@ -61,9 +61,13 @@ stuurt het als `x-admin-key` mee. De server controleert dat in `netlify/lib/auth
 `ADMIN_PASSWORD`, met een hashvergelijking van vaste lengte. Staat de variabele niet ingesteld, dan
 gaan de endpoints op slot (503) in plaats van open.
 
-Achter het wachtwoord: `/api/admin-check`, `/api/admin-prompt`, `/api/clear-cache`, `/api/refresh`
-en `/api/refresh-feeds`. Publiek blijven `/api/articles`, `/api/analyse` en `/api/proxy` — die heeft
-de site zelf nodig.
+Achter het wachtwoord: `/api/admin-check`, `/api/admin-prompt`, `/api/clear-cache` en
+`/api/refresh-feeds`. Publiek blijven `/api/articles`, `/api/analyse` en `/api/proxy` — die heeft de
+site zelf nodig.
+
+`/api/refresh` is het uitzonderingsgeval. Dat is de self-heal die `articles.js` aanroept als de
+lijst leeg is, en die mag zonder wachtwoord — maar alleen zolang de lijst ook echt leeg is. Staat er
+al iets, dan gelden de adminregels weer.
 
 **Frontend-state** zit in localStorage onder `bd_theme`, `bd_saved`, `bd_filters`, `bd_onboarded`,
 `bd_visits` en `bd_lastvisit`. Geen accounts, geen server-side gebruikersdata.

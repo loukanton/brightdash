@@ -118,6 +118,16 @@ export async function refreshFeeds() {
     }
   } catch {}
 
+  // Ook uit de losse analyses-map, die een leeggemaakte artikelenlijst overleeft
+  try {
+    const analyses = await store.get('analyses', { type: 'json' });
+    if (analyses) {
+      for (const [link, insight] of Object.entries(analyses)) {
+        if (!cached[link]) cached[link] = insight;
+      }
+    }
+  } catch {}
+
   // Koppel bestaande analyses — geen nieuwe genereren hier
   items.forEach(item => {
     if (cached[item.link]) item.insight = cached[item.link];
