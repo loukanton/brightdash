@@ -80,6 +80,9 @@ Cloudflare nergens in de keten. Bewust niet op `admin.html`.
 Lokaal draaien kan met `netlify dev`, maar de CLI staat niet in `package.json`; die moet je apart
 geïnstalleerd hebben.
 
+Let op: Netlify zet omgevingsvariabelen bij de deploy in de functies. Voeg je er later een toe, dan
+ziet de code hem pas na een nieuwe deploy. Een lege commit is genoeg.
+
 ## Conventies
 
 - Geen build, geen framework, geen bundler. HTML, CSS en vanilla JS, met de hand.
