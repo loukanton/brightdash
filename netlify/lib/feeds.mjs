@@ -33,6 +33,16 @@ function extractTag(xml, tag) {
   return m ? (m[1] || m[2] || '').trim() : '';
 }
 
+// HTML-entiteiten omzetten naar gewone tekens (&#8217; wordt ', &amp; wordt &)
+function decodeEntities(str) {
+  return str
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(n))
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, n) => String.fromCharCode(parseInt(n, 16)))
+    .replace(/&quot;/g, '"').replace(/&#39;|&apos;/g, "'")
+    .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&');
+}
+
 // Irrelevante artikelen filteren
 const IRRELEVANT_PATTERNS = [
   /promo\s*code/i, /coupon/i, /discount code/i, /% off/i, /deal of the/i,
@@ -57,9 +67,9 @@ function parseItems(xml, feedName, lang, tag) {
   const items = [];
   const blocks = xml.match(/<item[\s>][\s\S]*?<\/item>/gi) || [];
   for (const block of blocks.slice(0, 15)) {
-    const title = extractTag(block, 'title');
+    const title = decodeEntities(extractTag(block, 'title'));
     const link  = extractTag(block, 'link') || (block.match(/<link>([^<]+)/)||[])[1] || '';
-    const desc  = extractTag(block, 'description').replace(/<[^>]+>/g,'').slice(0, 600);
+    const desc  = decodeEntities(extractTag(block, 'description')).replace(/<[^>]+>/g,'').slice(0, 600);
     const date  = extractTag(block, 'pubDate') || extractTag(block, 'published') || new Date().toISOString();
     if (!title || !link) continue;
     if (!isArticleRelevant(title, desc)) continue;

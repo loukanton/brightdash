@@ -3,13 +3,15 @@ import { getStore } from "@netlify/blobs";
 // Gedeelde schrijfinstructies voor alle prompts
 const SCHRIJFREGELS = `
 Schrijfregels (strikt volgen):
-- Kern: 1 feitelijke zin. Schrijf alsof je het aan een collega uitlegt bij de koffieautomaat — geen vaktaal, geen omhaal. Wat is er gebeurd?
-- Betekenis: schrijf alleen wat direct uit het artikel volgt — geen extrapolaties. Als er één relevante impact is: schrijf 1 zin. Als er meerdere zijn: schrijf 2-3 korte zinnen, elk op een nieuwe regel. Elke zin is één gedachte, geen bijzinnen. Geen streepjes of opsommingstekens. Begin NIET met "Dit betekent dat". Geef het gevoel van "dit is wat je hiervan moet snappen" — niet van "hier is een samenvatting".
-- Actie: 1 korte zin. Begin met een concreet werkwoord (bijv. Evalueer / Bespreek / Test / Stel bij / Anticipeer op / Vraag / Vergelijk). Gebruik NOOIT "Zorg dat" of "Onderzoek of". De actie moet voelen als een logische volgende stap, niet als een taak.
-- Geen herhaling tussen de drie secties.
-- Geen inleiding, geen afsluiting, geen extra tekst buiten de drie secties.
+- Kern: 1 feitelijke zin. Schrijf alsof je het aan een collega uitlegt bij de koffieautomaat. Geen vaktaal, geen omhaal. Wat is er gebeurd?
+- Betekenis: schrijf alleen wat direct uit het artikel volgt, geen extrapolaties. Als er één relevante impact is: schrijf 1 zin. Als er meerdere zijn: schrijf 2-3 korte zinnen, elk op een nieuwe regel. Elke zin is één gedachte, geen bijzinnen. Geen streepjes of opsommingstekens. Begin NIET met "Dit betekent dat". Geef het gevoel van "dit is wat je hiervan moet snappen", niet van "hier is een samenvatting".
+- Actie: alleen schrijven als er een stap is die NIET al vanzelf uit Kern en Betekenis volgt. Zou een slimme lezer deze stap zelf bedenken? Laat de regel dan helemaal weg. Een Actie moet specifiek zijn voor dit nieuws: benoem wát je evalueert, mét wie je iets bespreekt of waaraan je iets toetst. Verboden: adviezen die op elk bericht passen, zoals "Bespreek dit met je team", "Evalueer je strategie" of "Volg de ontwikkelingen". Begin met een concreet werkwoord (bijv. Evalueer / Bespreek / Test / Stel bij / Vraag / Vergelijk). Gebruik NOOIT "Zorg dat" of "Onderzoek of".
+- Betekenis en Actie zijn optioneel. Voegt een sectie niets toe, laat de hele regel dan weg. "Exact dit format" slaat op de labels en de volgorde, niet op het aantal secties. Leg nooit uit waarom je iets weglaat. Geen sterretjes, geen kanttekeningen, geen commentaar op het artikel zelf.
+- Staat er alleen een Kern, houd die dan extra kort en droog.
+- Geen herhaling tussen de secties.
+- Geen inleiding, geen afsluiting, geen extra tekst buiten de secties.
 - Als het artikel weinig inhoud heeft (aankondiging, evenement, fotoreportage): schrijf alleen Kern. Vul nooit op.
-- Schrijf in helder Nederlands. Korte zinnen, actieve werkwoorden. Vertaal technische termen naar gewone woorden — kopieer nooit jargon uit het artikel. Schrijf alsof je het uitlegt aan een drukke manager die geen tijd heeft om twee keer te lezen.`;
+- Schrijf in helder Nederlands. Korte zinnen, actieve werkwoorden. Geen gedachtestreepjes in een zin; begin liever een nieuwe zin. Geen komma voor "en" of "of". Vertaal technische termen naar gewone woorden, kopieer nooit jargon uit het artikel. Schrijf alsof je het uitlegt aan een drukke manager die geen tijd heeft om twee keer te lezen.`;
 
 // Per-categorie prompts
 const CATEGORY_PROMPTS = {

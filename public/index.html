@@ -220,6 +220,11 @@
   .article:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); transform: translateY(-1px); }
   @media (max-width: 600px) { .article:hover { transform: none; } }
   .article-description { font-size: 15px; color: var(--ink-3); line-height: 1.75; margin-bottom: 14px; }
+  .article-body { display: flex; gap: 16px; align-items: flex-start; }
+  .article-body-text { flex: 1; min-width: 0; }
+  .article-thumb { width: 76px; height: 76px; border-radius: 8px; object-fit: cover; flex-shrink: 0; background: var(--bg-2); }
+  @media (max-width: 600px) { .article-thumb { width: 60px; height: 60px; } }
+  #articleFeed.grid .article-thumb { width: 56px; height: 56px; }
 
   /* Analysis */
   @keyframes chipFadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
@@ -232,10 +237,6 @@
   @media (max-width: 600px) { .hide-on-mobile { display: none; } }
   .analysis-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.6; flex-shrink: 0; min-width: 72px; }
   .analysis-text { flex: 1; font-size: 14px; line-height: 1.65; }
-  .article-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; flex-shrink: 0; margin-left: auto; }
-  @media (max-width: 600px) { .article-thumb { width: 70px; height: 52px; } }
-  .article-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 2px; }
-  .article-header-content { flex: 1; min-width: 0; }
   .analysis-loading { display: flex; flex-direction: column; gap: 7px; padding: 4px 0; }
   .analysis-skel { height: 54px; border-radius: 5px; background: linear-gradient(90deg, var(--rule) 25%, var(--bg-2) 50%, var(--rule) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
   .analysis-skel:nth-child(2) { height: 46px; animation-delay: 0.15s; }
@@ -953,8 +954,8 @@ async function loadFeed() {
     const newCount = lastVisit ? allArticles.filter(a => new Date(a.pubDate) > new Date(lastVisit)).length : 0;
     if (newCount > 0) {
       const badge = document.createElement('span');
-      badge.style.cssText = 'background:var(--gold);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;margin-left:8px;display:inline-flex;align-items:center;justify-content:center;line-height:1;white-space:nowrap;vertical-align:middle;';
-      badge.innerHTML = newCount + ' <span style="font-size:9px;opacity:0.85">nieuw</span>';
+      badge.style.cssText = 'background:var(--gold);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;margin-left:8px;display:inline-flex;align-items:baseline;gap:3px;line-height:1;white-space:nowrap;vertical-align:middle;';
+      badge.innerHTML = newCount + '<span style="font-size:9px;opacity:0.85">nieuw</span>';
       document.querySelector('.masthead-brand').appendChild(badge);
     }
     localStorage.setItem('bd_lastvisit', new Date().toISOString());
@@ -1253,8 +1254,13 @@ function renderArticle(a, i) {
       ${tag ? `<span class="article-category-badge">${tag}</span>` : ''}
       <button class="save-btn ${isSaved?'saved':''}" onclick="toggleSave('${(a.link||'').replace(/'/g,"\\'")}',this)">${isSaved?'★':'☆'}</button>
     </div>
-    <a class="article-title" href="${sanitize(a.link)||'#'}" target="_blank" rel="noopener">${sanitize(decodeHtml(a.title))||''}</a>
-    ${desc ? `<p class="article-description${a.insight ? ' hide-on-mobile' : ''}">${sanitize(desc)}</p>` : ''}
+    <div class="article-body">
+      <div class="article-body-text">
+        <a class="article-title" href="${sanitize(a.link)||'#'}" target="_blank" rel="noopener">${sanitize(decodeHtml(a.title))||''}</a>
+        ${desc ? `<p class="article-description${a.insight ? ' hide-on-mobile' : ''}">${sanitize(decodeHtml(desc))}</p>` : ''}
+      </div>
+      ${a.image && /^https?:\/\//i.test(a.image) ? `<img class="article-thumb" src="${sanitize(a.image)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
+    </div>
     ${analysisHtml}
     <div class="article-footer">
       <div class="footer-left">
@@ -1471,7 +1477,8 @@ function decodeHtml(str) {
     .replace(/&#038;/g, '&').replace(/&amp;/g, '&')
     .replace(/&quot;/g, '"').replace(/&#39;/g, "'")
     .replace(/&lt;/g, '<').replace(/&gt;/g, '>')
-    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(n));
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(n))
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, n) => String.fromCharCode(parseInt(n, 16)));
 }
 
 function sanitize(str) {
