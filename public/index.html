@@ -161,6 +161,16 @@
   #updatedLabel { display: none !important; }
   .feed-title { font-family: 'Lora', serif; font-size: 22px; font-weight: 700; color: var(--ink); flex: 0 0 auto; }
   .feed-count { font-size: 12px; color: var(--muted); }
+  .dagstart { border: 1px solid var(--gold-border); background: var(--gold-pale); border-radius: 10px; padding: 16px 20px; margin-bottom: 20px; }
+  .dagstart-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold); display: block; margin-bottom: 8px; }
+  .dagstart-item { display: block; text-decoration: none; padding: 4px 0; }
+  .dagstart-item:hover .dagstart-title { color: var(--gold); }
+  .dagstart-title { font-family: 'Lora', serif; font-size: 15px; font-weight: 700; color: var(--ink); line-height: 1.4; transition: color 0.15s; }
+  .dagstart-source { font-size: 11px; color: var(--muted); margin-left: 6px; white-space: nowrap; }
+  .search-input { border: 1px solid var(--rule); background: var(--bg-2); border-radius: 5px; padding: 6px 10px; font-size: 13px; color: var(--ink); font-family: 'Instrument Sans', sans-serif; width: 170px; transition: border-color 0.15s; }
+  .search-input:focus { outline: none; border-color: var(--gold); }
+  .search-input::placeholder { color: var(--muted); }
+  @media (max-width: 600px) { .search-input { width: 105px; padding: 5px 8px; } }
   @media (max-width: 600px) { #sview-grid { display: none !important; } }
   .trending-pill { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gold); border: 1px solid var(--gold-border); background: var(--gold-pale); cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; }
   .trending-pill:hover { background: var(--gold); color: var(--white); }
@@ -219,7 +229,9 @@
   .article-title:hover { color: var(--gold); }
   .article:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); transform: translateY(-1px); }
   @media (max-width: 600px) { .article:hover { transform: none; } }
-  .article-description { font-size: 15px; color: var(--ink-3); line-height: 1.75; margin-bottom: 14px; }
+  .article-description { font-size: 15px; color: var(--ink-3); line-height: 1.75; margin-bottom: 14px; max-width: 72ch; }
+  .article-title { max-width: 60ch; }
+  .analysis-text { max-width: 68ch; }
   .article-body { display: flex; gap: 16px; align-items: flex-start; }
   .article-body-text { flex: 1; min-width: 0; }
   .article-thumb { width: 76px; height: 76px; border-radius: 8px; object-fit: cover; flex-shrink: 0; background: var(--bg-2); }
@@ -506,6 +518,16 @@
 </script>
 </head>
 <body>
+<script>
+// Donkere modus direct toepassen, voordat de pagina zichtbaar wordt.
+// Voorkomt een witte flits bij donkere systeemvoorkeur.
+(function () {
+  var t = localStorage.getItem('bd_theme');
+  if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.body.classList.add('dark');
+  }
+})();
+</script>
 
 <!-- Masthead -->
 <header class="masthead">
@@ -609,10 +631,12 @@
 
   <!-- Feed -->
   <div class="feed-wrapper">
+    <div class="dagstart" id="dagstart" style="display:none"></div>
     <div id="trendingBar" style="display:none;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:12px;"></div>
     <div class="feed-toolbar">
       <span class="feed-title" id="feedTitle">Alles</span>
       <div style="flex:1"></div>
+      <input class="search-input" id="searchInput" type="search" placeholder="Zoeken…" oninput="setSearch(this.value)">
       <span id="feedUpdated" style="font-size:11px;color:var(--muted)"></span>
       <span class="feed-count" id="feedCount" style="font-size:11px;color:var(--muted);margin-left:4px"></span>
     </div>
@@ -742,6 +766,9 @@ let allArticles = [], filteredArticles = [];
 let displayedCount = 8;
 const PAGE_SIZE = 8;
 let activeScope = 'alles';
+let searchQuery = '';
+let onlyNew = false;
+let prevVisitTs = null;
 let selectedThemes = new Set();
 let activeSort = 'nieuwste';
 let activeView = 'lijst';
@@ -796,7 +823,7 @@ function renderSwipeCard(direction) {
 
 function buildSwipeCard(card, a, direction) {
   card.classList.remove('leaving-left', 'leaving-right', 'entering');
-  const date = a.pubDate ? new Date(a.pubDate).toLocaleString('nl-NL', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }) : '';
+  const date = relTijd(a.pubDate);
   const tag = a.tag || a.category || '';
   const rawDesc = (a.description || '').replace(/&lt;[^&]*&gt;/g,'').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&').replace(/&nbsp;/g,' ').replace(/\s+/g,' ').trim();
   const id = safeId(a.link || swipeIndex);
@@ -869,6 +896,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   restoreFilters();
   loadFeed();
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
 });
 
 // ── Filter persistentie ──
@@ -930,7 +958,10 @@ function toggleTheme() {
 }
 
 function initTheme() {
-  if (localStorage.getItem('bd_theme') === 'dark') {
+  // Eigen keuze wint; anders de systeemvoorkeur volgen
+  const opgeslagen = localStorage.getItem('bd_theme');
+  const dark = opgeslagen ? opgeslagen === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (dark) {
     document.body.classList.add('dark');
     ['themeToggle','themeToggleMobile'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = '☾'; });
   }
@@ -951,11 +982,15 @@ async function loadFeed() {
     allArticles = (data.articles || data.items || []).sort((a,b) => new Date(b.pubDate) - new Date(a.pubDate));
     // Ongelezen tellen
     const lastVisit = localStorage.getItem('bd_lastvisit');
+    prevVisitTs = lastVisit;
     const newCount = lastVisit ? allArticles.filter(a => new Date(a.pubDate) > new Date(lastVisit)).length : 0;
     if (newCount > 0) {
       const badge = document.createElement('span');
-      badge.style.cssText = 'background:var(--gold);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;margin-left:8px;display:inline-flex;align-items:baseline;gap:3px;line-height:1;white-space:nowrap;vertical-align:middle;';
+      badge.id = 'newBadge';
+      badge.style.cssText = 'background:var(--gold);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;margin-left:8px;display:inline-flex;align-items:baseline;gap:3px;line-height:1;white-space:nowrap;vertical-align:middle;cursor:pointer;';
       badge.innerHTML = newCount + '<span style="font-size:9px;opacity:0.85">nieuw</span>';
+      badge.title = 'Toon alleen nieuwe artikelen';
+      badge.onclick = toggleOnlyNew;
       document.querySelector('.masthead-brand').appendChild(badge);
     }
     localStorage.setItem('bd_lastvisit', new Date().toISOString());
@@ -979,6 +1014,7 @@ async function loadFeed() {
     updateCounts();
     buildSourcesPanel();
     renderTrending(allArticles);
+    renderDagstart(allArticles);
     applyFilter();
   } catch {
     document.getElementById('articleFeed').innerHTML = '<div class="state-box"><div class="state-box-title">Kon artikelen niet laden</div></div>';
@@ -1086,9 +1122,27 @@ function applyFilter() {
   else if (activeScope === 'opgeslagen') items = items.filter(a => savedLinks.includes(a.link));
   if (selectedThemes.size > 0) items = items.filter(a => [...selectedThemes].some(t => (a.tag||a.category||'').toLowerCase().includes(t.toLowerCase())));
   if (selectedSources.size > 0) items = items.filter(a => selectedSources.has(a.source));
+  if (searchQuery) items = items.filter(a => ((a.title||'') + ' ' + (a.description||'')).toLowerCase().includes(searchQuery));
+  if (onlyNew) items = items.filter(a => prevVisitTs && a.pubDate && new Date(a.pubDate) > new Date(prevVisitTs));
   filteredArticles = items;
   saveFilters();
   renderArticles();
+}
+
+function setSearch(q) {
+  searchQuery = q.trim().toLowerCase();
+  displayedCount = PAGE_SIZE;
+  applyFilter();
+}
+
+function toggleOnlyNew() {
+  onlyNew = !onlyNew;
+  const badge = document.getElementById('newBadge');
+  if (badge) badge.style.boxShadow = onlyNew ? '0 0 0 2px var(--gold-border)' : '';
+  displayedCount = PAGE_SIZE;
+  applyFilter();
+  if (onlyNew) document.getElementById('feedTitle').textContent = 'Nieuw voor jou';
+  else updateFeedTitle();
 }
 
 function setSort(sort, el) {
@@ -1155,6 +1209,29 @@ function detectTrending(articles) {
   return trending;
 }
 
+// Dagstart: drie artikelen van de afgelopen 24 uur bovenaan.
+// Eerst op trending onderwerpen van vandaag zelf; zijn die er niet,
+// dan de nieuwste van drie verschillende bronnen.
+function renderDagstart(articles) {
+  const el = document.getElementById('dagstart');
+  if (!el) return;
+  const vandaag = articles.filter(a => a.pubDate && (Date.now() - new Date(a.pubDate)) < 24 * 60 * 60 * 1000);
+  if (vandaag.length < 3) return;
+  const trending = detectTrending(vandaag).map(t => t.word);
+  const score = a => trending.filter(w => (a.title || '').toLowerCase().includes(w)).length;
+  let top = [...vandaag].sort((x, y) => score(y) - score(x) || new Date(y.pubDate) - new Date(x.pubDate)).slice(0, 3);
+  if (trending.length === 0 || score(top[0]) === 0) {
+    // Geen gedeeld onderwerp vandaag: pak de nieuwste per bron
+    const perBron = new Map();
+    for (const a of vandaag) if (!perBron.has(a.source)) perBron.set(a.source, a);
+    top = [...perBron.values()].slice(0, 3);
+    if (top.length < 3) return;
+  }
+  el.innerHTML = '<span class="dagstart-label">Vandaag in het kort</span>' + top.map(a =>
+    `<a class="dagstart-item" href="${sanitize(a.link)}" target="_blank" rel="noopener"><span class="dagstart-title">${sanitize(decodeHtml(a.title))}</span><span class="dagstart-source">${sanitize(a.source || '')}</span></a>`).join('');
+  el.style.display = 'block';
+}
+
 function renderTrending(articles) {
   const trending = detectTrending(articles);
   const el = document.getElementById('trendingBar');
@@ -1188,7 +1265,7 @@ function resetTrending() {
 
 function renderArticles() {
   const toShow = filteredArticles.slice(0, displayedCount);
-  document.getElementById('feedCount').textContent = filteredArticles.length + ' berichten';
+  document.getElementById('feedCount').textContent = filteredArticles.length === 1 ? '1 bericht' : filteredArticles.length + ' berichten';
   if (toShow.length === 0) {
     document.getElementById('articleFeed').innerHTML = '<div class="state-box"><div class="state-box-title">Geen artikelen</div></div>';
     document.getElementById('loadMoreContainer').style.display = 'none';
@@ -1203,9 +1280,8 @@ function renderArticles() {
 
 function renderArticle(a, i) {
   const maxDesc = activeView === 'grid' ? 120 : 320;
-  const date = a.pubDate ? new Date(a.pubDate).toLocaleString('nl-NL', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }) : '';
-  const lastVisit = localStorage.getItem('bd_lastvisit');
-  const isNew = lastVisit && a.pubDate && new Date(a.pubDate) > new Date(lastVisit);
+  const date = relTijd(a.pubDate);
+  const isNew = prevVisitTs && a.pubDate && new Date(a.pubDate) > new Date(prevVisitTs);
   const tag = a.tag || a.category || '';
   // Strip HTML inclusief encoded HTML tags
   const rawHtml = a.description || '';
@@ -1467,6 +1543,19 @@ function initOnboarding() {
 }
 
 document.addEventListener('DOMContentLoaded', () => { initOnboarding(); });
+
+// Relatieve tijd voor vandaag en gisteren, daarna gewoon de datum
+function relTijd(pubDate) {
+  if (!pubDate) return '';
+  const d = new Date(pubDate);
+  if (isNaN(d)) return '';
+  const min = Math.floor((Date.now() - d) / 60000);
+  if (min < 1) return 'zojuist';
+  if (min < 60) return min + ' min geleden';
+  if (min < 24 * 60) return Math.floor(min / 60) + ' uur geleden';
+  if (min < 48 * 60) return 'gisteren';
+  return d.toLocaleString('nl-NL', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
+}
 
 function decodeHtml(str) {
   if (!str) return '';

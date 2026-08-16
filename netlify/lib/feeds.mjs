@@ -101,7 +101,7 @@ async function checkRelevance(items) {
 
 NIET relevant: koopgidsen, productreviews van gadgets, kortingsacties, entertainment (films, series, trailers, games), sport, lifestyle en nieuwsbrieven die meerdere losse onderwerpen in één bericht bundelen.
 
-WEL relevant: alles waar een manager of beslisser iets mee kan, ook als het maar zijdelings over technologie of organisaties gaat. Twijfel je, dan is het relevant.
+WEL relevant: alles waar een manager of beslisser iets mee kan, ook als het maar zijdelings over technologie of organisaties gaat. Productnieuws en marktnieuws van vakmedia (zoals Tweakers of The Verge) is relevant; alleen hun koopgidsen en gadgetreviews niet. Twijfel je, dan is het relevant.
 
 Antwoord met alleen een JSON-array met de nummers van artikelen die NIET relevant zijn. Geen andere tekst. Voorbeeld: [2,7]
 
@@ -123,6 +123,12 @@ ${lijst}`;
     const data = await res.json();
     const text = data?.content?.[0]?.text || '[]';
     const afgekeurd = JSON.parse(text.match(/\[[\d,\s]*\]/)?.[0] || '[]');
+    // Noodrem: keurt het model meer dan een kwart af, vertrouw de batch
+    // dan niet en laat alles staan
+    if (items.length >= 8 && afgekeurd.length > items.length * 0.25) {
+      console.warn(`Relevantiecheck genegeerd: ${afgekeurd.length} van ${items.length} afgekeurd, dat is te veel`);
+      return {};
+    }
     const map = {};
     items.forEach((it, i) => { map[it.link] = !afgekeurd.includes(i); });
     return map;
@@ -175,11 +181,12 @@ export async function refreshFeeds() {
   items = items.filter(i => relevance[i.link] !== false);
   if (voorFilter > items.length) console.log(`Relevantiefilter: ${voorFilter - items.length} artikelen weggelaten`);
 
-  // Alleen beoordelingen bewaren van links die nu nog in de feeds zitten,
-  // anders groeit de cache eindeloos
+  // Alleen goedkeuringen bewaren, en alleen van links die nu nog in de
+  // feeds zitten. Afkeuringen worden bij de volgende refresh opnieuw
+  // beoordeeld: zo herstelt een te strenge batch zichzelf.
   const bewaren = {};
   for (const link of Object.keys(relevance)) {
-    if (seen.has(link)) bewaren[link] = relevance[link];
+    if (seen.has(link) && relevance[link] === true) bewaren[link] = relevance[link];
   }
   await store.setJSON('relevance', bewaren);
 
