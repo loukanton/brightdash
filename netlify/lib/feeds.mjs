@@ -204,22 +204,20 @@ export async function refreshFeeds() {
   // Max 200
   items = items.slice(0, 200);
 
-  // Bestaande analyses uit cache bewaren
+  // Bestaande analyses terugkoppelen. De losse analyses-map is leidend:
+  // die bevat altijd de nieuwste versie, ook als de artikelenlijst een
+  // verouderde momentopname is. De lijst vult alleen gaten op.
   let cached = {};
-  try {
-    const raw = await store.get('articles', { type: 'json' });
-    if (raw && Array.isArray(raw)) {
-      raw.forEach(i => { if (i.link && i.insight) cached[i.link] = i.insight; });
-    }
-  } catch {}
-
-  // Ook uit de losse analyses-map, die een leeggemaakte artikelenlijst overleeft
   try {
     const analyses = await store.get('analyses', { type: 'json' });
     if (analyses) {
-      for (const [link, insight] of Object.entries(analyses)) {
-        if (!cached[link]) cached[link] = insight;
-      }
+      for (const [link, insight] of Object.entries(analyses)) cached[link] = insight;
+    }
+  } catch {}
+  try {
+    const raw = await store.get('articles', { type: 'json' });
+    if (raw && Array.isArray(raw)) {
+      raw.forEach(i => { if (i.link && i.insight && !cached[i.link]) cached[i.link] = i.insight; });
     }
   } catch {}
 

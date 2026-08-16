@@ -1363,7 +1363,7 @@ function renderArticle(a, i) {
   return `<article class="article" style="animation-delay:${i*30}ms">
     <div class="article-meta">
       <span class="article-source">${a.source||''}</span>
-      <span class="article-vertaald" id="vertaald-${id}"${kop ? '' : ' style="display:none"'}>· vertaald</span>
+      <span class="article-vertaald" id="vertaald-${id}"${kop && (a.lang||'').toLowerCase() !== 'nl' ? '' : ' style="display:none"'}>· vertaald</span>
       <div class="article-dot"></div>
       <span class="article-date">${date}</span>
       ${isNew ? '<span style="background:var(--gold);color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;margin-left:4px;vertical-align:middle;">NIEUW</span>' : ''}
@@ -1454,10 +1454,14 @@ async function lazyLoadAnalysis(article, attempt = 0) {
       if (kop) {
         const t = document.getElementById('titel-' + id);
         const o = document.getElementById('orig-' + id);
-        const v = document.getElementById('vertaald-' + id);
         if (t) t.textContent = kop;
         if (o) o.style.display = '';
-        if (v) v.style.display = '';
+        // "vertaald" alleen bij Engelse bronnen; bij Nederlandse is de kop
+        // een herschreven titel, geen vertaling
+        if ((article.lang || '').toLowerCase() !== 'nl') {
+          const v = document.getElementById('vertaald-' + id);
+          if (v) v.style.display = '';
+        }
       }
       // De beschrijving is overbodig zodra de analyse er staat
       const d = document.getElementById('desc-' + id);
