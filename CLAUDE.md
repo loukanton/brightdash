@@ -32,7 +32,7 @@ netlify.toml         build- en functieconfig
 
 ## Hoe het werkt
 
-**Opslag** is Netlify Blobs, store `brightdash`, met vier sleutels:
+**Opslag** is Netlify Blobs, store `brightdash`, met vijf sleutels:
 
 | sleutel | inhoud |
 | --- | --- |
@@ -40,10 +40,17 @@ netlify.toml         build- en functieconfig
 | `meta` | `{ updatedAt, count }` |
 | `analyses` | map van `link` → analysetekst, overleeft een feed-refresh en het legen van de cache |
 | `prompt` | eigen prompt uit de admin, overschrijft de categorieprompts |
+| `relevance` | map van `link` → true/false uit de AI-relevantiecheck; links die uit de feeds verdwijnen worden opgeruimd |
 
 **Flow:** de cron schrijft elke 30 minuten verse artikelen weg en plakt bestaande analyses er weer
 aan vast. De frontend haalt `/api/articles` op en vraagt per artikel `/api/analyse`. Die functie
 kijkt eerst in de cache en belt pas Claude als er nog niets ligt.
+
+**Relevantiefilter** in twee lagen, allebei in `feeds.mjs`. Eerst de regexpatronen
+(koopgidsen, reviews, entertainment, The Download-digests). Daarna beoordeelt Haiku
+(`claude-haiku-4-5-20251001`) per refresh de nieuwe titels in één batchcall; het oordeel staat in
+de blob-sleutel `relevance`. De check valt open: geen API-sleutel of een fout betekent alles
+laten staan.
 
 **Prompts** staan in `analyse.mjs`. Per categorie één (AI, Tech, Overheid, HR, Organisatie, Media,
 WoW) plus een default, allemaal met dezelfde `SCHRIJFREGELS` eronder. Die schrijfregels zijn het
