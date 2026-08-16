@@ -57,7 +57,9 @@ open (geen API-sleutel of een fout betekent alles laten staan).
 WoW) plus een default, allemaal met dezelfde `SCHRIJFREGELS` eronder. Die schrijfregels zijn het
 hart van het product — de toon is met zorg afgesteld. Pas ze niet aan zonder dat Louk erom vraagt.
 
-De analyse bestaat uit maximaal drie korte alinea's zonder labels: eerst wat er is gebeurd, dan
+De analyse begint met een regel `Kop:` met een Nederlandse kop; de frontend toont die als
+titel met de originele titel er klein onder, en verbergt de beschrijving zodra de analyse er
+staat. Daarna maximaal drie korte alinea's zonder labels: eerst wat er is gebeurd, dan
 wat het betekent, en alleen als die echt iets toevoegt een afsluitende actiezin die met een
 werkwoord begint. De frontend geeft elke alinea een gekleurd streepje (blauw, groen, amber); een
 analyse van één alinea krijgt goud, het teken voor dun nieuws. Oude analyses in de cache hebben

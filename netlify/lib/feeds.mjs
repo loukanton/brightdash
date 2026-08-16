@@ -51,7 +51,7 @@ const IRRELEVANT_PATTERNS = [
   /black friday/i, /cyber monday/i, /prime day/i, /sale alert/i, /voucher/i,
   /\bbest\b.*\(20\d\d\)/i, /^\d+ best /i, /top \d+ .*\(20\d\d\)/i,
   // Productreviews van gadgets
-  /review.*\(20\d\d\)/i, /^review:/i, /we tested/i, /hands.on with/i,
+  /review.*\(20\d\d\)/i, /^review:/i, /\breview\s*:/i, /we tested/i, /hands.on with/i,
   // Entertainment en lifestyle
   /\btrailer\b/i, /to stream this/i, /best (movies|shows|series|films)\b/i,
   /^the download:/i,
@@ -123,9 +123,10 @@ ${lijst}`;
     const data = await res.json();
     const text = data?.content?.[0]?.text || '[]';
     const afgekeurd = JSON.parse(text.match(/\[[\d,\s]*\]/)?.[0] || '[]');
-    // Noodrem: keurt het model meer dan een kwart af, vertrouw de batch
-    // dan niet en laat alles staan
-    if (items.length >= 8 && afgekeurd.length > items.length * 0.25) {
+    // Noodrem alleen tegen totale wissingen. Kleinere missers vangt het
+    // twee-kansen-systeem op: onterecht afgekeurde artikelen komen bij
+    // de herkansing vanzelf terug.
+    if (items.length >= 20 && afgekeurd.length > items.length * 0.6) {
       console.warn(`Relevantiecheck genegeerd: ${afgekeurd.length} van ${items.length} afgekeurd, dat is te veel`);
       return {};
     }

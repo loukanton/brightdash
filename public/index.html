@@ -235,6 +235,9 @@
   @media (max-width: 600px) { .article:hover { transform: none; } }
   .article-description { font-size: 15px; color: var(--ink-3); line-height: 1.75; margin-bottom: 14px; max-width: 72ch; }
   .article-title { max-width: 60ch; }
+  .article-orig { font-size: 12px; color: var(--muted); line-height: 1.4; margin: -6px 0 12px; max-width: 60ch; }
+  .article-vertaald { font-size: 10px; color: var(--muted); font-style: italic; }
+  #articleFeed.grid .article-orig { display: none !important; }
   .article-body { display: flex; gap: 16px; align-items: flex-start; }
   .article-body-text { flex: 1; min-width: 0; }
   .article-thumb { width: 76px; height: 76px; border-radius: 8px; object-fit: cover; flex-shrink: 0; background: var(--bg-2); }
@@ -1350,12 +1353,14 @@ function renderArticle(a, i) {
   }
   const id = safeId(a.link || i);
   const isSaved = savedLinks.includes(a.link);
+  const kop = a.insight ? analyseKop(a.insight) : '';
   const analysisHtml = a.insight
     ? renderAnalysisBlock(a.insight, id)
     : `<div class="analysis-block" id="analysis-${id}"><div class="analysis-loading"><div class="analysis-skel"></div><div class="analysis-skel"></div><div class="analysis-skel"></div></div></div>`;
   return `<article class="article" style="animation-delay:${i*30}ms">
     <div class="article-meta">
       <span class="article-source">${a.source||''}</span>
+      <span class="article-vertaald" id="vertaald-${id}"${kop ? '' : ' style="display:none"'}>· vertaald</span>
       <div class="article-dot"></div>
       <span class="article-date">${date}</span>
       ${isNew ? '<span style="background:var(--gold);color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;margin-left:4px;vertical-align:middle;">NIEUW</span>' : ''}
@@ -1364,8 +1369,9 @@ function renderArticle(a, i) {
     </div>
     <div class="article-body">
       <div class="article-body-text">
-        <a class="article-title" href="${sanitize(a.link)||'#'}" target="_blank" rel="noopener">${sanitize(decodeHtml(a.title))||''}</a>
-        ${desc ? `<p class="article-description${a.insight ? ' hide-on-mobile' : ''}">${sanitize(decodeHtml(desc))}</p>` : ''}
+        <a class="article-title" id="titel-${id}" href="${sanitize(a.link)||'#'}" target="_blank" rel="noopener">${sanitize(kop || decodeHtml(a.title))||''}</a>
+        <p class="article-orig" id="orig-${id}"${kop ? '' : ' style="display:none"'}>${sanitize(decodeHtml(a.title))||''}</p>
+        ${desc && !a.insight ? `<p class="article-description" id="desc-${id}">${sanitize(decodeHtml(desc))}</p>` : ''}
       </div>
       ${a.image && /^https?:\/\//i.test(a.image) ? `<img class="article-thumb" src="${sanitize(a.image)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
     </div>
@@ -1382,7 +1388,13 @@ function renderArticle(a, i) {
 // De analyse is één doorlopende alinea. Oude analyses uit de cache
 // hebben nog Kern/Betekenis/Actie-labels; die strippen we hier weg en
 // elke sectie wordt één alinea, ook als hij uit meerdere regels bestond.
+// De Nederlandse kop uit de analyse, of leeg als die er (nog) niet is
+function analyseKop(insight) {
+  return (insight.match(/^Kop:\s*(.+)/i) || [])[1]?.trim() || '';
+}
+
 function analyseTekst(insight) {
+  insight = insight.replace(/^Kop:.*\n?/i, '');
   if (/^Kern:/im.test(insight)) {
     const kern = insight.match(/Kern:\s*([\s\S]*?)(?=\nBetekenis:|\nActie:|$)/i)?.[1];
     const betekenis = insight.match(/Betekenis:\s*([\s\S]*?)(?=\nActie:|$)/i)?.[1];
@@ -1434,6 +1446,19 @@ async function lazyLoadAnalysis(article, attempt = 0) {
       article.insight = data.insight;
       const el = document.getElementById('analysis-' + id);
       if (el) el.outerHTML = renderAnalysisBlock(data.insight, id);
+      // Nederlandse kop tonen zodra die er is; origineel klein eronder
+      const kop = analyseKop(data.insight);
+      if (kop) {
+        const t = document.getElementById('titel-' + id);
+        const o = document.getElementById('orig-' + id);
+        const v = document.getElementById('vertaald-' + id);
+        if (t) t.textContent = kop;
+        if (o) o.style.display = '';
+        if (v) v.style.display = '';
+      }
+      // De beschrijving is overbodig zodra de analyse er staat
+      const d = document.getElementById('desc-' + id);
+      if (d) d.style.display = 'none';
     } else {
       const el = document.getElementById('analysis-' + id);
       if (el) el.innerHTML = '<div style="font-size:12px;color:var(--muted);padding:8px 0">Analyse niet beschikbaar</div>';

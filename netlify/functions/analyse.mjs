@@ -3,7 +3,8 @@ import { getStore } from "@netlify/blobs";
 // Gedeelde schrijfinstructies voor alle prompts
 const SCHRIJFREGELS = `
 Schrijfregels (strikt volgen):
-- Schrijf een korte analyse van maximaal drie alinea's, elke alinea op een eigen regel. Geen labels, geen kopjes, geen opsommingen.
+- Begin met een regel "Kop:" gevolgd door een Nederlandse kop voor het artikel. Kort en feitelijk, hooguit tien woorden, geen clickbait. Vertaal niet letterlijk; schrijf de kop zoals een Nederlandse redactie hem zou maken. Is de originele titel een nieuwsbrieflijstje met meerdere onderwerpen, maak dan een kop over het belangrijkste onderwerp. Dit is de enige regel met een label.
+- Daarna de analyse: maximaal drie alinea's, elke alinea op een eigen regel. Geen labels, geen kopjes, geen opsommingen.
 - De eerste alinea is feitelijk: wat is er gebeurd? Eén zin. Schrijf alsof je het aan een collega uitlegt bij de koffieautomaat. Geen vaktaal, geen omhaal.
 - De tweede alinea is wat het betekent: alleen wat direct uit het artikel volgt, geen extrapolaties. Eén of twee korte zinnen, elke zin één gedachte, geen bijzinnen. Begin niet met "Dit betekent dat".
 - De derde alinea is een actiezin en mag alleen als er een stap is die NIET al vanzelf uit de rest volgt. Zou een slimme lezer die stap zelf bedenken? Laat de alinea dan weg. Begin met een concreet werkwoord (bijv. Evalueer / Bespreek / Test / Stel bij / Vraag / Vergelijk). Gebruik nooit "Zorg dat" of "Onderzoek of". Verboden: adviezen die op elk bericht passen, zoals "Bespreek dit met je team", "Evalueer je strategie" of "Volg de ontwikkelingen".
