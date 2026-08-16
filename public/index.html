@@ -164,6 +164,7 @@
   .dagstart-item:hover .dagstart-title { color: var(--gold); }
   .dagstart-title { font-family: 'Lora', serif; font-size: 15px; font-weight: 700; color: var(--ink); line-height: 1.4; transition: color 0.15s; }
   .dagstart-source { font-size: 11px; color: var(--muted); margin-left: 6px; white-space: nowrap; }
+  .dagstart-orig { display: block; font-size: 11px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
   .search-input { border: 1px solid var(--rule); background: var(--bg-2); border-radius: 5px; padding: 6px 10px; font-size: 13px; color: var(--ink); font-family: 'Instrument Sans', sans-serif; width: 170px; transition: border-color 0.15s; }
   .search-input:focus { outline: none; border-color: var(--gold); }
   .search-input::placeholder { color: var(--muted); }
@@ -1217,20 +1218,32 @@ function detectTrending(articles) {
 function renderDagstart(articles) {
   const el = document.getElementById('dagstart');
   if (!el) return;
-  const vandaag = articles.filter(a => a.pubDate && (Date.now() - new Date(a.pubDate)) < 24 * 60 * 60 * 1000);
+  // Reviews, koopgidsen en lijstjes horen nooit in de dagstart,
+  // ook niet als ze het feedfilter zijn gepasseerd
+  const ongeschikt = /\breview\b|\bbest\b|\btop \d+\b|\bdeal\b|gift guide/i;
+  const vandaag = articles.filter(a => a.pubDate && (Date.now() - new Date(a.pubDate)) < 24 * 60 * 60 * 1000 && !ongeschikt.test(a.title || ''));
   if (vandaag.length < 3) return;
   const trending = detectTrending(vandaag).map(t => t.word);
+  // Artikelen met analyse eerst: die leveren een Nederlandse samenvatting
   const score = a => trending.filter(w => (a.title || '').toLowerCase().includes(w)).length;
-  let top = [...vandaag].sort((x, y) => score(y) - score(x) || new Date(y.pubDate) - new Date(x.pubDate)).slice(0, 3);
+  const heeftNl = a => a.insight ? 1 : 0;
+  let top = [...vandaag].sort((x, y) => score(y) - score(x) || heeftNl(y) - heeftNl(x) || new Date(y.pubDate) - new Date(x.pubDate)).slice(0, 3);
   if (trending.length === 0 || score(top[0]) === 0) {
     // Geen gedeeld onderwerp vandaag: pak de nieuwste per bron
     const perBron = new Map();
-    for (const a of vandaag) if (!perBron.has(a.source)) perBron.set(a.source, a);
+    for (const a of [...vandaag].sort((x, y) => heeftNl(y) - heeftNl(x))) if (!perBron.has(a.source)) perBron.set(a.source, a);
     top = [...perBron.values()].slice(0, 3);
     if (top.length < 3) return;
   }
-  el.innerHTML = '<span class="dagstart-label">Vandaag in het kort</span>' + top.map(a =>
-    `<a class="dagstart-item" href="${sanitize(a.link)}" target="_blank" rel="noopener"><span class="dagstart-title">${sanitize(decodeHtml(a.title))}</span><span class="dagstart-source">${sanitize(a.source || '')}</span></a>`).join('');
+  el.innerHTML = '<span class="dagstart-label">Vandaag in het kort</span>' + top.map(a => {
+    // Nederlandse samenvatting: de eerste zin van de analyse.
+    // Zonder analyse valt de regel terug op de originele titel.
+    const zin = a.insight ? (analyseTekst(a.insight).match(/^.*?[.!?](?=\s|$)/s) || [])[0] : '';
+    if (zin) {
+      return `<a class="dagstart-item" href="${sanitize(a.link)}" target="_blank" rel="noopener"><span class="dagstart-title">${sanitize(zin.trim())}</span><span class="dagstart-orig">${sanitize(decodeHtml(a.title))} · ${sanitize(a.source || '')}</span></a>`;
+    }
+    return `<a class="dagstart-item" href="${sanitize(a.link)}" target="_blank" rel="noopener"><span class="dagstart-title">${sanitize(decodeHtml(a.title))}</span><span class="dagstart-source">${sanitize(a.source || '')}</span></a>`;
+  }).join('');
   el.style.display = 'block';
 }
 

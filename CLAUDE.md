@@ -40,7 +40,7 @@ netlify.toml         build- en functieconfig
 | `meta` | `{ updatedAt, count }` |
 | `analyses` | map van `link` → analysetekst, overleeft een feed-refresh en het legen van de cache |
 | `prompt` | eigen prompt uit de admin, overschrijft de categorieprompts |
-| `relevance` | map van `link` → true uit de AI-relevantiecheck; alleen goedkeuringen worden bewaard, afkeuringen worden elke refresh opnieuw beoordeeld |
+| `relevance` | map van `link` → true / 'twijfel' / false uit de AI-relevantiecheck; twijfel is één keer afgekeurd en krijgt één herkansing, false is definitief |
 
 **Flow:** de cron schrijft elke 30 minuten verse artikelen weg en plakt bestaande analyses er weer
 aan vast. De frontend haalt `/api/articles` op en vraagt per artikel `/api/analyse`. Die functie
@@ -61,6 +61,11 @@ De analyse is één doorlopende alinea van 2 tot 4 zinnen: eerst wat er is gebeu
 betekent, en alleen als die echt iets toevoegt een afsluitende actiezin die met een werkwoord
 begint. Er zijn geen Kern/Betekenis/Actie-labels meer. Oude analyses in de cache hebben die labels
 nog wel; de frontend stript ze in `analyseTekst()`.
+
+**Herbeoordeling** werkt met de drie standen in `relevance`. Eén afkeuring verbergt het artikel en
+geeft één herkansing bij de volgende refresh; een tweede afkeuring is definitief. De noodrem
+(batch met meer dan een kwart afkeuringen wordt genegeerd) slaat daardoor niet meer aan op de
+kleine herkansingsbatch.
 
 **Model:** `claude-sonnet-4-6`, hardcoded in `analyse.mjs`, max 600 tokens.
 

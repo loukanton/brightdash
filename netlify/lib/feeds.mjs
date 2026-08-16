@@ -171,22 +171,28 @@ export async function refreshFeeds() {
   // Sorteren
   items.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
 
-  // AI-relevantiecheck: eerder beoordeelde links komen uit de cache,
-  // alleen nieuwe gaan langs Haiku. Valt de check uit, dan blijft alles staan.
+  // AI-relevantiecheck. Per link kent de cache drie standen:
+  // true = goedgekeurd, 'twijfel' = één keer afgekeurd (krijgt één
+  // herkansing), false = twee keer afgekeurd, definitief weg.
+  // Zo herstelt een te strenge beoordeling zichzelf binnen één refresh,
+  // zonder dat alle oude rommel elke keer opnieuw wordt beoordeeld.
   let relevance = {};
   try { relevance = await store.get('relevance', { type: 'json' }) || {}; } catch {}
-  const onbeoordeeld = items.filter(i => !(i.link in relevance));
-  Object.assign(relevance, await checkRelevance(onbeoordeeld));
+  const onbeoordeeld = items.filter(i => !(i.link in relevance) || relevance[i.link] === 'twijfel');
+  const oordeel = await checkRelevance(onbeoordeeld);
+  for (const [link, ok] of Object.entries(oordeel)) {
+    if (ok) relevance[link] = true;
+    else relevance[link] = relevance[link] === 'twijfel' ? false : 'twijfel';
+  }
   const voorFilter = items.length;
-  items = items.filter(i => relevance[i.link] !== false);
+  items = items.filter(i => relevance[i.link] !== false && relevance[i.link] !== 'twijfel');
   if (voorFilter > items.length) console.log(`Relevantiefilter: ${voorFilter - items.length} artikelen weggelaten`);
 
-  // Alleen goedkeuringen bewaren, en alleen van links die nu nog in de
-  // feeds zitten. Afkeuringen worden bij de volgende refresh opnieuw
-  // beoordeeld: zo herstelt een te strenge batch zichzelf.
+  // Alleen beoordelingen bewaren van links die nu nog in de feeds zitten,
+  // anders groeit de cache eindeloos
   const bewaren = {};
   for (const link of Object.keys(relevance)) {
-    if (seen.has(link) && relevance[link] === true) bewaren[link] = relevance[link];
+    if (seen.has(link)) bewaren[link] = relevance[link];
   }
   await store.setJSON('relevance', bewaren);
 
