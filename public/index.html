@@ -1363,13 +1363,20 @@ function renderArticle(a, i) {
 }
 
 // De analyse is één doorlopende alinea. Oude analyses uit de cache
-// hebben nog Kern/Betekenis/Actie-labels; die strippen we hier weg.
+// hebben nog Kern/Betekenis/Actie-labels; die strippen we hier weg en
+// elke sectie wordt één alinea, ook als hij uit meerdere regels bestond.
 function analyseTekst(insight) {
-  return insight
-    .replace(/^Kern:\s*/im, '')
-    .replace(/^Betekenis:\s*/im, '')
-    .replace(/^Actie:\s*/im, '')
-    .trim();
+  if (/^Kern:/im.test(insight)) {
+    const kern = insight.match(/Kern:\s*([\s\S]*?)(?=\nBetekenis:|\nActie:|$)/i)?.[1];
+    const betekenis = insight.match(/Betekenis:\s*([\s\S]*?)(?=\nActie:|$)/i)?.[1];
+    const actie = insight.match(/Actie:\s*([\s\S]*?)$/i)?.[1];
+    return [kern, betekenis, actie]
+      .filter(Boolean)
+      .map(s => s.replace(/\s+/g, ' ').trim())
+      .filter(Boolean)
+      .join('\n');
+  }
+  return insight.trim();
 }
 
 function renderAnalysisBlock(insight, id) {
