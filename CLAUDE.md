@@ -57,10 +57,12 @@ open (geen API-sleutel of een fout betekent alles laten staan).
 WoW) plus een default, allemaal met dezelfde `SCHRIJFREGELS` eronder. Die schrijfregels zijn het
 hart van het product — de toon is met zorg afgesteld. Pas ze niet aan zonder dat Louk erom vraagt.
 
-De analyse is één doorlopende alinea van 2 tot 4 zinnen: eerst wat er is gebeurd, dan wat het
-betekent, en alleen als die echt iets toevoegt een afsluitende actiezin die met een werkwoord
-begint. Er zijn geen Kern/Betekenis/Actie-labels meer. Oude analyses in de cache hebben die labels
-nog wel; de frontend stript ze in `analyseTekst()`.
+De analyse bestaat uit maximaal drie korte alinea's zonder labels: eerst wat er is gebeurd, dan
+wat het betekent, en alleen als die echt iets toevoegt een afsluitende actiezin die met een
+werkwoord begint. De frontend geeft elke alinea een gekleurd streepje (blauw, groen, amber); een
+analyse van één alinea krijgt goud, het teken voor dun nieuws. Oude analyses in de cache hebben
+nog Kern/Betekenis/Actie-labels; de frontend stript ze in `analyseTekst()` en vouwt elke sectie
+tot één alinea.
 
 **Herbeoordeling** werkt met de drie standen in `relevance`. Eén afkeuring verbergt het artikel en
 geeft één herkansing bij de volgende refresh; een tweede afkeuring is definitief. De noodrem
