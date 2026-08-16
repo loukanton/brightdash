@@ -130,6 +130,16 @@ ziet de code hem pas na een nieuwe deploy. Een lege commit is genoeg.
   categorieprompts terug.
 - **Refresh is synchroon.** 25 feeds parallel, elk met 5 seconden timeout, binnen de
   functielimiet van Netlify. Komen er veel feeds bij, dan kan dat gaan knellen.
+- **Gelijktijdige schrijfacties kunnen elkaar overschrijven.** De `analyses`-map wordt per
+  aanroep in zijn geheel gelezen en teruggeschreven, zonder slot. Schrijven twee
+  analyse-aanroepen tegelijk, dan wint de laatste en verliest de andere zijn update. Zeldzaam
+  en zelfherstellend (de frontend vraagt een ontbrekende analyse gewoon opnieuw aan), maar bij
+  batchwerk zoals hergeneratie kan het rondes kosten. Let op bij verificatie: `/api/articles`
+  wordt 5 minuten gecachet op het Netlify-edge; controleer met een cache-buster
+  (`?t=<timestamp>`), anders kijk je naar oude data.
+- **Tweakers en Techzine blokkeren Netlify.** Tweakers weigert het IP-adres van het
+  datacenter, Techzine heeft botdetectie. Een andere User-Agent helpt niet (getest). De feeds
+  staan nog in de lijst en falen stil. Nette oplossing: de redactie mailen om toegang vragen.
 
 ## Werkafspraken
 
