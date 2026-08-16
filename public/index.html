@@ -162,9 +162,10 @@
   .dagstart-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold); display: block; margin-bottom: 8px; }
   .dagstart-item { display: block; text-decoration: none; padding: 10px 0; border-bottom: 1px solid var(--gold-border); }
   .dagstart-item:last-child { border-bottom: none; padding-bottom: 2px; }
-  .dagstart-item:hover .dagstart-zin { color: var(--gold); }
+  .dagstart-item:hover .dagstart-kop { color: var(--gold); }
   .dagstart-meta { display: block; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); margin-bottom: 3px; }
-  .dagstart-zin { display: block; font-size: 14px; line-height: 1.6; color: var(--ink); transition: color 0.15s; }
+  .dagstart-kop { display: block; font-family: 'Lora', serif; font-size: 16px; font-weight: 700; color: var(--ink); line-height: 1.4; margin-bottom: 2px; transition: color 0.15s; }
+  .dagstart-zin { display: block; font-size: 13px; line-height: 1.55; color: var(--ink-3); }
   .dagstart-head { display: flex; align-items: center; justify-content: space-between; }
   .dagstart-sluit { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 13px; padding: 0 2px; line-height: 1; }
   .dagstart-sluit:hover { color: var(--ink); }
@@ -1259,10 +1260,12 @@ function renderDagstart(articles) {
     if (top.length < 3) return;
   }
   el.innerHTML = '<div class="dagstart-head"><span class="dagstart-label">Vandaag in het kort</span><button class="dagstart-sluit" onclick="toggleDagstart(false)" title="Verbergen">✕</button></div>' + top.map(a => {
-    // Nederlandse samenvatting: de eerste zin van de analyse.
-    // Zonder analyse valt de regel terug op de originele titel.
+    // Nederlandse kop en eerste zin van de analyse; zonder analyse
+    // valt de regel terug op de originele titel
+    const kop = a.insight ? analyseKop(a.insight) : '';
     const zin = a.insight ? (analyseTekst(a.insight).match(/^.*?[.!?](?=\s|$)/s) || [])[0] : '';
-    return `<a class="dagstart-item" href="${sanitize(a.link)}" target="_blank" rel="noopener"><span class="dagstart-meta">${sanitize(a.source || '')} · ${relTijd(a.pubDate)}</span><span class="dagstart-zin">${sanitize(zin ? zin.trim() : decodeHtml(a.title))}</span></a>`;
+    const titel = kop || decodeHtml(a.title);
+    return `<a class="dagstart-item" href="${sanitize(a.link)}" target="_blank" rel="noopener"><span class="dagstart-meta">${sanitize(a.source || '')} · ${relTijd(a.pubDate)}</span><span class="dagstart-kop">${sanitize(titel)}</span>${zin ? `<span class="dagstart-zin">${sanitize(zin.trim())}</span>` : ''}</a>`;
   }).join('');
   el.style.display = 'block';
 }
