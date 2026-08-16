@@ -88,7 +88,7 @@ lijst leeg is, en die mag zonder wachtwoord — maar alleen zolang de lijst ook 
 al iets, dan gelden de adminregels weer.
 
 **Frontend-state** zit in localStorage onder `bd_theme`, `bd_saved`, `bd_filters`, `bd_onboarded`,
-`bd_visits` en `bd_lastvisit`. Geen accounts, geen server-side gebruikersdata.
+`bd_visits`, `bd_lastvisit` en `bd_dagstart`. Geen accounts, geen server-side gebruikersdata.
 
 ## Hosting en deploy
 

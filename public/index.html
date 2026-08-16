@@ -160,11 +160,17 @@
   .feed-count { font-size: 12px; color: var(--muted); }
   .dagstart { border: 1px solid var(--gold-border); background: var(--gold-pale); border-radius: 10px; padding: 16px 20px; margin-bottom: 20px; }
   .dagstart-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold); display: block; margin-bottom: 8px; }
-  .dagstart-item { display: block; text-decoration: none; padding: 4px 0; }
-  .dagstart-item:hover .dagstart-title { color: var(--gold); }
-  .dagstart-title { font-family: 'Lora', serif; font-size: 15px; font-weight: 700; color: var(--ink); line-height: 1.4; transition: color 0.15s; }
-  .dagstart-source { font-size: 11px; color: var(--muted); margin-left: 6px; white-space: nowrap; }
-  .dagstart-orig { display: block; font-size: 11px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
+  .dagstart-item { display: block; text-decoration: none; padding: 10px 0; border-bottom: 1px solid var(--gold-border); }
+  .dagstart-item:last-child { border-bottom: none; padding-bottom: 2px; }
+  .dagstart-item:hover .dagstart-zin { color: var(--gold); }
+  .dagstart-meta { display: block; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); margin-bottom: 3px; }
+  .dagstart-zin { display: block; font-size: 14px; line-height: 1.6; color: var(--ink); transition: color 0.15s; }
+  .dagstart-head { display: flex; align-items: center; justify-content: space-between; }
+  .dagstart-sluit { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 13px; padding: 0 2px; line-height: 1; }
+  .dagstart-sluit:hover { color: var(--ink); }
+  .dagstart.dicht { background: none; border: none; padding: 0; }
+  .dagstart-reopen { border: 1px solid var(--gold-border); background: var(--gold-pale); color: var(--gold); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 5px 12px; border-radius: 20px; cursor: pointer; font-family: 'Instrument Sans', sans-serif; }
+  .dagstart-reopen:hover { background: var(--gold); color: var(--white); }
   .search-input { border: 1px solid var(--rule); background: var(--bg-2); border-radius: 5px; padding: 6px 10px; font-size: 13px; color: var(--ink); font-family: 'Instrument Sans', sans-serif; width: 170px; transition: border-color 0.15s; }
   .search-input:focus { outline: none; border-color: var(--gold); }
   .search-input::placeholder { color: var(--muted); }
@@ -1215,9 +1221,23 @@ function detectTrending(articles) {
 // Dagstart: drie artikelen van de afgelopen 24 uur bovenaan.
 // Eerst op trending onderwerpen van vandaag zelf; zijn die er niet,
 // dan de nieuwste van drie verschillende bronnen.
+function toggleDagstart(open) {
+  if (open) localStorage.removeItem('bd_dagstart');
+  else localStorage.setItem('bd_dagstart', 'dicht');
+  renderDagstart(allArticles);
+}
+
 function renderDagstart(articles) {
   const el = document.getElementById('dagstart');
   if (!el) return;
+  // Weggekklikt: alleen een klein knopje om hem terug te halen
+  if (localStorage.getItem('bd_dagstart') === 'dicht') {
+    el.classList.add('dicht');
+    el.innerHTML = '<button class="dagstart-reopen" onclick="toggleDagstart(true)">Vandaag in het kort tonen</button>';
+    el.style.display = 'block';
+    return;
+  }
+  el.classList.remove('dicht');
   // Reviews, koopgidsen en lijstjes horen nooit in de dagstart,
   // ook niet als ze het feedfilter zijn gepasseerd
   const ongeschikt = /\breview\b|\bbest\b|\btop \d+\b|\bdeal\b|gift guide/i;
@@ -1235,14 +1255,11 @@ function renderDagstart(articles) {
     top = [...perBron.values()].slice(0, 3);
     if (top.length < 3) return;
   }
-  el.innerHTML = '<span class="dagstart-label">Vandaag in het kort</span>' + top.map(a => {
+  el.innerHTML = '<div class="dagstart-head"><span class="dagstart-label">Vandaag in het kort</span><button class="dagstart-sluit" onclick="toggleDagstart(false)" title="Verbergen">✕</button></div>' + top.map(a => {
     // Nederlandse samenvatting: de eerste zin van de analyse.
     // Zonder analyse valt de regel terug op de originele titel.
     const zin = a.insight ? (analyseTekst(a.insight).match(/^.*?[.!?](?=\s|$)/s) || [])[0] : '';
-    if (zin) {
-      return `<a class="dagstart-item" href="${sanitize(a.link)}" target="_blank" rel="noopener"><span class="dagstart-title">${sanitize(zin.trim())}</span><span class="dagstart-orig">${sanitize(decodeHtml(a.title))} · ${sanitize(a.source || '')}</span></a>`;
-    }
-    return `<a class="dagstart-item" href="${sanitize(a.link)}" target="_blank" rel="noopener"><span class="dagstart-title">${sanitize(decodeHtml(a.title))}</span><span class="dagstart-source">${sanitize(a.source || '')}</span></a>`;
+    return `<a class="dagstart-item" href="${sanitize(a.link)}" target="_blank" rel="noopener"><span class="dagstart-meta">${sanitize(a.source || '')} · ${relTijd(a.pubDate)}</span><span class="dagstart-zin">${sanitize(zin ? zin.trim() : decodeHtml(a.title))}</span></a>`;
   }).join('');
   el.style.display = 'block';
 }
