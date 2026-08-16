@@ -31,15 +31,12 @@
     --gold: #B8922A; --gold-pale: #F5EDD8; --gold-border: #DFC870;
     --ink: #1A1714; --ink-3: #4A4540; --muted: #8A8178;
     --rule: #E8E2D8; --bg: #FAF8F4; --bg-2: #F2EDE4; --white: #FFFFFF;
-    --chip-kern-bg: #EBF2FA; --chip-kern-text: #1A4A7A; --chip-kern-border: #C5DDEF;
-    --chip-bet-bg: #EBF5EE; --chip-bet-text: #1A4A2A; --chip-bet-border: #C0DFC8;
-    --chip-act-bg: #FDF3E3; --chip-act-text: #6A3A00; --chip-act-border: #EAD4A0;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--ink); font-family: 'Instrument Sans', sans-serif; font-size: 16px; line-height: 1.65; min-height: 100vh; -webkit-text-size-adjust: 100%; }
 
   /* Dark */
-  body.dark { --gold: #C9A84C; --gold-pale: #2A2210; --gold-border: #6A5010; --ink: #EEEAE4; --ink-3: #A09890; --muted: #706860; --rule: #2E2A26; --bg: #111009; --bg-2: #1A1814; --white: #181512; --chip-kern-bg: #0E1A2A; --chip-kern-text: #7ABAEE; --chip-kern-border: #1A3A5A; --chip-bet-bg: #0E1A0E; --chip-bet-text: #7ACC8A; --chip-bet-border: #1A3A1A; --chip-act-bg: #1A1400; --chip-act-text: #D4AA55; --chip-act-border: #3A2E00; }
+  body.dark { --gold: #C9A84C; --gold-pale: #2A2210; --gold-border: #6A5010; --ink: #EEEAE4; --ink-3: #A09890; --muted: #706860; --rule: #2E2A26; --bg: #111009; --bg-2: #1A1814; --white: #181512; }
   body.dark .masthead, body.dark .rail { background: var(--white); }
   body.dark .slide-panel { background: #1C1A17; }
   body.dark .toolbar-btn.active { background: #2A2520; color: var(--ink); }
@@ -231,7 +228,6 @@
   @media (max-width: 600px) { .article:hover { transform: none; } }
   .article-description { font-size: 15px; color: var(--ink-3); line-height: 1.75; margin-bottom: 14px; max-width: 72ch; }
   .article-title { max-width: 60ch; }
-  .analysis-text { max-width: 68ch; }
   .article-body { display: flex; gap: 16px; align-items: flex-start; }
   .article-body-text { flex: 1; min-width: 0; }
   .article-thumb { width: 76px; height: 76px; border-radius: 8px; object-fit: cover; flex-shrink: 0; background: var(--bg-2); }
@@ -240,19 +236,25 @@
 
   /* Analysis */
   @keyframes chipFadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-  .analysis-block { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; animation: chipFadeIn 0.35s ease both; }
+  .analysis-block { padding: 2px 0; margin-bottom: 16px; animation: chipFadeIn 0.35s ease both; }
   @media (max-width: 600px) { .analysis-block + .article-description, .article-description:has(+ .analysis-block) { display: none; } }
-  .analysis-row { display: flex; align-items: baseline; gap: 10px; padding: 10px 14px; border-radius: 5px; line-height: 1.65; font-size: 14px; }
-  .analysis-row.kern { background: var(--chip-kern-bg); color: var(--chip-kern-text); border: 1px solid var(--chip-kern-border); }
-  .analysis-row.betekenis { background: var(--chip-bet-bg); color: var(--chip-bet-text); border: 1px solid var(--chip-bet-border); }
-  .analysis-row.actie { background: var(--chip-act-bg); color: var(--chip-act-text); border: 1px solid var(--chip-act-border); }
+  .analysis-kop { display: block; padding-left: 16px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--gold); margin-bottom: 4px; }
+  /* Elke alinea zijn eigen streepje in de oude chipkleuren: blauw (kern), groen (betekenis), amber (actie) */
+  .analysis-p { position: relative; padding-left: 16px; font-size: 14px; line-height: 1.7; color: var(--ink); max-width: 68ch; margin: 0 0 8px; }
+  .analysis-p:last-child { margin-bottom: 0; }
+  .analysis-p::before { content: ''; position: absolute; left: 0; top: 3px; bottom: 3px; width: 3px; border-radius: 2px; background: #C9932A; }
+  .analysis-p:nth-of-type(1)::before { background: #3D7FC4; }
+  .analysis-p:nth-of-type(2)::before { background: #3E9E63; }
+  .analysis-p:only-of-type::before { background: var(--gold); }
+  body.dark .analysis-p::before { background: #D9AF55; }
+  body.dark .analysis-p:nth-of-type(1)::before { background: #6FA8E0; }
+  body.dark .analysis-p:nth-of-type(2)::before { background: #62BE88; }
+  body.dark .analysis-p:only-of-type::before { background: var(--gold); }
   @media (max-width: 600px) { .hide-on-mobile { display: none; } }
-  .analysis-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.6; flex-shrink: 0; min-width: 72px; }
-  .analysis-text { flex: 1; font-size: 14px; line-height: 1.65; }
   .analysis-loading { display: flex; flex-direction: column; gap: 7px; padding: 4px 0; }
-  .analysis-skel { height: 54px; border-radius: 5px; background: linear-gradient(90deg, var(--rule) 25%, var(--bg-2) 50%, var(--rule) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
-  .analysis-skel:nth-child(2) { height: 46px; animation-delay: 0.15s; }
-  .analysis-skel:nth-child(3) { height: 40px; animation-delay: 0.3s; }
+  .analysis-skel { height: 14px; border-radius: 4px; background: linear-gradient(90deg, var(--rule) 25%, var(--bg-2) 50%, var(--rule) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
+  .analysis-skel:nth-child(2) { width: 92%; animation-delay: 0.15s; }
+  .analysis-skel:nth-child(3) { width: 70%; animation-delay: 0.3s; }
   .spinner { width: 13px; height: 13px; border: 2px solid var(--rule); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; flex-shrink: 0; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .article-footer { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding-top: 4px; }
@@ -499,7 +501,7 @@
   "@type": "WebApplication",
   "name": "BrightDash",
   "url": "https://brightdash.nl",
-  "description": "BrightDash verzamelt het laatste nieuws over AI en tech wat relevant is voor het Nederlandse bedrijfsleven. Per artikel een AI-analyse: Kern, Betekenis en Actie.",
+  "description": "BrightDash verzamelt het laatste nieuws over AI en tech wat relevant is voor het Nederlandse bedrijfsleven. Per artikel een korte AI-analyse: wat er speelt, wat het betekent en wat je ermee kunt.",
   "applicationCategory": "NewsApplication",
   "operatingSystem": "Web, iOS, Android",
   "offers": {
@@ -1347,15 +1349,21 @@ function renderArticle(a, i) {
   </article>`;
 }
 
+// De analyse is één doorlopende alinea. Oude analyses uit de cache
+// hebben nog Kern/Betekenis/Actie-labels; die strippen we hier weg.
+function analyseTekst(insight) {
+  return insight
+    .replace(/^Kern:\s*/im, '')
+    .replace(/^Betekenis:\s*/im, '')
+    .replace(/^Actie:\s*/im, '')
+    .trim();
+}
+
 function renderAnalysisBlock(insight, id) {
-  const kern = insight.match(/Kern:\s*(.+?)(?=\nBetekenis:|$)/s)?.[1]?.trim();
-  const betekenis = insight.match(/Betekenis:\s*(.+?)(?=\nActie:|$)/s)?.[1]?.trim();
-  const actie = insight.match(/Actie:\s*(.+?)$/s)?.[1]?.trim();
-  if (!kern && !betekenis && !actie) return `<div class="analysis-block" id="analysis-${id}"><div class="analysis-row kern"><span class="analysis-label">Analyse</span><span class="analysis-text">${insight}</span></div></div>`;
+  const alineas = analyseTekst(insight).split(/\n+/).map(r => r.trim()).filter(Boolean);
   return `<div class="analysis-block" id="analysis-${id}">
-    ${kern ? `<div class="analysis-row kern"><span class="analysis-label">Kern</span><span class="analysis-text">${kern}</span></div>` : ''}
-    ${betekenis ? `<div class="analysis-row betekenis"><span class="analysis-label">Betekenis</span><span class="analysis-text">${betekenis}</span></div>` : ''}
-    ${actie ? `<div class="analysis-row actie"><span class="analysis-label">Actie</span><span class="analysis-text">${actie}</span></div>` : ''}
+    <span class="analysis-kop">Analyse</span>
+    ${alineas.map(r => `<p class="analysis-p">${r}</p>`).join('')}
   </div>`;
 }
 
@@ -1578,22 +1586,9 @@ function sanitize(str) {
 function deelArtikelTekst(link, title, source) {
   try {
     const article = allArticles.find(a => a.link === link);
-    const insight = (article && article.insight) ? article.insight : '';
-    let kern = '', betekenis = '', actie = '', current = '';
-    insight.split('\n').forEach(function(line) {
-      if (line.indexOf('Kern:') === 0) { current = 'k'; kern = line.slice(5).trim(); }
-      else if (line.indexOf('Betekenis:') === 0) { current = 'b'; betekenis = line.slice(10).trim(); }
-      else if (line.indexOf('Actie:') === 0) { current = 'a'; actie = line.slice(6).trim(); }
-      else if (line.trim()) {
-        if (current === 'k') kern += ' ' + line.trim();
-        else if (current === 'b') betekenis += ' ' + line.trim();
-        else if (current === 'a') actie += ' ' + line.trim();
-      }
-    });
+    const analyse = (article && article.insight) ? analyseTekst(article.insight).replace(/\n+/g, ' ') : '';
     var delen = [decodeHtml(title)];
-    if (kern) delen.push('Kern: ' + kern);
-    if (betekenis) delen.push('Betekenis: ' + betekenis);
-    if (actie) delen.push('Actie: ' + actie);
+    if (analyse) delen.push(analyse);
     delen.push('Via BrightDash: ' + link);
     var tekst = delen.join('\n\n');
     if (navigator.share) {
@@ -1620,18 +1615,10 @@ function safeId(str) { try { return btoa(String(str)).replace(/[^a-z0-9]/gi,'');
   <div class="onboarding-card">
     <div class="onboarding-logo"><span style="font-weight:700">Bright</span><span style="font-style:italic;color:var(--gold)">Dash</span></div>
     <h2 class="onboarding-title">Het nieuws dat<br>ertoe doet.</h2>
-    <p class="onboarding-text">AI en tech nieuws voor Nederlandse managers en beslissers — met directe analyse. Wat speelt er, wat betekent het, en wat moet je ermee?</p>
-    <div style="background:var(--chip-kern-bg);border:1px solid var(--chip-kern-border);border-radius:8px;padding:14px 16px;margin-bottom:12px;">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--chip-kern-text);opacity:0.7;margin-bottom:4px;">Kern</div>
-      <div style="font-size:13px;color:var(--chip-kern-text);line-height:1.5;">Wat er speelt, in één zin.</div>
-    </div>
-    <div style="background:var(--chip-bet-bg);border:1px solid var(--chip-bet-border);border-radius:8px;padding:14px 16px;margin-bottom:12px;">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--chip-bet-text);opacity:0.7;margin-bottom:4px;">Betekenis</div>
-      <div style="font-size:13px;color:var(--chip-bet-text);line-height:1.5;">Waarom het relevant is voor jouw organisatie.</div>
-    </div>
-    <div style="background:var(--chip-act-bg);border:1px solid var(--chip-act-border);border-radius:8px;padding:14px 16px;margin-bottom:24px;">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--chip-act-text);opacity:0.7;margin-bottom:4px;">Actie</div>
-      <div style="font-size:13px;color:var(--chip-act-text);line-height:1.5;">Concreet wat je morgen kunt doen.</div>
+    <p class="onboarding-text">AI en tech nieuws voor Nederlandse managers en beslissers, met directe analyse. Wat speelt er, wat betekent het en wat kun je ermee?</p>
+    <div class="analysis-block" style="margin-bottom:24px;text-align:left;">
+      <span class="analysis-kop">Analyse</span>
+      <p class="analysis-p" style="font-size:13px;">Bij elk artikel een paar zinnen zonder jargon: wat er is gebeurd, wat het betekent voor jouw organisatie en waar nuttig een concrete vervolgstap.</p>
     </div>
     <button class="onboarding-btn" onclick="closeOnboarding()">Toon het nieuws →</button>
   </div>

@@ -3,25 +3,20 @@ import { getStore } from "@netlify/blobs";
 // Gedeelde schrijfinstructies voor alle prompts
 const SCHRIJFREGELS = `
 Schrijfregels (strikt volgen):
-- Kern: 1 feitelijke zin. Schrijf alsof je het aan een collega uitlegt bij de koffieautomaat. Geen vaktaal, geen omhaal. Wat is er gebeurd?
-- Betekenis: schrijf alleen wat direct uit het artikel volgt, geen extrapolaties. Als er één relevante impact is: schrijf 1 zin. Als er meerdere zijn: schrijf 2-3 korte zinnen, elk op een nieuwe regel. Elke zin is één gedachte, geen bijzinnen. Geen streepjes of opsommingstekens. Begin NIET met "Dit betekent dat". Geef het gevoel van "dit is wat je hiervan moet snappen", niet van "hier is een samenvatting".
-- Actie: alleen schrijven als er een stap is die NIET al vanzelf uit Kern en Betekenis volgt. Zou een slimme lezer deze stap zelf bedenken? Laat de regel dan helemaal weg. Een Actie moet specifiek zijn voor dit nieuws: benoem wát je evalueert, mét wie je iets bespreekt of waaraan je iets toetst. Verboden: adviezen die op elk bericht passen, zoals "Bespreek dit met je team", "Evalueer je strategie" of "Volg de ontwikkelingen". Begin met een concreet werkwoord (bijv. Evalueer / Bespreek / Test / Stel bij / Vraag / Vergelijk). Gebruik NOOIT "Zorg dat" of "Onderzoek of".
-- Betekenis en Actie zijn optioneel. Voegt een sectie niets toe, laat de hele regel dan weg. "Exact dit format" slaat op de labels en de volgorde, niet op het aantal secties. Leg nooit uit waarom je iets weglaat. Geen sterretjes, geen kanttekeningen, geen commentaar op het artikel zelf.
-- Staat er alleen een Kern, houd die dan extra kort en droog.
-- Geen herhaling tussen de secties.
-- Geen inleiding, geen afsluiting, geen extra tekst buiten de secties.
-- Als het artikel weinig inhoud heeft (aankondiging, evenement, fotoreportage): schrijf alleen Kern. Vul nooit op.
+- Schrijf één doorlopende alinea van 2 tot 4 korte zinnen. Geen labels, geen kopjes, geen opsommingen.
+- De eerste zin is feitelijk: wat is er gebeurd? Schrijf alsof je het aan een collega uitlegt bij de koffieautomaat. Geen vaktaal, geen omhaal.
+- Daarna wat het betekent: alleen wat direct uit het artikel volgt, geen extrapolaties. Elke zin is één gedachte, geen bijzinnen. Begin niet met "Dit betekent dat".
+- Een afsluitende actiezin mag alleen als er een stap is die NIET al vanzelf uit de rest volgt. Zou een slimme lezer die stap zelf bedenken? Laat hem dan weg. Begin zo'n zin met een concreet werkwoord (bijv. Evalueer / Bespreek / Test / Stel bij / Vraag / Vergelijk). Gebruik nooit "Zorg dat" of "Onderzoek of". Verboden: adviezen die op elk bericht passen, zoals "Bespreek dit met je team", "Evalueer je strategie" of "Volg de ontwikkelingen".
+- Heeft het artikel weinig inhoud (aankondiging, evenement, fotoreportage): schrijf dan alleen die ene feitelijke zin, kort en droog. Vul nooit op.
+- Leg nooit uit wat je weglaat. Geen sterretjes, geen kanttekeningen, geen commentaar op het artikel zelf.
+- Geen inleiding, geen afsluiting, geen tekst buiten de alinea.
 - Schrijf in helder Nederlands. Korte zinnen, actieve werkwoorden. Geen gedachtestreepjes in een zin; begin liever een nieuwe zin. Geen komma voor "en" of "of". Vertaal technische termen naar gewone woorden, kopieer nooit jargon uit het artikel. Schrijf alsof je het uitlegt aan een drukke manager die geen tijd heeft om twee keer te lezen.`;
 
 // Per-categorie prompts
 const CATEGORY_PROMPTS = {
   AI: `Je bent een scherpe AI-strateeg die Nederlandse managers helpt het AI-nieuws te duiden.
 
-Analyseer onderstaand AI-nieuwsbericht. Geef exact dit format terug, elk onderdeel op een nieuwe regel:
-
-Kern: [Wat er technisch of zakelijk is gebeurd of aangekondigd — feitelijk, max 1 zin]
-Betekenis: [Wat dit concreet verandert voor organisaties die AI inzetten of willen inzetten]
-Actie: [Één concrete vervolgstap die direct voortkomt uit dit nieuws]
+Analyseer onderstaand AI-nieuwsbericht. Schrijf één korte alinea: eerst wat er technisch of zakelijk is gebeurd, dan wat dit concreet verandert voor organisaties die AI inzetten of willen inzetten. Sluit alleen af met een concrete vervolgstap als die echt iets toevoegt.
 
 Titel: {{title}}
 Bron: {{source}}
@@ -30,11 +25,7 @@ ${SCHRIJFREGELS}`,
 
   Tech: `Je bent een technologiestrateeg die Nederlandse beslissers helpt technologieontwikkelingen te vertalen naar organisatiekeuzes.
 
-Analyseer onderstaand technologienieuws. Geef exact dit format terug:
-
-Kern: [Wat er technisch of in de markt is gebeurd — feitelijk, max 1 zin]
-Betekenis: [Welke organisaties of sectoren dit raakt en waarom het er nu toe doet]
-Actie: [Één concrete stap of beslissing die dit nieuws uitlokt]
+Analyseer onderstaand technologienieuws. Schrijf één korte alinea: eerst wat er technisch of in de markt is gebeurd, dan welke organisaties of sectoren dit raakt en waarom het er nu toe doet. Sluit alleen af met een concrete stap of beslissing als die echt iets toevoegt.
 
 Titel: {{title}}
 Bron: {{source}}
@@ -43,11 +34,7 @@ ${SCHRIJFREGELS}`,
 
   Overheid: `Je bent een adviseur voor Nederlandse overheids- en semi-overheidsorganisaties op het gebied van digitalisering en beleid.
 
-Analyseer onderstaand overheidsnieuws. Geef exact dit format terug:
-
-Kern: [Wat er beleidsmatig, juridisch of bestuurlijk is besloten of voorgesteld — feitelijk, max 1 zin]
-Betekenis: [Welke gevolgen dit heeft voor Nederlandse (semi-)overheidsorganisaties — benoem specifieke risico's, verplichtingen of kansen]
-Actie: [Één concrete stap voor een overheidsorganisatie die dit nieuws nu moet opvolgen]
+Analyseer onderstaand overheidsnieuws. Schrijf één korte alinea: eerst wat er beleidsmatig, juridisch of bestuurlijk is besloten of voorgesteld, dan welke gevolgen dit heeft voor Nederlandse (semi-)overheidsorganisaties. Benoem specifieke risico's, verplichtingen of kansen. Sluit alleen af met een concrete stap als die echt iets toevoegt.
 
 Titel: {{title}}
 Bron: {{source}}
@@ -56,11 +43,7 @@ ${SCHRIJFREGELS}`,
 
   HR: `Je bent een HR-strateeg die Nederlandse werkgevers helpt arbeidsmarkt- en organisatieontwikkelingen te vertalen naar HR-beleid.
 
-Analyseer onderstaand HR-nieuws. Geef exact dit format terug:
-
-Kern: [Wat er op de arbeidsmarkt of in organisaties is veranderd of vastgesteld — feitelijk, max 1 zin]
-Betekenis: [Wat dit betekent voor werkgevers in Nederland — benoem specifieke gevolgen voor instroom, behoud, beleid of cultuur]
-Actie: [Één concrete HR-maatregel of -beslissing die dit nieuws uitlokt]
+Analyseer onderstaand HR-nieuws. Schrijf één korte alinea: eerst wat er op de arbeidsmarkt of in organisaties is veranderd of vastgesteld, dan wat dit betekent voor werkgevers in Nederland. Benoem specifieke gevolgen voor instroom, behoud, beleid of cultuur. Sluit alleen af met een concrete HR-maatregel als die echt iets toevoegt.
 
 Titel: {{title}}
 Bron: {{source}}
@@ -69,11 +52,7 @@ ${SCHRIJFREGELS}`,
 
   Organisatie: `Je bent een managementadviseur die Nederlandse bestuurders helpt organisatie-inzichten om te zetten in actie.
 
-Analyseer onderstaand organisatie- of managementnieuws. Geef exact dit format terug:
-
-Kern: [Wat het onderzoek, de trend of de ontwikkeling inhoudt — feitelijk, max 1 zin]
-Betekenis: [Wat dit zegt over hoe organisaties presteren of falen — wees concreet over welke patronen of risico's dit blootlegt]
-Actie: [Één concrete managementbeslissing of -gesprek dat dit nieuws uitlokt]
+Analyseer onderstaand organisatie- of managementnieuws. Schrijf één korte alinea: eerst wat het onderzoek, de trend of de ontwikkeling inhoudt, dan wat dit zegt over hoe organisaties presteren of falen. Wees concreet over welke patronen of risico's dit blootlegt. Sluit alleen af met een concrete managementbeslissing als die echt iets toevoegt.
 
 Titel: {{title}}
 Bron: {{source}}
@@ -82,11 +61,7 @@ ${SCHRIJFREGELS}`,
 
   Media: `Je bent een media- en marketingstrateeg die Nederlandse merken helpt platformontwikkelingen en consumentengedrag te vertalen naar campagne- en merkbeleid.
 
-Analyseer onderstaand media- of marketingnieuws. Geef exact dit format terug:
-
-Kern: [Wat er is veranderd in media, platforms of consumentengedrag — feitelijk, max 1 zin]
-Betekenis: [Wat dit concreet betekent voor Nederlandse merken, bureaus of marketeers — benoem specifieke kansen of risico's]
-Actie: [Één concrete aanpassing in strategie, budget of aanpak die dit nieuws uitlokt]
+Analyseer onderstaand media- of marketingnieuws. Schrijf één korte alinea: eerst wat er is veranderd in media, platforms of consumentengedrag, dan wat dit concreet betekent voor Nederlandse merken, bureaus of marketeers. Benoem specifieke kansen of risico's. Sluit alleen af met een concrete aanpassing in strategie, budget of aanpak als die echt iets toevoegt.
 
 Titel: {{title}}
 Bron: {{source}}
@@ -95,11 +70,7 @@ ${SCHRIJFREGELS}`,
 
   WoW: `Je bent een organisatieadviseur die Nederlandse managers helpt inzichten over samenwerking en werkwijzen om te zetten in gedragsverandering.
 
-Analyseer onderstaand nieuws over manier van werken. Geef exact dit format terug:
-
-Kern: [Wat het onderzoek of de ontwikkeling zegt over hoe mensen of teams werken — feitelijk, max 1 zin]
-Betekenis: [Wat dit betekent voor productiviteit, samenwerking of cultuur in Nederlandse organisaties — wees concreet]
-Actie: [Één concrete aanpassing in werkwijze of teamafspraak die een manager morgen kan maken]
+Analyseer onderstaand nieuws over manier van werken. Schrijf één korte alinea: eerst wat het onderzoek of de ontwikkeling zegt over hoe mensen of teams werken, dan wat dit betekent voor productiviteit, samenwerking of cultuur in Nederlandse organisaties. Sluit alleen af met een concrete aanpassing in werkwijze of teamafspraak als die echt iets toevoegt.
 
 Titel: {{title}}
 Bron: {{source}}
@@ -108,11 +79,7 @@ ${SCHRIJFREGELS}`,
 
   default: `Je bent een strategisch adviseur die Nederlandse managers helpt technologie- en organisatienieuws te duiden.
 
-Analyseer onderstaand nieuwsbericht. Geef exact dit format terug:
-
-Kern: [Wat er feitelijk is gebeurd of besloten — max 1 zin]
-Betekenis: [Wat dit concreet verandert voor Nederlandse organisaties — benoem specifieke sectoren of rollen waar relevant]
-Actie: [Één concrete vervolgstap die logisch voortkomt uit dit specifieke nieuws]
+Analyseer onderstaand nieuwsbericht. Schrijf één korte alinea: eerst wat er feitelijk is gebeurd of besloten, dan wat dit concreet verandert voor Nederlandse organisaties. Benoem specifieke sectoren of rollen waar relevant. Sluit alleen af met een concrete vervolgstap als die echt iets toevoegt.
 
 Titel: {{title}}
 Bron: {{source}}

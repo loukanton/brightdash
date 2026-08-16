@@ -57,6 +57,11 @@ open (geen API-sleutel of een fout betekent alles laten staan).
 WoW) plus een default, allemaal met dezelfde `SCHRIJFREGELS` eronder. Die schrijfregels zijn het
 hart van het product — de toon is met zorg afgesteld. Pas ze niet aan zonder dat Louk erom vraagt.
 
+De analyse is één doorlopende alinea van 2 tot 4 zinnen: eerst wat er is gebeurd, dan wat het
+betekent, en alleen als die echt iets toevoegt een afsluitende actiezin die met een werkwoord
+begint. Er zijn geen Kern/Betekenis/Actie-labels meer. Oude analyses in de cache hebben die labels
+nog wel; de frontend stript ze in `analyseTekst()`.
+
 **Model:** `claude-sonnet-4-6`, hardcoded in `analyse.mjs`, max 600 tokens.
 
 **Secrets** staan in de Netlify-omgevingsvariabelen, nooit in de repo — die is publiek:
