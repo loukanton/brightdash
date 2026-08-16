@@ -8,7 +8,10 @@ export default async (req, context) => {
 
   try {
     const res = await fetch(feedUrl, {
-      headers: { 'User-Agent': 'BrightDash/1.0 RSS Reader' },
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+        'Accept': 'application/rss+xml, application/xml, text/xml, */*'
+      },
       signal: AbortSignal.timeout(8000)
     });
 

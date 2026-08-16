@@ -143,7 +143,11 @@ async function fetchFeed(feed) {
   try {
     const res = await fetch(feed.url, {
       signal: AbortSignal.timeout(5000),
-      headers: { 'User-Agent': 'BrightDash/1.0 RSS Reader' }
+      headers: {
+        // Browserachtige headers: sommige sites weigeren onbekende botnamen
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+        'Accept': 'application/rss+xml, application/xml, text/xml, */*'
+      }
     });
     if (!res.ok) { console.warn(`Feed ${feed.name} returned ${res.status}`); return []; }
     const xml = await res.text();
