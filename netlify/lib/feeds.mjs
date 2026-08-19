@@ -158,6 +158,71 @@ async function fetchFeed(feed) {
   }
 }
 
+// ── Archief ──
+// De artikelenlijst rouleert: wat er vandaag in staat is over een week weg.
+// De analyses zelf blijven bewaard in de sleutel `analyses`, maar zonder titel,
+// bron of datum kun je daar later niets mee. Daarom leggen we bij elke refresh
+// de gegevens van elk artikel mét analyse vast, in een blob per dag:
+// `archief-2026-08-19` is een map van link naar artikelgegevens.
+// Eén blob per dag houdt een weekoverzicht op zeven gets, en een verloren
+// schrijfronde kost hooguit die ene dag in plaats van het hele archief.
+
+// De dag waarop het nieuws verscheen, in Nederlandse tijd. en-CA geeft YYYY-MM-DD.
+function dagSleutel(pubDate) {
+  const d = pubDate ? new Date(pubDate) : new Date();
+  const geldig = isNaN(d) ? new Date() : d;
+  return geldig.toLocaleDateString('en-CA', { timeZone: 'Europe/Amsterdam' });
+}
+
+// De Nederlandse kop uit de analyse, zodat een overzicht uit het archief
+// alleen kan worden opgebouwd zonder de hele analyses-map te laden.
+function analyseKop(insight) {
+  const eerste = (insight || '').split('\n')[0].trim();
+  const m = eerste.match(/^Kop:\s*(.+)$/i);
+  return m ? m[1].trim() : '';
+}
+
+async function bewaarArchief(store, items) {
+  const perDag = {};
+  for (const item of items) {
+    if (!item.link || !item.insight) continue;
+    const dag = dagSleutel(item.pubDate);
+    if (!perDag[dag]) perDag[dag] = {};
+    perDag[dag][item.link] = {
+      link: item.link,
+      title: item.title,
+      kop: analyseKop(item.insight),
+      source: item.source,
+      tag: item.tag,
+      pubDate: item.pubDate,
+      lang: item.lang,
+      image: item.image || ''
+    };
+  }
+
+  let vastgelegd = 0;
+  for (const [dag, nieuw] of Object.entries(perDag)) {
+    const sleutel = `archief-${dag}`;
+    let bestaand = {};
+    try { bestaand = await store.get(sleutel, { type: 'json' }) || {}; } catch {}
+    let gewijzigd = false;
+    for (const [link, gegevens] of Object.entries(nieuw)) {
+      if (!bestaand[link]) {
+        bestaand[link] = gegevens;
+        vastgelegd++;
+        gewijzigd = true;
+      } else if (gegevens.kop && bestaand[link].kop !== gegevens.kop) {
+        // Analyse opnieuw gegenereerd: de kop kan veranderd zijn
+        bestaand[link].kop = gegevens.kop;
+        gewijzigd = true;
+      }
+    }
+    if (gewijzigd) await store.setJSON(sleutel, bestaand);
+  }
+
+  return { vastgelegd, dagen: Object.keys(perDag).length };
+}
+
 // Haalt alle feeds op en schrijft ze naar de blob store.
 // Bestaande analyses blijven behouden; er worden hier geen nieuwe gegenereerd.
 export async function refreshFeeds() {
@@ -232,6 +297,14 @@ export async function refreshFeeds() {
 
   const withInsight = items.filter(i => i.insight).length;
   console.log(`Saved ${items.length} items (${withInsight} with cached insight)`);
+
+  // Archief bijwerken. Mislukt dit, dan is de refresh zelf nog steeds goed gegaan.
+  try {
+    const archief = await bewaarArchief(store, items);
+    console.log(`Archief: ${archief.vastgelegd} nieuw vastgelegd over ${archief.dagen} dag(en)`);
+  } catch (e) {
+    console.warn(`Archief bijwerken mislukt: ${e.message}`);
+  }
 
   return { count: items.length, withInsight };
 }
