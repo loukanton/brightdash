@@ -19,6 +19,7 @@ public/              statische site, met de hand geschreven HTML
   disclaimer.html
 netlify/lib/
   feeds.mjs          de feedlijst en alle ophaal-, filter- en opslaglogica
+  week.mjs           verzamelt, rangschikt en bouwt een weekoverzicht
 netlify/functions/   backend
   refresh-feeds.mjs  cron (*/30), roept refreshFeeds() aan
   refresh.mjs        POST /api/refresh en /api/refresh-feeds — dezelfde refresh, handmatig
@@ -27,6 +28,10 @@ netlify/functions/   backend
   admin-prompt.mjs   GET/POST /api/admin-prompt — leest en schrijft de eigen prompt
   proxy.js           GET /api/proxy?url= — CORS-proxy voor losse feeds
   tel.mjs            POST /api/tel — telt weergaven en doorklikken per artikel
+  week.mjs           GET /week en /week/2026-08-17 — de weekoverzichten, serverside gerenderd
+  week-cron.mjs      cron (maandag 06:00 UTC), maakt het overzicht van de week ervoor
+  week-maken.mjs     POST /api/week-maken — hetzelfde, handmatig, achter het wachtwoord
+  sitemap.mjs        GET /sitemap.xml — vaste pagina's plus alle weekoverzichten
   clear-cache.js     POST /api/clear-cache
 netlify.toml         build- en functieconfig
 ```
@@ -44,6 +49,8 @@ netlify.toml         build- en functieconfig
 | `relevance` | map van `link` → true / 'twijfel' / false uit de AI-relevantiecheck; twijfel is één keer afgekeurd en krijgt één herkansing, false is definitief |
 | `archief-JJJJ-MM-DD` | per dag een map van `link` → titel, Nederlandse kop, bron, categorie, datum, taal en afbeelding, voor elk artikel dat een analyse heeft. Alleen toevoegen, nooit opschonen |
 | `tellingen-JJJJ-MM-DD` | per dag een map van `link` → `{ weergaven, klikken }` |
+| `week-JJJJ-MM-DD` | één gepubliceerd weekoverzicht: titel, intro, periode en de berichten met hun analyse. De sleutel is de maandag |
+| `weken` | index van gepubliceerde weken, nieuwste eerst |
 
 **Flow:** de cron schrijft elke 30 minuten verse artikelen weg en plakt bestaande analyses er weer
 aan vast. De frontend haalt `/api/articles` op en vraagt per artikel `/api/analyse`. Die functie
@@ -61,6 +68,14 @@ minstens de helft in beeld staat, hooguit één keer per bezoek, en stuurt alles
 `sendBeacon`. Geen cookies, geen bezoekersgegevens, alleen tellers per link. De telling is bij
 benadering: gelijktijdige schrijfacties kunnen elkaar overschrijven, en het endpoint is publiek dus
 de cijfers zijn te beïnvloeden. Voor een volgorde is dat goed genoeg; gebruik ze nergens anders voor.
+
+**Weekoverzichten.** Elke maandag om 06:00 UTC bouwt `week-cron.mjs` het overzicht van de week
+ervoor: de twintig best gelezen berichten met hun analyse, plus twee alinea's van Claude over de
+rode draad. De volgorde komt uit de tellingen, waarbij een doorklik vijf keer zo zwaar weegt als een
+weergave. Een overzicht dat er al staat wordt niet overschreven, tenzij je dat expliciet vraagt via
+`/api/week-maken`. De pagina's staan op `/week/2026-08-17` en worden serverside gerenderd, want het
+hele punt is dat Google ze zonder JavaScript kan lezen. In de blob staat de inhoud, niet de opmaak:
+een wijziging in de vormgeving werkt dus ook door in oude weken.
 
 **Relevantiefilter** in twee lagen, allebei in `feeds.mjs`. Eerst de regexpatronen
 (koopgidsen, reviews, entertainment, The Download-digests). Daarna beoordeelt Haiku
