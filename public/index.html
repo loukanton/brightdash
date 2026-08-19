@@ -391,6 +391,20 @@
 
   .onboarding-btn:hover { background: var(--gold); }
 
+  /* Op het beginscherm zetten */
+  .install-card { text-align: left; }
+  .install-title { font-family: 'Lora', serif; font-size: 22px; font-weight: 700; color: var(--ink); line-height: 1.3; margin-bottom: 10px; }
+  .install-text { font-size: 14px; color: var(--ink-3); line-height: 1.6; margin-bottom: 20px; }
+  .install-steps { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .install-steps:empty { display: none; }
+  .install-step { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--ink-3); background: var(--bg); border-radius: 8px; padding: 11px 14px; }
+  .install-num { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; background: var(--gold); color: #FFFFFF; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  body.dark .install-num { color: #151310; }
+  .install-step strong { color: var(--ink); font-weight: 600; }
+  .install-glyph { vertical-align: -3px; margin: 0 1px; color: var(--gold); }
+  .install-later { display: block; width: 100%; margin-top: 10px; padding: 8px; background: none; border: none; color: var(--muted); font-family: 'Instrument Sans', sans-serif; font-size: 13px; cursor: pointer; }
+  .install-later:hover { color: var(--ink-3); }
+
   /* Terug naar boven */
   /* Voortgangsbalk */
   .progress-bar { position: fixed; top: 57px; left: 0; right: 0; height: 3px; background: var(--rule); z-index: 500; opacity: 0; transition: opacity 0.3s; }
@@ -1611,12 +1625,98 @@ window.addEventListener('scroll', () => {
 function closeOnboarding() {
   document.getElementById('onboardingOverlay').classList.add('hidden');
   localStorage.setItem('bd_onboarded', '1');
+  toonInstallTip();
 }
 
 function initOnboarding() {
   if (!localStorage.getItem('bd_onboarded')) {
     document.getElementById('onboardingOverlay').classList.remove('hidden');
+  } else {
+    // Wie het introscherm al voorbij is, krijgt de tip een keer bij het volgende bezoek.
+    // Even wachten: Chrome meldt zijn installatieprompt pas kort na het laden.
+    setTimeout(toonInstallTip, 1500);
   }
+}
+
+// ── Op het beginscherm zetten ──
+// Chrome en Edge bieden een echte installatieknop aan; die vangen we op zodat we
+// hem op ons eigen moment kunnen tonen. Safari kent dat niet, daar leggen we de
+// drie tikken uit.
+let installPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  installPrompt = e;
+  // Staat de kaart al open met de handmatige uitleg, dan vervangen we die alsnog
+  // door de knop van de browser.
+  const kaart = document.getElementById('installOverlay');
+  if (kaart && !kaart.classList.contains('hidden')) vulInstallKaart();
+});
+
+window.addEventListener('appinstalled', () => {
+  installPrompt = null;
+  localStorage.setItem('bd_installtip', '1');
+  document.getElementById('installOverlay').classList.add('hidden');
+});
+
+function draaitAlsApp() {
+  return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+}
+
+function opTelefoon() {
+  return window.matchMedia('(max-width: 820px)').matches &&
+    (navigator.maxTouchPoints > 0 || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent));
+}
+
+function isApple() {
+  return /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+    (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
+}
+
+// Het deelicoon van iOS, nagetekend zodat het in de tekst meeloopt
+const DEEL_ICOON = '<svg class="install-glyph" width="14" height="16" viewBox="0 0 14 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 1.2v8.3"/><path d="M4.2 4l2.8-2.8L9.8 4"/><path d="M3.2 6.4H1.4v8.4h11.2V6.4h-1.8"/></svg>';
+
+function vulInstallKaart() {
+  const stappen = document.getElementById('installSteps');
+  const knop = document.getElementById('installBtn');
+  const later = document.getElementById('installLater');
+  if (installPrompt) {
+    stappen.innerHTML = '';
+    knop.style.display = '';
+    later.textContent = 'Nu niet';
+  } else if (isApple()) {
+    stappen.innerHTML =
+      '<div class="install-step"><span class="install-num">1</span><span>Tik in de balk van Safari op ' + DEEL_ICOON + ' of <strong>\u22EF</strong></span></div>' +
+      '<div class="install-step"><span class="install-num">2</span><span>Kies <strong>Zet op beginscherm</strong> \u2014 staat het er niet, tik dan eerst op <strong>Delen</strong></span></div>' +
+      '<div class="install-step"><span class="install-num">3</span><span>Tik rechtsboven op <strong>Voeg toe</strong></span></div>';
+    knop.style.display = 'none';
+    later.textContent = 'Klaar';
+  } else {
+    stappen.innerHTML =
+      '<div class="install-step"><span class="install-num">1</span><span>Tik op <strong>\u22EE</strong> rechtsboven in je browser</span></div>' +
+      '<div class="install-step"><span class="install-num">2</span><span>Kies <strong>App installeren</strong> of <strong>Toevoegen aan startscherm</strong></span></div>';
+    knop.style.display = 'none';
+    later.textContent = 'Klaar';
+  }
+}
+
+function toonInstallTip() {
+  if (draaitAlsApp() || !opTelefoon() || localStorage.getItem('bd_installtip')) return;
+  vulInstallKaart();
+  document.getElementById('installOverlay').classList.remove('hidden');
+}
+
+function sluitInstall() {
+  document.getElementById('installOverlay').classList.add('hidden');
+  localStorage.setItem('bd_installtip', '1');
+}
+
+async function installNu() {
+  if (!installPrompt) { sluitInstall(); return; }
+  installPrompt.prompt();
+  try { await installPrompt.userChoice; } catch (e) {}
+  installPrompt = null;
+  sluitInstall();
 }
 
 document.addEventListener('DOMContentLoaded', () => { initOnboarding(); });
@@ -1690,6 +1790,18 @@ function safeId(str) { try { return btoa(String(str)).replace(/[^a-z0-9]/gi,'');
       <p class="analysis-p" style="font-size:13px;">Bij elk artikel een paar zinnen zonder jargon: wat er is gebeurd, wat het betekent voor jouw organisatie en waar nuttig een concrete vervolgstap.</p>
     </div>
     <button class="onboarding-btn" onclick="closeOnboarding()">Toon het nieuws →</button>
+  </div>
+</div>
+
+<!-- Op het beginscherm zetten -->
+<div class="onboarding-overlay hidden" id="installOverlay">
+  <div class="onboarding-card install-card">
+    <div class="onboarding-logo"><span style="font-weight:700">Bright</span><span style="font-style:italic;color:var(--gold)">Dash</span></div>
+    <h2 class="install-title">Zet BrightDash op je beginscherm</h2>
+    <p class="install-text">Dan opent het als een app: een eigen icoon, geen adresbalk, en zonder verbinding lees je het laatste nieuws gewoon door.</p>
+    <div class="install-steps" id="installSteps"></div>
+    <button class="onboarding-btn" id="installBtn" onclick="installNu()">Toevoegen</button>
+    <button class="install-later" id="installLater" onclick="sluitInstall()">Nu niet</button>
   </div>
 </div>
 
