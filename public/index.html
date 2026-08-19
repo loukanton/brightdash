@@ -1207,6 +1207,7 @@ function appendArticles(from, to) {
   feed.appendChild(frag);
   document.getElementById('loadMoreContainer').style.display = filteredArticles.length > displayedCount ? 'block' : 'none';
   toAppend.filter(a => !a.insight && a.link).forEach(a => enqueueAnalysis(a));
+  volgArtikelen();
 }
 
 // ── Trending ──
@@ -1329,6 +1330,7 @@ function renderArticles() {
   if (activeView === 'grid') feed.classList.add('grid');
   document.getElementById('loadMoreContainer').style.display = filteredArticles.length > displayedCount ? 'block' : 'none';
   toShow.filter(a => !a.insight && a.link).forEach(a => enqueueAnalysis(a));
+  volgArtikelen();
 }
 
 function renderArticle(a, i) {
@@ -1375,7 +1377,7 @@ function renderArticle(a, i) {
   const analysisHtml = a.insight
     ? renderAnalysisBlock(a.insight, id)
     : `<div class="analysis-block" id="analysis-${id}"><div class="analysis-loading"><div class="analysis-skel"></div><div class="analysis-skel"></div><div class="analysis-skel"></div></div></div>`;
-  return `<article class="article" style="animation-delay:${i*30}ms">
+  return `<article class="article" data-link="${sanitize(a.link||'')}" style="animation-delay:${i*30}ms">
     <div class="article-meta">
       <span class="article-source">${a.source||''}</span>
       <span class="article-vertaald" id="vertaald-${id}"${kop && (a.lang||'').toLowerCase() !== 'nl' ? '' : ' style="display:none"'}>· vertaald</span>
@@ -1747,6 +1749,92 @@ function decodeHtml(str) {
     .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(n))
     .replace(/&#x([0-9a-fA-F]+);/g, (_, n) => String.fromCharCode(parseInt(n, 16)));
 }
+
+// ── Tellingen ──
+// Hoe vaak een artikel echt is bekeken en hoe vaak iemand doorklikte naar de
+// bron. Daar wordt straks het weekoverzicht op gesorteerd. Geen cookies, geen
+// bezoekersgegevens: er gaat alleen een artikellink de deur uit.
+//
+// Een weergave telt pas als het artikel anderhalve seconde in beeld staat, en
+// hooguit één keer per bezoek. Anders meet je hoe ver iemand scrollt in plaats
+// van wat hij leest.
+const TEL_DREMPEL_MS = 1500;
+const alGeteld = new Set();
+let telBuffer = { weergaven: [], klikken: [] };
+let telTimer = null;
+let artikelObserver = null;
+const inBeeldTimers = new WeakMap();
+
+function stuurTellingen() {
+  if (telTimer) { clearTimeout(telTimer); telTimer = null; }
+  if (!telBuffer.weergaven.length && !telBuffer.klikken.length) return;
+  const data = JSON.stringify(telBuffer);
+  telBuffer = { weergaven: [], klikken: [] };
+  try {
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon('/api/tel', new Blob([data], { type: 'application/json' }));
+    } else {
+      fetch('/api/tel', { method: 'POST', body: data, headers: { 'Content-Type': 'application/json' }, keepalive: true }).catch(() => {});
+    }
+  } catch {}
+}
+
+function planVerzending() {
+  if (telTimer) return;
+  telTimer = setTimeout(() => { telTimer = null; stuurTellingen(); }, 10000);
+}
+
+function telWeergave(link) {
+  if (!link || alGeteld.has(link)) return;
+  alGeteld.add(link);
+  telBuffer.weergaven.push(link);
+  planVerzending();
+}
+
+function telKlik(link) {
+  if (!link) return;
+  telBuffer.klikken.push(link);
+  stuurTellingen();
+}
+
+// Nieuwe artikelen aan de observer hangen. Elementen die er al in zitten
+// krijgen een markering, zodat herhaald renderen niets dubbel doet.
+function volgArtikelen() {
+  if (!('IntersectionObserver' in window)) return;
+  if (!artikelObserver) {
+    artikelObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const link = entry.target.dataset.link;
+        if (!link) return;
+        if (entry.isIntersecting) {
+          if (alGeteld.has(link)) { artikelObserver.unobserve(entry.target); return; }
+          const t = setTimeout(() => { telWeergave(link); artikelObserver.unobserve(entry.target); }, TEL_DREMPEL_MS);
+          inBeeldTimers.set(entry.target, t);
+        } else {
+          const t = inBeeldTimers.get(entry.target);
+          if (t) { clearTimeout(t); inBeeldTimers.delete(entry.target); }
+        }
+      });
+    }, { threshold: 0.5 });
+  }
+  document.querySelectorAll('.article[data-link]:not([data-gevolgd])').forEach(el => {
+    if (!el.dataset.link) return;
+    el.dataset.gevolgd = '1';
+    artikelObserver.observe(el);
+  });
+}
+
+// Doorklikken naar de bron: de kop, de knop en de knop in het swipescherm
+document.addEventListener('click', (e) => {
+  const a = e.target.closest && e.target.closest('a.read-link, a.article-title, a.swipe-read-link');
+  if (a && a.href) telKlik(a.href);
+}, true);
+
+// Bij het verlaten van de pagina wat nog in de buffer staat alsnog versturen
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') stuurTellingen();
+});
+window.addEventListener('pagehide', stuurTellingen);
 
 function sanitize(str) {
   if (!str) return '';

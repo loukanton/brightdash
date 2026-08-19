@@ -26,6 +26,7 @@ netlify/functions/   backend
   analyse.mjs        POST /api/analyse — vraagt Claude om de duiding, cachet het resultaat
   admin-prompt.mjs   GET/POST /api/admin-prompt — leest en schrijft de eigen prompt
   proxy.js           GET /api/proxy?url= — CORS-proxy voor losse feeds
+  tel.mjs            POST /api/tel — telt weergaven en doorklikken per artikel
   clear-cache.js     POST /api/clear-cache
 netlify.toml         build- en functieconfig
 ```
@@ -41,10 +42,25 @@ netlify.toml         build- en functieconfig
 | `analyses` | map van `link` → analysetekst, overleeft een feed-refresh en het legen van de cache |
 | `prompt` | eigen prompt uit de admin, overschrijft de categorieprompts |
 | `relevance` | map van `link` → true / 'twijfel' / false uit de AI-relevantiecheck; twijfel is één keer afgekeurd en krijgt één herkansing, false is definitief |
+| `archief-JJJJ-MM-DD` | per dag een map van `link` → titel, Nederlandse kop, bron, categorie, datum, taal en afbeelding, voor elk artikel dat een analyse heeft. Alleen toevoegen, nooit opschonen |
+| `tellingen-JJJJ-MM-DD` | per dag een map van `link` → `{ weergaven, klikken }` |
 
 **Flow:** de cron schrijft elke 30 minuten verse artikelen weg en plakt bestaande analyses er weer
 aan vast. De frontend haalt `/api/articles` op en vraagt per artikel `/api/analyse`. Die functie
 kijkt eerst in de cache en belt pas Claude als er nog niets ligt.
+
+**Archief.** De artikelenlijst rouleert, dus van een analyse van vorige week zijn titel, bron en
+datum straks weg. Aan het eind van elke refresh legt `bewaarArchief()` in `feeds.mjs` daarom de
+gegevens vast van elk artikel dat een analyse heeft, in een blob per dag. De dag komt van de
+publicatiedatum in Nederlandse tijd, niet UTC. Bestaande regels worden nooit overschreven; alleen
+de Nederlandse kop wordt bijgewerkt als een analyse opnieuw is gegenereerd.
+
+**Tellingen.** `/api/tel` houdt per dag bij hoe vaak een artikel is bekeken en hoe vaak er is
+doorgeklikt naar de bron. De frontend telt een weergave pas als het artikel anderhalve seconde voor
+minstens de helft in beeld staat, hooguit één keer per bezoek, en stuurt alles gebundeld met
+`sendBeacon`. Geen cookies, geen bezoekersgegevens, alleen tellers per link. De telling is bij
+benadering: gelijktijdige schrijfacties kunnen elkaar overschrijven, en het endpoint is publiek dus
+de cijfers zijn te beïnvloeden. Voor een volgorde is dat goed genoeg; gebruik ze nergens anders voor.
 
 **Relevantiefilter** in twee lagen, allebei in `feeds.mjs`. Eerst de regexpatronen
 (koopgidsen, reviews, entertainment, The Download-digests). Daarna beoordeelt Haiku
@@ -92,6 +108,7 @@ lijst leeg is, en die mag zonder wachtwoord — maar alleen zolang de lijst ook 
 al iets, dan gelden de adminregels weer.
 
 **Frontend-state** zit in localStorage onder `bd_theme`, `bd_saved`, `bd_filters`, `bd_onboarded`,
+`bd_installtip`,
 `bd_visits`, `bd_lastvisit` en `bd_dagstart`. Geen accounts, geen server-side gebruikersdata.
 
 ## Hosting en deploy
